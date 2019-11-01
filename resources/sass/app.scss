@@ -1,0 +1,143 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+// Manage Adverts
+.threeLineEllipsis {
+    height: 66px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+// .threeLineEllipsis {
+//     position: relative;
+//     line-height: 20px;
+//     max-lines: 3;
+//     max-height: 60px;
+//     height: 60px;
+//     overflow: hidden;
+//     // padding-right: 1rem;
+//     text-overflow: ellipsis;
+// }
+.oneLineEllipsis {
+    height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.cssimg {
+    height: 150px;
+    object-fit: contain;
+}
+.hoverer:hover .edit {
+    opacity: 1;
+}
+.hoverer:hover .delete {
+    opacity: 1;
+}
+.edit {
+    opacity: 0;
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+.delete {
+    opacity: 0;
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: rgba(255, 255, 255, 0.6);
+    color: blue;
+    cursor: pointer;
+}
+.imagePreview {
+    width: 100%;
+    height: 180px;
+    background-position: center center;
+    background: url(http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg);
+    background-color: #fff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: inline-block;
+    box-shadow: 0px -3px 6px 2px rgba(0, 0, 0, 0.2);
+}
+.deleted {
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M100 0 L0 100 ' stroke='black' stroke-width='1'/><path d='M0 0 L100 100 ' stroke='black' stroke-width='1'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%, auto;
+    border: solid red 2px;
+    width: 300px;
+}
+#btn-primary {
+    display: block;
+    border-radius: 0px;
+    box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.2);
+    margin-top: -5px;
+    cursor: pointer;
+}
+.imgUp {
+    margin-bottom: 15px;
+}
+.del {
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+.imgAdd {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #4bd7ef;
+    color: #fff;
+    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    line-height: 30px;
+    margin-top: 0px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+// Create Advert
+#titlehover2 {
+    cursor: pointer;
+}
+#titlehover {
+    height: 63px;
+    padding: 13px;
+    cursor: pointer;
+}
+#notitlehover {
+    height: 63px;
+    padding: 13px;
+}
+
+#titlehover:hover {
+    padding: 12px;
+    border: 1px solid #9325BC;
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 10px #ccc;
+}
