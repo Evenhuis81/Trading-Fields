@@ -108,7 +108,6 @@
                                 @else
                                 {{ $advert->startbid == null ? '' : 'checked' }}>
                                 @endif
-                                {{-- {{ dd($advert->startbid == null) }} --}}
                                 {{-- {{ old('bids') == "on" ? ' checked' : (($advert->startbid == null) ? '' : ' checked') }}> --}}
                                 <label class="form-check-label" for="bids">
                                     Allow bids
