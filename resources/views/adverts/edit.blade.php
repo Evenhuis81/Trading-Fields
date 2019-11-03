@@ -30,7 +30,7 @@
                             <label for="title" class="col-md-4 col-form-label text-md-right py-0 pz-0" id="titlehover2">{{ __('Title =>') }}</label>
                             <div class="col-md-6">
                                 <p class="card-text mb-0" id="titleText" style="margin-left: 13px;">{{ $advert->title }}</p>
-                                <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') ? old('title') : "$advert->title" }}" style="display: none; padding-bottom: 7px;" autofocus>
+                                <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') ? old('title') : "$advert->title" }}" style="display: none; padding-bottom: 6px;" autofocus>
                             </div>
                         </div>
                         @error('title')
@@ -47,7 +47,7 @@
                             <label for="description"
                                 class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
                             <div class="col-md-6">
-                                <textarea value="" id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description') ? old('description') : $advert->description }}</textarea>
+                                <textarea rows="3" cols="50" value="" id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description') ? old('description') : $advert->description }}</textarea>
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -110,8 +110,9 @@
                                 @elseif (session('bidcheckoff'))
                                 {{ "" }}>
                                 @else
-                                {{ $advert->startbid == null) ? '' : 'checked' }}>
+                                {{ $advert->startbid == null ? '' : 'checked' }}>
                                 @endif
+                                {{-- {{ dd($advert->startbid == null) }} --}}
                                 {{-- {{ old('bids') == "on" ? ' checked' : (($advert->startbid == null) ? '' : ' checked') }}> --}}
                                 <label class="form-check-label" for="bids">
                                     Allow bids
