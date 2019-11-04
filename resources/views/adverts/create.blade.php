@@ -96,7 +96,11 @@
                             </div>
                             <div class="col-md-6 ml-5">
                                 <input class="form-check-input" type="checkbox" name="bids" id="bids"
-                                    {{ session('bidcheck') ? "" : "checked" }}>
+                                    @if (session('bidcheckon')) {{ "checked" }}>
+                                @elseif (session('bidcheckoff')) {{ "" }}>
+                                @else {{ "checked" }}>
+                                @endif
+                                {{-- {{ session('bidcheck') ? "" : "checked" }}> --}}
                                 <label class="form-check-label" for="bids">
                                     Allow bids
                                 </label>
@@ -125,32 +129,37 @@
                             <h5 class="card-header mb-3">Add Image(s)</h5>
                             <div class="row">
                                 <div class="col-sm-4 imgUp">
-                                    <div class="imagePreview"></div>
-                                    <label class="btn btn-primary" id="btn-primary">
-                                        Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
-                                            style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
-                                    </label>
-                                </div><!-- col-4 -->
-                                <i class=" fa fa-plus imgAdd"></i>
-                            </div><!-- row -->
-                        </div><!-- container -->
-                        <div class="imgVal  mx-auto col-sm-4">
-                            <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
-                                <strong>@error('images') At least 1 image is required @enderror &nbsp;</strong>
-                            </span>
-                        </div>
-                        <hr>
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4 mt-3">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Create Advert') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div> {{-- Card Body --}}
-            </div> {{-- Card --}}
-        </div> {{-- Column --}}
-    </div> {{-- Row --}}
+                                    @if (session('images'))
+                                    <div class="imagePreview" style="background-image: url('{{ session('images')[0] }}')"></div>
+                                    @else
+                                    <div class="imagePreview">No</div>
+                                    @endif
+                                    {{-- <div class="imagePreview" style="background-image: url('{{ $base64Img[0] }}')"></div> --}}
+                                <label class="btn btn-primary" id="btn-primary">
+                                    Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
+                                        style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
+                                </label>
+                            </div><!-- col-4 -->
+                            <i class=" fa fa-plus imgAdd"></i>
+                        </div><!-- row -->
+                </div><!-- container -->
+                <div class="imgVal  mx-auto col-sm-4">
+                    <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
+                        <strong>@error('images') At least 1 image is required @enderror &nbsp;</strong>
+                    </span>
+                </div>
+                <hr>
+                <div class="form-group row">
+                    <div class="col-md-6 offset-md-4 mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            {{ __('Create Advert') }}
+                        </button>
+                    </div>
+                </div>
+                </form>
+            </div> {{-- Card Body --}}
+        </div> {{-- Card --}}
+    </div> {{-- Column --}}
+</div> {{-- Row --}}
 </div> {{-- Container --}}
 @endsection

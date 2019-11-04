@@ -35,21 +35,26 @@ class AdvertStoreRequest extends FormRequest
     }
     public function withValidator($validator)
     {
-    // $validator->after(function ($validator) {
-        // $req = 1;
-        // $req = $this->validated();
-        // dd($this->input['startbid']);
+        $base64Img=[];
+        if ($this->hasFile('images')) {
+            foreach ($this->file('images') as $picture) {
+                $imageData = base64_encode(file_get_contents($picture));
+                $src = 'data: '.mime_content_type($picture->path()).';base64,'.$imageData;
+                array_push($base64Img, $src);
+                }
+        }
         if(is_null($this->input(['bids']))) {
-        // $validator->after(function ($validator){
                 redirect('/adverts/create')
                 ->withErrors($validator)
                 ->withInput()
-                ->with('bidcheck', 'a');
+                ->with('images', $base64Img)
+                ->with('bidcheckoff', 'a');
             } else {
                 redirect('/adverts/create')
                 ->withErrors($validator)
-                ->withInput();
+                ->withInput()
+                ->with('images', $base64Img)
+                ->with('bidcheckon', 'a');
             } 
-        // });
     }
 }

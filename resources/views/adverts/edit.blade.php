@@ -136,7 +136,6 @@
             <div class="card-body">
                 <div class="container">
                     <h5 class="card-header mb-3">Change/Add Image(s)</h5>
-                    {{-- {{ $advert->pictures->count() == 1 ? '' : 's' }}</h5> --}}
                     <div class="row">
                         <div class="col-sm-4 imgUp">
                             @if ($base64Img)
@@ -154,6 +153,7 @@
                             <h5 class="card-text text-center">Administrator</h4>
                         </div>
                     </div><!-- col-4 -->
+                    <i class=" fa fa-plus imgAdd"></i>
                     @endif
                 </div><!-- row -->
             </div><!-- container -->

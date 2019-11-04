@@ -18,31 +18,25 @@ class AdvertsController extends Controller
     }
     public function create()
     {
+        // dd(session());
         $categories = Category::all();
         return view('adverts.create', compact('categories'));
     }
     public function store(AdvertStoreRequest $request)
     {
+        // Validated Through Request
         $validated = $request->validated();
+        // Create Advert
         $advert = Advert::create($validated + ['owner_id' => auth()->id()]);
-        $this->storeImage($request, $advert);
-        // if ($request->hasFile('images')) {
-        //     foreach ($request->file('images') as $image) {
-        //         $name = $image->getClientOriginalName();
-        //         $img = new Picture();
-        //         $img->filename = '/advertimages/'.date('YmdHis',time()).'-'.$name;
-        //         $img->owner_id = auth()->id();
-        //         $img->advert_id = $advert->id;
-        //         $img->save();
-        //         $image->move(public_path() . '/advertimages/', $img['filename']);
-        //         }
-        // }
+        // Create Picture(s)
+        $img = $this->storeImage($request, $advert);
+        // Attach Category
         $advert->categories()->sync($validated['category']);
+
         return redirect('/adverts/create')->with('success', 'Successfully Create New Advert!');
     }
     public function storeImage($req, $adv)
     {
-        // dd($adv);
         // $request->hasFile('images') {
         foreach ($req->file('images') as $image) {
             $name = $image->getClientOriginalName();
@@ -53,6 +47,7 @@ class AdvertsController extends Controller
             $img->save();
             $image->move(public_path() . '/advertimages/', $img['filename']);
             }
+            return $img;
     }
     public function show(Advert $advert)
     {
