@@ -18,8 +18,8 @@
                         @adman
                         <p>You are logged in as an Advertiser</p>
                         <a href="{{ route('index') }}" class="btn btn-info">Index Page</a>
-                        <a href="{{ route('create.advert') }}" class="btn btn-secondary ml-3">Create Advert</a>
-                        <a href="{{ route('index.advert') }}" class="btn btn-success ml-3">Manage Adverts</a>
+                        <a href="{{ route('adverts.create') }}" class="btn btn-secondary ml-3">Create Advert</a>
+                        <a href="{{ route('adverts.index') }}" class="btn btn-success ml-3">Manage Adverts</a>
                         @endadman
                         @admin
                         <p>You are logged in as an Administrator</p>

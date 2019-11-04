@@ -16,11 +16,11 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <a class="btn btn-success col-md-4 offset-md-4" href="{{ route('index.advert') }}">Manage Your Adverts</a>
+                <a class="btn btn-success col-md-4 offset-md-4" href="{{ route('adverts.index') }}">Manage Your Adverts</a>
                 @endif
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('store.advert') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('adverts.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group row">

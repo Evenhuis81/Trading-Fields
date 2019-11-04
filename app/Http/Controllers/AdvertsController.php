@@ -24,6 +24,7 @@ class AdvertsController extends Controller
     }
     public function store(AdvertStoreRequest $request)
     {
+        $this->authorize('update', $advert);
         // Validated Through Request
         $validated = $request->validated();
         // Create Advert
@@ -51,7 +52,8 @@ class AdvertsController extends Controller
     }
     public function show(Advert $advert)
     {
-        abort_if($advert->owner_id !== auth()->id(), 403);
+        // return dd($advert = Advert::findOrFail($advert->id));
+        // abort_if($advert->owner_id !== auth()->id(), 403);
     }
     public function edit(Advert $advert)
     {

@@ -38,8 +38,8 @@
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         @adman
-                        <a class="dropdown-item" href="{{ route('create.advert') }}">{{ __('New Advert') }}</a>
-                        <a class="dropdown-item" href="{{ route('index.advert') }}">{{ __('Manage Adverts') }}</a>
+                        <a class="dropdown-item" href="{{ route('adverts.create') }}">{{ __('New Advert') }}</a>
+                        <a class="dropdown-item" href="{{ route('adverts.index') }}">{{ __('Manage Adverts') }}</a>
                         <div class="dropdown-divider"></div>
                         @endadman
                         @admin
