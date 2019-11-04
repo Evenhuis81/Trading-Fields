@@ -2,106 +2,65 @@
 
 namespace App\Http\Controllers;
 
-// use App\Image;
 use App\Advert;
 use App\Picture;
 use App\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\AdvertStoreRequest;
 use Illuminate\Support\Facades\Validator;
 
 class AdvertsController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+{  
     public function index()
     {
         $adverts = Advert::where('owner_id', (auth()->id()))->get();
-        // dd($adverts);
         return view('adverts.index', compact('adverts'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $categories = Category::all();
         return view('adverts.create', compact('categories'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(AdvertStoreRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|min:3|max:50',
-            'description' => 'required|string|min:3|max:500',
-            'price' => 'required|integer|min:0|max:10000',
-            'category' => 'required|integer',
-            'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
-            'images' => 'required|array|min:1',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        if ($validator->fails()) {
-            $failreturn = redirect('/adverts/create')
-            ->withErrors($validator)
-            ->withInput();
-            if (is_null($request['bids'])) {
-                return $failreturn->with('bidcheck', 'a');
-            } else {
-                return $failreturn;
-            }   
-        }
-
-        $advert = Advert::create($request->all() + ['owner_id' => auth()->id()]);
-
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $name = $image->getClientOriginalName();
-                
-                $img = new Picture();
-                $img->filename = '/advertimages/'.date('YmdHis',time()).'-'.$name;
-                $img->owner_id = auth()->id();
-                $img->advert_id = $advert->id;
-                $img->save();
-                $image->move(public_path() . '/advertimages/', $img['filename']);
-                }
-        }
-
-        $advert->categories()->sync(request('category'));
-        
+        $validated = $request->validated();
+        $advert = Advert::create($validated + ['owner_id' => auth()->id()]);
+        $this->storeImage($request, $advert);
+        // if ($request->hasFile('images')) {
+        //     foreach ($request->file('images') as $image) {
+        //         $name = $image->getClientOriginalName();
+        //         $img = new Picture();
+        //         $img->filename = '/advertimages/'.date('YmdHis',time()).'-'.$name;
+        //         $img->owner_id = auth()->id();
+        //         $img->advert_id = $advert->id;
+        //         $img->save();
+        //         $image->move(public_path() . '/advertimages/', $img['filename']);
+        //         }
+        // }
+        $advert->categories()->sync($validated['category']);
         return redirect('/adverts/create')->with('success', 'Successfully Create New Advert!');
     }
-    
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Advert  $advert
-     * @return \Illuminate\Http\Response
-     */
+    public function storeImage($req, $adv)
+    {
+        // dd($adv);
+        // $request->hasFile('images') {
+        foreach ($req->file('images') as $image) {
+            $name = $image->getClientOriginalName();
+            $img = new Picture();
+            $img->filename = '/advertimages/'.date('YmdHis',time()).'-'.$name;
+            $img->owner_id = auth()->id();
+            $img->advert_id = $adv->id;
+            $img->save();
+            $image->move(public_path() . '/advertimages/', $img['filename']);
+            }
+    }
     public function show(Advert $advert)
     {
-        //
+        abort_if($advert->owner_id !== auth()->id(), 403);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Advert  $advert
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Advert $advert)
     {
+        abort_if($advert->owner_id !== auth()->id(), 403);
         $categories = Category::all();
         $base64Img=[];
         foreach ($advert->pictures as $picture) {
@@ -115,21 +74,10 @@ class AdvertsController extends Controller
             // Echo out a sample image
             // echo '<img src="'.$src.'">';
         }
-        
         return view('adverts.edit', compact('advert', 'base64Img', 'categories'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Advert  $advert
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Advert $advert)
     {
-        // dd($request);
-        // $categories = Category::all();
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
@@ -173,16 +121,8 @@ class AdvertsController extends Controller
 
         return redirect('/adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Advert  $advert
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Advert $advert)
     {
-        // Ajax Delete
         $advert->delete();
     }
 }
