@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AdvertsController extends Controller
 {  
+    public function __construct()
+    {
+        $this->middleware('adman')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $adverts = Advert::where('owner_id', (auth()->id()))->get();
@@ -18,23 +23,24 @@ class AdvertsController extends Controller
     }
     public function create()
     {
-        // dd(session());
         $categories = Category::all();
         return view('adverts.create', compact('categories'));
     }
     public function store(AdvertStoreRequest $request)
     {
-        $this->authorize('update', $advert);
+
+        // $this->authorize('update', $advert);
         // Validated Through Request
         $validated = $request->validated();
         // Create Advert
         $advert = Advert::create($validated + ['owner_id' => auth()->id()]);
         // Create Picture(s)
-        $img = $this->storeImage($request, $advert);
+        $this->storeImage($request, $advert);
         // Attach Category
         $advert->categories()->sync($validated['category']);
 
-        return redirect('/adverts/create')->with('success', 'Successfully Create New Advert!');
+        return redirect('/adverts/create')->with('success', 'Successfully Create New Advert!')
+                                            ->with('advertid', $advert->id);
     }
     public function storeImage($req, $adv)
     {
@@ -48,16 +54,16 @@ class AdvertsController extends Controller
             $img->save();
             $image->move(public_path() . '/advertimages/', $img['filename']);
             }
-            return $img;
+            // return back();
     }
     public function show(Advert $advert)
     {
-        // return dd($advert = Advert::findOrFail($advert->id));
-        // abort_if($advert->owner_id !== auth()->id(), 403);
+        dd($advert = Advert::findOrFail(88));
     }
     public function edit(Advert $advert)
     {
-        abort_if($advert->owner_id !== auth()->id(), 403);
+        $this->authorize('update', $advert);
+        // abort_if($advert->owner_id !== auth()->id(), 403);
         $categories = Category::all();
         $base64Img=[];
         foreach ($advert->pictures as $picture) {
@@ -75,6 +81,9 @@ class AdvertsController extends Controller
     }
     public function update(Request $request, Advert $advert)
     {
+        $this->authorize('update', $advert);
+        dd(str_random(10));
+        dd($newToken);
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
@@ -120,6 +129,8 @@ class AdvertsController extends Controller
     }
     public function destroy(Advert $advert)
     {
+        $this->authorize('update', $advert);
         $advert->delete();
+        return back;
     }
 }

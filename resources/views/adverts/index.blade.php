@@ -21,7 +21,7 @@
             <div class="card-title text-center">
                 <legend>{{ __('You don\'t have any Adverts!') }}</legend>
                 <hr>
-                <a href="{{ route('create.advert') }}" class="btn btn-success" style="font-size: 1.5em; color: white">{{ __('Make an Advert') }}</a>
+                <a href="{{ route('adverts.create') }}" class="btn btn-success" style="font-size: 1.5em; color: white">{{ __('Make an Advert') }}</a>
             </div>
         </div>
     </div>

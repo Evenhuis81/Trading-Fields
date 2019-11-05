@@ -16,7 +16,11 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <a class="btn btn-success col-md-4 offset-md-4" href="{{ route('adverts.index') }}">Manage Your Adverts</a>
+                <div class="row col-md-12">
+                    <a class="btn btn-success col-md-3 offset-md-1" href="{{ route('adverts.index') }}">Manage Your Adverts</a>
+                    <a class="btn btn-warning col-md-3 offset-md-1" href="{{ route('adverts.edit', [session('advertid')]) }}">Edit new Advert</a>
+                    <a class="btn btn-info col-md-3 offset-md-1" href="{{ route('adverts.show', [session('advertid')]) }}">Show new Advert</a>
+                </div>
                 @endif
 
                 <div class="card-body">
@@ -126,13 +130,14 @@
                         </div>
                         <hr>
                         <div class="container">
-                            <h5 class="card-header mb-3">Add Image(s)</h5>
+                            <h5 class="card-header mb-3">Add Image</h5>
                             <div class="row">
-                                <div class="col-sm-4 imgUp">
+                                <div class="col-sm-4 offset-sm-4 imgUp">
                                     @if (session('images'))
                                     <div class="imagePreview" style="background-image: url('{{ session('images')[0] }}')"></div>
+                                    <input type="hidden" name="base64img" value="{{ session('images')[0] }}">
                                     @else
-                                    <div class="imagePreview">No</div>
+                                    <div class="imagePreview"></div>
                                     @endif
                                     {{-- <div class="imagePreview" style="background-image: url('{{ $base64Img[0] }}')"></div> --}}
                                 <label class="btn btn-primary" id="btn-primary">
@@ -140,7 +145,7 @@
                                         style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
                                 </label>
                             </div><!-- col-4 -->
-                            <i class=" fa fa-plus imgAdd"></i>
+                            {{-- <i class=" fa fa-plus imgAdd"></i> --}}
                         </div><!-- row -->
                 </div><!-- container -->
                 <div class="imgVal  mx-auto col-sm-4">
