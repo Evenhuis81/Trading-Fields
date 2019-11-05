@@ -82,8 +82,8 @@ class AdvertsController extends Controller
     public function update(Request $request, Advert $advert)
     {
         $this->authorize('update', $advert);
-        dd(str_random(10));
-        dd($newToken);
+        // dd(str_random(10));
+        // dd($newToken);
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
@@ -131,6 +131,6 @@ class AdvertsController extends Controller
     {
         $this->authorize('update', $advert);
         $advert->delete();
-        return back;
+        // return back;
     }
 }

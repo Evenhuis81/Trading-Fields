@@ -15,7 +15,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <a class="btn btn-success col-md-4 offset-md-4 mt-2" href="{{ route('index.advert') }}">Manage Your Adverts</a>
+                <a class="btn btn-success col-md-4 offset-md-4 mt-2" href="{{ route('adverts.index') }}">Manage Your Adverts</a>
                 @endif
 
                 <div class="card-body">
@@ -114,7 +114,7 @@
                                 </label>
                             </div>
                         </div>
-                        {{-- <div class="form-group row" id="inputBid" style="display: none">
+                        <div class="form-group row" id="inputBid" style="display: none">
                             <div class="form-check col-md-4 text-md-right mt-2">
                                 <label for="bid col-form-label">Change Starting bid:</label>
                             </div>
@@ -131,13 +131,13 @@
                         </span>
                         @enderror
                 </div>
-            </div> --}}
+            </div>
 
             <div class="card-body">
                 <div class="container">
                     <h5 class="card-header mb-3">Change/Add Image(s)</h5>
                     <div class="row">
-                        <div class="col-sm-4 imgUp">
+                        <div class="col-sm-4 offset-sm-4 imgUp">
                             @if ($base64Img)
                             <div class="imagePreview" style="background-image: url('{{ $base64Img[0] }}')"></div>
                             <label class="btn btn-primary" id="btn-primary">
@@ -145,7 +145,7 @@
                                     style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
                             </label>
                         </div><!-- col-4 -->
-                        <i class=" fa fa-plus imgAdd"></i>
+                        {{-- <i class=" fa fa-plus imgAdd"></i> --}}
                         @else
                         <div style="height:140px;">
                             <h2 class="card-text text-center mt-5">Missing Image</h2>
