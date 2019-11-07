@@ -7,7 +7,6 @@ use Faker\Generator as Faker;
 
 $factory->define(Advert::class, function (Faker $faker) {
     return [
-        // ucfirst
         'title' => ucfirst($faker->word()).' '.ucfirst($faker->word()),
         'description' => $faker->realText(150),
         'price' => rand(0,500),

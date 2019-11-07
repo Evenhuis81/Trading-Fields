@@ -16,7 +16,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="row col-md-12">
+                <div class="row col-md-12 mt-2">
                     <a class="btn btn-success col-md-3 offset-md-1" href="{{ route('adverts.index') }}">Manage Your Adverts</a>
                     <a class="btn btn-warning col-md-3 offset-md-1" href="{{ route('adverts.edit', [session('advertid')]) }}">Edit new Advert</a>
                     <a class="btn btn-info col-md-3 offset-md-1" href="{{ route('adverts.show', [session('advertid')]) }}">Show new Advert</a>
@@ -133,9 +133,9 @@
                             <h5 class="card-header mb-3">Add Image</h5>
                             <div class="row">
                                 <div class="col-sm-4 offset-sm-4 imgUp">
-                                    @if (session('images'))
+                                    @if (session('images') )
                                     <div class="imagePreview" style="background-image: url('{{ session('images')[0] }}')"></div>
-                                    <input type="hidden" name="base64img" value="{{ session('images')[0] }}">
+                                    <input type="hidden" name="{{ session('imagekey') }}" value="{{ session('images')[0] }}">
                                     @else
                                     <div class="imagePreview"></div>
                                     @endif

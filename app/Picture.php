@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Picture extends Model
 {
+    protected $guarded = [];
+
     public function advert() {
         return $this->belongsTo(Advert::class, 'advert_id');
     }
@@ -13,4 +15,10 @@ class Picture extends Model
     public function owner() {
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    // public function getFileNameAttribute($value)
+    // { {file_name)}
+    // file_name
+    //     return "(&quot;data:image/jpeg;base64," . $value;
+    // }
 }

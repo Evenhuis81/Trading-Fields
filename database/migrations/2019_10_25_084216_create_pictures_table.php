@@ -16,7 +16,7 @@ class CreatePicturesTable extends Migration
         Schema::create('pictures', function (Blueprint $table) {
             $table->bigIncrements('id');
             // $table->boolean('isTemp')->default(false);
-            $table->string('filename');
+            $table->string('file_name');
             $table->unsignedBigInteger('owner_id');
             $table->unsignedBigInteger('advert_id');
             $table->timestamps();

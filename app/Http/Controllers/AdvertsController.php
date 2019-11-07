@@ -6,6 +6,8 @@ use App\Advert;
 use App\Picture;
 use App\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AdvertStoreRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +15,7 @@ class AdvertsController extends Controller
 {  
     public function __construct()
     {
-        $this->middleware('adman')->except(['index', 'show']);
+        $this->middleware('adman')->except(['show']);
     }
 
     public function index()
@@ -30,7 +32,9 @@ class AdvertsController extends Controller
     {
 
         // $this->authorize('update', $advert);
+
         // Validated Through Request
+        // dd($request);
         $validated = $request->validated();
         // Create Advert
         $advert = Advert::create($validated + ['owner_id' => auth()->id()]);
@@ -44,21 +48,69 @@ class AdvertsController extends Controller
     }
     public function storeImage($req, $adv)
     {
-        // $request->hasFile('images') {
-        foreach ($req->file('images') as $image) {
-            $name = $image->getClientOriginalName();
+        if (isset($req['images'])) {
+            foreach ($req->file('images') as $image) {
+                // dd($image);
+                $name = $image->getClientOriginalName();
+                $img = new Picture();
+                $img->file_name = '/advertimages/'.date('YmdHis',time()).'-'.$name;
+                $img->owner_id = auth()->id();
+                $img->advert_id = $adv->id;
+                $img->save();
+                $image->move(public_path() . '/advertimages/', $img['file_name']);
+                }
+        } else {
+            // dd(public_path());
+            $pictr = $req['base64key'];
+            $ini = substr($pictr, 12);
+            $type = explode(';', $ini);
+            $data = base64_decode($type[1]);
+            $name = "test.".$type[0];
             $img = new Picture();
-            $img->filename = '/advertimages/'.date('YmdHis',time()).'-'.$name;
+            $img->file_name = 'advertimages/'.date('YmdHis',time()).'-'.$name;
             $img->owner_id = auth()->id();
             $img->advert_id = $adv->id;
             $img->save();
-            $image->move(public_path() . '/advertimages/', $img['filename']);
-            }
+            //$data->move(public_path() . '/advertimages/', $img['file_name']);
+
+            Storage::put($img['file_name'], $data);
+
+
+
+
+            // preg_match("/^data:image\/(.*);base64/i",$pictr, $match);
+            // $extension = $match;
+            // echo $type[0]; // result png
+            // $pictr1 = substr($pictr, 5, strpos($pictr, ';')-5);
+            // dd($pictr);
+            // dd($req['base64key']);
+            // $offset = strpos($req['base64key'], ',');
+            // $data = base64_decode(substr($req['base64key'], $offset));
+            // list($type, $data) = explode(';', $req['base64key']); // exploding data for later checking and validating 
+            // if (preg_match('/^data:image\/(\w+);base64,/', $req['base64key'], $type)) {
+            //     $data = substr($data, strpos($data, ',') + 1);
+            //     $type = strtolower($type[1]); // jpg, png, gif
+            //     dd($type);
+            // }
+
+        }
+    
+        
+        // $request->hasFile('images') {
+        // foreach ($req->file('images') as $image) {
+        //     $name = $image->getClientOriginalName();
+        //     $img = new Picture();
+        //     $img->filename = '/advertimages/'.date('YmdHis',time()).'-'.$name;
+        //     $img->owner_id = auth()->id();
+        //     $img->advert_id = $adv->id;
+        //     $img->save();
+        //     $image->move(public_path() . '/advertimages/', $img['filename']);
+        //     }
             // return back();
     }
     public function show(Advert $advert)
     {
-        dd($advert = Advert::findOrFail(88));
+        // dd($advert = Advert::findOrFail(88));
     }
     public function edit(Advert $advert)
     {
@@ -67,8 +119,7 @@ class AdvertsController extends Controller
         $categories = Category::all();
         $base64Img=[];
         foreach ($advert->pictures as $picture) {
-            // dd(public_path($picture->filename));
-            $image = public_path($picture->filename);
+            $image = public_path($picture->file_name);
             // Read image path, convert to base64 encoding
             $imageData = base64_encode(file_get_contents($image));
             // Format the image SRC: data:{mime};base64,{data};

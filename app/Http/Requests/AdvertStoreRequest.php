@@ -23,7 +23,8 @@ class AdvertStoreRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->input(['base64img'])) {
+        // base64img = key?
+        if ($this->input(['base64key'])) {
         // if ($this->hasFile('images')) {
             return [
             'title' => 'required|string|min:3|max:50',
@@ -31,8 +32,7 @@ class AdvertStoreRequest extends FormRequest
             'price' => 'required|integer|min:0|max:10000',
             'category' => 'required|integer',
             'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
-            // 'images' => 'required|array|min:1',
-            // 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'base64key' => 'required',
             ];
         } else {
             return [
@@ -49,6 +49,9 @@ class AdvertStoreRequest extends FormRequest
     public function withValidator($validator)
     {
         if ($this->hasFile('images')) {
+            $redirect=redirect('/adverts/create')
+            ->withErrors($validator)
+            ->withInput();
             $base64Img=[];
             foreach ($this->file('images') as $picture) {
                 $imageData = base64_encode(file_get_contents($picture));
@@ -59,28 +62,32 @@ class AdvertStoreRequest extends FormRequest
                     ->withErrors($validator)
                     ->withInput()
                     ->with('images', $base64Img)
+                    ->with('imagekey', 'base64key')
                     ->with('bidcheckoff', 'a');
                 } else {
                     redirect('/adverts/create')
                     ->withErrors($validator)
                     ->withInput()
+                    ->with('imagekey', 'base64key')
                     ->with('images', $base64Img)
                     ->with('bidcheckon', 'a');
                 }
             }
-        } elseif ($this->input(['base64img'])) {
+        } elseif ($this->input(['base64key'])) {
             $base64Img=[];
-            array_push($base64Img, $this->input(['base64img']));
+            array_push($base64Img, $this->input(['base64key']));
             if(is_null($this->input(['bids']))) {
                 redirect('/adverts/create')
                 ->withErrors($validator)
                 ->withInput()
+                ->with('imagekey', 'base64key')
                 ->with('images', $base64Img)
                 ->with('bidcheckoff', 'a');
             } else {
                 redirect('/adverts/create')
                 ->withErrors($validator)
                 ->withInput()
+                ->with('imagekey', 'base64key')
                 ->with('images', $base64Img)
                 ->with('bidcheckon', 'a');
             }
@@ -89,13 +96,11 @@ class AdvertStoreRequest extends FormRequest
                 redirect('/adverts/create')
                 ->withErrors($validator)
                 ->withInput()
-                // ->with('images', $base64Img)
                 ->with('bidcheckoff', 'a');
             } else {
                 redirect('/adverts/create')
                 ->withErrors($validator)
                 ->withInput()
-                // ->with('images', $base64Img)
                 ->with('bidcheckon', 'a');
             }
         }

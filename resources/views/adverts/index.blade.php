@@ -40,7 +40,7 @@
                 <div class="card col-md-3 ml-3 hoverer poss{{ $adverts[$position]->id }}">
                     @endif
                     @if ($adverts[$position]->pictures->count())
-                    <img class="card-img-top cssimg mt-2" src="{{ url($adverts[$position]->pictures[0]->filename) }}" alt="Card image cap">
+                    <img class="card-img-top cssimg mt-2" src="{{ url($adverts[$position]->pictures[0]->file_name) }}" alt="Card image cap">
                     @else
                     <div style="height: 150px;">
                         <h2 class="card-text text-center mt-5">Missing Image</h2>
