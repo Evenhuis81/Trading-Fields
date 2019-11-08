@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Picture extends Model
 {
+    // set fillable
     protected $guarded = [];
 
     public function advert() {

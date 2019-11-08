@@ -16,12 +16,15 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="row col-md-12 mt-2">
+                <div class="row col-md-12 my-2">
                     <a class="btn btn-success col-md-3 offset-md-1" href="{{ route('adverts.index') }}">Manage Your Adverts</a>
                     <a class="btn btn-warning col-md-3 offset-md-1" href="{{ route('adverts.edit', [session('advertid')]) }}">Edit new Advert</a>
                     <a class="btn btn-info col-md-3 offset-md-1" href="{{ route('adverts.show', [session('advertid')]) }}">Show new Advert</a>
                 </div>
-                @endif
+                <div class="row col-md-12 my-2">
+                    <a class="btn btn-dark col-md-5 offset-md-4" href="{{ route('adverts.create') }}">Create Another Advert</a>
+                </div>
+                @else
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('adverts.store') }}" enctype="multipart/form-data">
@@ -104,7 +107,6 @@
                                 @elseif (session('bidcheckoff')) {{ "" }}>
                                 @else {{ "checked" }}>
                                 @endif
-                                {{-- {{ session('bidcheck') ? "" : "checked" }}> --}}
                                 <label class="form-check-label" for="bids">
                                     Allow bids
                                 </label>
@@ -136,35 +138,37 @@
                                     @if (session('images') )
                                     <div class="imagePreview" style="background-image: url('{{ session('images')[0] }}')"></div>
                                     <input type="hidden" name="{{ session('imagekey') }}" value="{{ session('images')[0] }}">
+                                    <input type="hidden" name="imagename" value="{{ session('imagename') }}">
                                     @else
                                     <div class="imagePreview"></div>
+                                    <input id="imagename" type="hidden" name="" value="">
                                     @endif
-                                    {{-- <div class="imagePreview" style="background-image: url('{{ $base64Img[0] }}')"></div> --}}
-                                <label class="btn btn-primary" id="btn-primary">
-                                    Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
-                                        style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
-                                </label>
-                            </div><!-- col-4 -->
-                            {{-- <i class=" fa fa-plus imgAdd"></i> --}}
-                        </div><!-- row -->
-                </div><!-- container -->
-                <div class="imgVal  mx-auto col-sm-4">
-                    <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
-                        <strong>@error('images') At least 1 image is required @enderror &nbsp;</strong>
-                    </span>
-                </div>
-                <hr>
-                <div class="form-group row">
-                    <div class="col-md-6 offset-md-4 mt-3">
-                        <button type="submit" class="btn btn-primary">
-                            {{ __('Create Advert') }}
-                        </button>
-                    </div>
-                </div>
-                </form>
-            </div> {{-- Card Body --}}
-        </div> {{-- Card --}}
-    </div> {{-- Column --}}
-</div> {{-- Row --}}
+                                    <label class="btn btn-primary" id="btn-primary">
+                                        Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
+                                            style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
+                                    </label>
+                                </div><!-- col-4 -->
+                                {{-- <i class=" fa fa-plus imgAdd"></i> --}}
+                            </div><!-- row -->
+                        </div><!-- container -->
+                        <div class="imgVal  mx-auto col-sm-4">
+                            <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
+                                <strong>@error('images') An image is required @enderror &nbsp;</strong>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="form-group row">
+                            <div class="col-md-6 offset-md-4 mt-3">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Create Advert') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div> {{-- Card Body --}}
+                @endif
+            </div> {{-- Card --}}
+        </div> {{-- Column --}}
+    </div> {{-- Row --}}
 </div> {{-- Container --}}
 @endsection

@@ -49422,6 +49422,11 @@ $(document).ready(function () {
 
       if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
 
+      $("#imagename").attr({
+        name: "imagename",
+        value: this.files[0].name
+      });
+
       if (!/^image/.test(files[0].type)) {
         // only image file
         message = "This is not a valid image!";

@@ -125,56 +125,56 @@
                                 <input id="bid" type="number"
                                     class="form-control @error('startbid') is-invalid @enderror" name="startbid"
                                     value="{{ old('startbid') ? old('startbid') : "0" }}">
-                        @error('startbid')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                </div>
-            </div>
-
-            <div class="card-body">
-                <div class="container">
-                    <h5 class="card-header mb-3">Change/Add Image(s)</h5>
-                    <div class="row">
-                        <div class="col-sm-4 offset-sm-4 imgUp">
-                            @if ($base64Img)
-                            <div class="imagePreview" style="background-image: url('{{ $base64Img[0] }}')"></div>
-                            <label class="btn btn-primary" id="btn-primary">
-                                Change<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
-                                    style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
-                            </label>
-                        </div><!-- col-4 -->
-                        {{-- <i class=" fa fa-plus imgAdd"></i> --}}
-                        @else
-                        <div style="height:140px;">
-                            <h2 class="card-text text-center mt-5">Missing Image</h2>
-                            <h4 class="card-text text-center">Contact</h4>
-                            <h5 class="card-text text-center">Administrator</h4>
+                                @error('startbid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                         </div>
-                    </div><!-- col-4 -->
-                    <i class=" fa fa-plus imgAdd"></i>
-                    @endif
-                </div><!-- row -->
-            </div><!-- container -->
-            <div class="imgVal  mx-auto col-sm-4">
-                <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
-                    <strong>@error('images') At least 1 image is required @enderror &nbsp;</strong>
-                </span>
-            </div>
-            <hr>
-            <div class="form-group row">
-                <div class="col-md-6 offset-md-4 mt-3">
-                    <button type="submit" class="btn btn-primary">
-                        {{ __('Save Changes') }}
-                    </button>
-                </div>
-            </div>
-            </form>
-        </div> {{-- Card Body --}}
-    </div> {{-- Card --}}
-</div> {{-- Column --}}
-</div> {{-- Row --}}
+
+                        <div class="card-body">
+                            <div class="container">
+                                <h5 class="card-header mb-3">Change Image</h5>
+                                <div class="row">
+                                    <div class="col-sm-4 offset-sm-4 imgUp">
+                                        @if ($base64Img)
+                                        <div class="imagePreview" style="background-image: url('{{ $base64Img[0] }}')"></div>
+                                        <label class="btn btn-primary" id="btn-primary">
+                                            Change<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
+                                                style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
+                                        </label>
+                                    </div><!-- col-4 -->
+                                    {{-- <i class=" fa fa-plus imgAdd"></i> --}}
+                                    @else
+                                    <div style="height:140px;">
+                                        <h2 class="card-text text-center mt-5">Missing Image</h2>
+                                        <h4 class="card-text text-center">Contact</h4>
+                                        <h5 class="card-text text-center">Administrator</h4>
+                                    </div>
+                                </div><!-- col-4 -->
+                                <i class=" fa fa-plus imgAdd"></i>
+                                @endif
+                            </div><!-- row -->
+                        </div><!-- container -->
+                        <div class="imgVal  mx-auto col-sm-4">
+                            <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
+                                <strong>@error('images') At least 1 image is required @enderror &nbsp;</strong>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="form-group row">
+                            <div class="col-md-6 offset-md-4 mt-3">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Save Changes') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div> {{-- Card Body --}}
+            </div> {{-- Card --}}
+        </div> {{-- Column --}}
+    </div> {{-- Row --}}
 </div> {{-- Container --}}
 
 

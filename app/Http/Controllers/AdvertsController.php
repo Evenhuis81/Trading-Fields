@@ -30,14 +30,10 @@ class AdvertsController extends Controller
     }
     public function store(AdvertStoreRequest $request)
     {
-
-        // $this->authorize('update', $advert);
-
         // Validated Through Request
-        // dd($request);
         $validated = $request->validated();
         // Create Advert
-        $advert = Advert::create($validated + ['owner_id' => auth()->id()]);
+        $request['bids'] ? $advert = Advert::create($validated + ['owner_id' => auth()->id()]) : $advert = Advert::create($validated + ['owner_id' => auth()->id(), 'startbid' => null]);
         // Create Picture(s)
         $this->storeImage($request, $advert);
         // Attach Category
@@ -46,68 +42,6 @@ class AdvertsController extends Controller
         return redirect('/adverts/create')->with('success', 'Successfully Create New Advert!')
                                             ->with('advertid', $advert->id);
     }
-    public function storeImage($req, $adv)
-    {
-        if (isset($req['images'])) {
-            foreach ($req->file('images') as $image) {
-                // dd($image);
-                $name = $image->getClientOriginalName();
-                $img = new Picture();
-                $img->file_name = '/advertimages/'.date('YmdHis',time()).'-'.$name;
-                $img->owner_id = auth()->id();
-                $img->advert_id = $adv->id;
-                $img->save();
-                $image->move(public_path() . '/advertimages/', $img['file_name']);
-                }
-        } else {
-            // dd(public_path());
-            $pictr = $req['base64key'];
-            $ini = substr($pictr, 12);
-            $type = explode(';', $ini);
-            $data = base64_decode($type[1]);
-            $name = "test.".$type[0];
-            $img = new Picture();
-            $img->file_name = 'advertimages/'.date('YmdHis',time()).'-'.$name;
-            $img->owner_id = auth()->id();
-            $img->advert_id = $adv->id;
-            $img->save();
-            //$data->move(public_path() . '/advertimages/', $img['file_name']);
-
-            Storage::put($img['file_name'], $data);
-
-
-
-
-            // preg_match("/^data:image\/(.*);base64/i",$pictr, $match);
-            // $extension = $match;
-            // echo $type[0]; // result png
-            // $pictr1 = substr($pictr, 5, strpos($pictr, ';')-5);
-            // dd($pictr);
-            // dd($req['base64key']);
-            // $offset = strpos($req['base64key'], ',');
-            // $data = base64_decode(substr($req['base64key'], $offset));
-            // list($type, $data) = explode(';', $req['base64key']); // exploding data for later checking and validating 
-            // if (preg_match('/^data:image\/(\w+);base64,/', $req['base64key'], $type)) {
-            //     $data = substr($data, strpos($data, ',') + 1);
-            //     $type = strtolower($type[1]); // jpg, png, gif
-            //     dd($type);
-            // }
-
-        }
-    
-        
-        // $request->hasFile('images') {
-        // foreach ($req->file('images') as $image) {
-        //     $name = $image->getClientOriginalName();
-        //     $img = new Picture();
-        //     $img->filename = '/advertimages/'.date('YmdHis',time()).'-'.$name;
-        //     $img->owner_id = auth()->id();
-        //     $img->advert_id = $adv->id;
-        //     $img->save();
-        //     $image->move(public_path() . '/advertimages/', $img['filename']);
-        //     }
-            // return back();
-    }
     public function show(Advert $advert)
     {
         // dd($advert = Advert::findOrFail(88));
@@ -115,26 +49,27 @@ class AdvertsController extends Controller
     public function edit(Advert $advert)
     {
         $this->authorize('update', $advert);
-        // abort_if($advert->owner_id !== auth()->id(), 403);
         $categories = Category::all();
+
         $base64Img=[];
         foreach ($advert->pictures as $picture) {
-            $image = public_path($picture->file_name);
+            $imagee = Storage::url($picture->file_name);
+            $image = Storage::get($picture->file_name);
             // Read image path, convert to base64 encoding
-            $imageData = base64_encode(file_get_contents($image));
+            $imageData = base64_encode($image);
             // Format the image SRC: data:{mime};base64,{data};
-            $src = 'data: '.mime_content_type($image).';base64,'.$imageData;
+            // dd(getcwd());
+            $src = 'data: '.mime_content_type('storage/'.$picture->file_name).';base64,'.$imageData;
+            // $src = 'data: '.mime_content_type(getcwd() . $imagee).';base64,'.$imageData;
             array_push($base64Img, $src);
-            // Echo out a sample image
-            // echo '<img src="'.$src.'">';
         }
+        // dd($base64Img);
+        // return view('adverts.edit', compact('advert', 'base64Img', 'categories'))->with('imagename');
         return view('adverts.edit', compact('advert', 'base64Img', 'categories'));
     }
     public function update(Request $request, Advert $advert)
     {
         $this->authorize('update', $advert);
-        // dd(str_random(10));
-        // dd($newToken);
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
@@ -177,6 +112,32 @@ class AdvertsController extends Controller
         //     }
 
         return redirect('/adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!');
+    }
+    public function storeImage($req, $adv)
+    {
+        if (isset($req['images'])) {
+            foreach ($req->file('images') as $image) {
+                $name = $image->getClientOriginalName();
+                $img = new Picture();
+                $img->file_name = 'public/advertimages/'.date('YmdHis',time()).'-'.$name;
+                $img->owner_id = auth()->id();
+                $img->advert_id = $adv->id;
+                $img->save();
+                $imgcont = $image->get();
+                Storage::put($img['file_name'], $imgcont);
+                }
+        } else {
+            $pictr = $req['base64key'];
+            $type = explode(';', $pictr);
+            $data = base64_decode($type[1]);
+            $name = $req['imagename'];
+            $img = new Picture();
+            $img->file_name = 'public/advertimages/'.date('YmdHis',time()).'-'.$name;
+            $img->owner_id = auth()->id();
+            $img->advert_id = $adv->id;
+            $img->save();
+            Storage::put($img['file_name'], $data);
+        }
     }
     public function destroy(Advert $advert)
     {
