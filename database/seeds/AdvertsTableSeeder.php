@@ -15,7 +15,7 @@ class AdvertsTableSeeder extends Seeder
     {
         factory(Advert::class,30)->create();
         $adverts=Advert::all();
-        $pictures = array('advertseederimages/Auto.jpg', 'advertseederimages/Fiets.jpg', 'advertseederimages/Horloge.jpg', 'advertseederimages/Magnetron.jpg', 'advertseederimages/Monitor.jpg', 'advertseederimages/Naafdoppen.jpg', 'advertseederimages/Phone.jpg', 'advertseederimages/Piano.jpg', 'advertseederimages/Schoen.jpg', 'advertseederimages/Slijpmachine.jpg', 'advertseederimages/Stoel.jpg', 'advertseederimages/Wasmachine.jpg', );
+        $pictures = array('/advertseederimages/Auto.jpg', '/advertseederimages/Fiets.jpg', '/advertseederimages/Horloge.jpg', '/advertseederimages/Magnetron.jpg', '/advertseederimages/Monitor.jpg', '/advertseederimages/Naafdoppen.jpg', '/advertseederimages/Phone.jpg', '/advertseederimages/Piano.jpg', '/advertseederimages/Schoen.jpg', '/advertseederimages/Slijpmachine.jpg', '/advertseederimages/Stoel.jpg', '/advertseederimages/Wasmachine.jpg', );
         foreach ($adverts as $advert) { 
             $img = Picture::create([
                 'file_name' => $pictures[rand(0, 11)],

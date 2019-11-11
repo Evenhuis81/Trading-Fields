@@ -18,8 +18,8 @@ class CreateAdvertCategoryTable extends Migration
             $table->unsignedBigInteger('advert_id');
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
-            $table->foreign('advert_id')->references('id')->on('adverts');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('advert_id')->references('id')->on('adverts')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

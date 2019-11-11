@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AdvertStoreRequest;
 use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Http\Testing\File;
+
 class AdvertsController extends Controller
 {  
     public function __construct()
@@ -53,18 +55,23 @@ class AdvertsController extends Controller
 
         $base64Img=[];
         foreach ($advert->pictures as $picture) {
-            $imagee = Storage::url($picture->file_name);
-            $image = Storage::get($picture->file_name);
+            // $imagee= asset('storage'.$picture->file_name);
+            // $imagee = Storage::url($picture->file_name);
+            // 'storage/advertimages/20191111092441-Magnetron.jpg'
+            $image = Storage::get('public'.$picture->file_name);
+            // dd($image);
             // Read image path, convert to base64 encoding
             $imageData = base64_encode($image);
             // Format the image SRC: data:{mime};base64,{data};
-            // dd(getcwd());
-            $src = 'data: '.mime_content_type('storage/'.$picture->file_name).';base64,'.$imageData;
-            // $src = 'data: '.mime_content_type(getcwd() . $imagee).';base64,'.$imageData;
+
+            // dd(mime_content_type(getcwd().'/../storage/app/'.$picture->file_name));
+
+            // dd(mime_content_type(getcwd().$imagee));
+
+            $src = 'data: '.mime_content_type(getcwd().'/../storage/app/public'.$picture->file_name).';base64,'.$imageData;
             array_push($base64Img, $src);
+            // dd('hi');
         }
-        // dd($base64Img);
-        // return view('adverts.edit', compact('advert', 'base64Img', 'categories'))->with('imagename');
         return view('adverts.edit', compact('advert', 'base64Img', 'categories'));
     }
     public function update(Request $request, Advert $advert)
@@ -119,12 +126,12 @@ class AdvertsController extends Controller
             foreach ($req->file('images') as $image) {
                 $name = $image->getClientOriginalName();
                 $img = new Picture();
-                $img->file_name = 'public/advertimages/'.date('YmdHis',time()).'-'.$name;
+                $img->file_name = '/advertimages/'.date('YmdHis',time()).'-'.$name;
                 $img->owner_id = auth()->id();
                 $img->advert_id = $adv->id;
                 $img->save();
                 $imgcont = $image->get();
-                Storage::put($img['file_name'], $imgcont);
+                Storage::disk('local')->put('public'.$img['file_name'], $imgcont);
                 }
         } else {
             $pictr = $req['base64key'];
@@ -132,11 +139,12 @@ class AdvertsController extends Controller
             $data = base64_decode($type[1]);
             $name = $req['imagename'];
             $img = new Picture();
-            $img->file_name = 'public/advertimages/'.date('YmdHis',time()).'-'.$name;
+            $img->file_name = 'advertimages/'.date('YmdHis',time()).'-'.$name;
             $img->owner_id = auth()->id();
             $img->advert_id = $adv->id;
             $img->save();
-            Storage::put($img['file_name'], $data);
+            Storage::disk('local')->put('public'.$img['file_name'], $data);
+            // Storage::put($img['file_name'], $data);
         }
     }
     public function destroy(Advert $advert)
