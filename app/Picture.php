@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Picture extends Model
 {
     // set fillable
-    protected $guarded = [];
+    protected $fillable = [
+        // 'file_name',
+    ];
 
     public function advert() {
         return $this->belongsTo(Advert::class, 'advert_id');

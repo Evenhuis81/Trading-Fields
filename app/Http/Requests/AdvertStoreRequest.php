@@ -25,7 +25,6 @@ class AdvertStoreRequest extends FormRequest
     {
         // base64img = key?
         if ($this->input(['base64key'])) {
-        // if ($this->hasFile('images')) {
             return [
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',

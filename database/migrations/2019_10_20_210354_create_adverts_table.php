@@ -18,7 +18,7 @@ class CreateAdvertsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->unsignedInteger('price');
-            $table->unsignedBigInteger('category');
+            // $table->unsignedBigInteger('category');
             $table->unsignedInteger('startbid')->nullable();
             $table->unsignedBigInteger('owner_id');
             $table->timestamps();

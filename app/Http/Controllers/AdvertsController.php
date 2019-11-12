@@ -6,12 +6,13 @@ use App\Advert;
 use App\Picture;
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Testing\File;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AdvertStoreRequest;
-use Illuminate\Support\Facades\Validator;
 
-use Illuminate\Http\Testing\File;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\AdvertUpdateRequest;
 
 class AdvertsController extends Controller
 {  
@@ -52,50 +53,65 @@ class AdvertsController extends Controller
     {
         $this->authorize('update', $advert);
         $categories = Category::all();
-
-        $base64Img=[];
-        foreach ($advert->pictures as $picture) {
-            // $imagee= asset('storage'.$picture->file_name);
-            // $imagee = Storage::url($picture->file_name);
-            // 'storage/advertimages/20191111092441-Magnetron.jpg'
-            $image = Storage::get('public/'.$picture->file_name);
-            // Read image path, convert to base64 encoding
-            $imageData = base64_encode($image);
-            // Format the image SRC: data:{mime};base64,{data};
-            $src = 'data: '.mime_content_type(getcwd().'/../storage/app/public/'.$picture->file_name).';base64,'.$imageData;
-            array_push($base64Img, $src);
-            // dd('hi');
-        }
+        $base64Img = $this->convertBase64($advert);
         return view('adverts.edit', compact('advert', 'base64Img', 'categories'));
     }
-    public function update(Request $request, Advert $advert)
+    public function update(AdvertUpdateRequest $request, Advert $advert)
+    {
+        // Validated Through Request
+        $validated = $request->validated();
+        dd($validated);
+        // dd(collect($validated)->except(['category'])->toArray());
+        // dd($request['bids']);
+        //unset($validated["category"]);
+        //dd(collect($validated)->except(['category']));
+        // Update Advert
+        $request['bids'] ? $advert->update(collect($validated)->except(['category'])->toArray()) : $advert->update(collect($validated)->except(['category'])->toArray() + ['startbid' => null]);
+        $advert->categories()->sync([$validated['category']]);
+        // if ($validated['title'] == $advert->title) {
+        //     if ($validated['description'] == $advert->description) {
+        //         if ($validated['price'] == $advert->price) {
+        //                 // dd($advert->categories()->first()->id);
+        //                 // dd($validated['category']);
+        //                 if ($validated['category'] == $advert->categories()->first()->id) {
+        //                     dd('hi');
+        //                 }
+        //         }
+        //     }
+        // }
+
+        // $data = $request->session()->all();
+        // dd($data);
+        // $validator = Validator::make($request->all(), [
+        //     'title' => 'required|string|min:3|max:50',
+        //     'description' => 'required|string|min:3|max:500',
+        //     'price' => 'required|integer|min:0|max:10000',
+        //     'category' => 'required|integer',
+        //     'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
+        //     'images' => 'required|array|min:1',
+        //     'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        // ]);
+        // if ($validator->fails()) {
+        //     $failreturn = redirect('/adverts/'.$advert->id.'/edit')
+        //     ->withErrors($validator)
+        //     ->withInput();
+        //     if (is_null($request['bids'])) {
+        //         return $failreturn->with('bidcheckoff', 'a');
+        //     } else {
+        //         return $failreturn->with('bidcheckon', 'a');
+        //     }   
+        // }
+        // if ($request->hasFile('images')) {
+        //     foreach ($advert->pictures as $picture) {
+        //         $picture->delete();
+        //     }
+        // }
+        return redirect('adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!');
+    }
+    public function destroy(Advert $advert)
     {
         $this->authorize('update', $advert);
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|min:3|max:50',
-            'description' => 'required|string|min:3|max:500',
-            'price' => 'required|integer|min:0|max:10000',
-            'category' => 'required|integer',
-            // 'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
-            // 'images' => 'required|array|min:1',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        if ($validator->fails()) {
-            $failreturn = redirect('/adverts/'.$advert->id.'/edit')
-            ->withErrors($validator)
-            ->withInput();
-            if (is_null($request['bids'])) {
-                return $failreturn->with('bidcheckoff', 'a');
-            } else {
-                return $failreturn->with('bidcheckon', 'a');
-            }   
-        }
-        if ($request->hasFile('images')) {
-            foreach ($advert->pictures as $picture) {
-                $picture->delete();
-            }
-        }
-        return redirect('adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!');
+        $advert->delete();
     }
     public function storeImage($req, $adv)
     {
@@ -123,10 +139,17 @@ class AdvertsController extends Controller
             Storage::disk('public')->put($img['file_name'], $data);
         }
     }
-    public function destroy(Advert $advert)
+    public function convertBase64($adv)
     {
-        $this->authorize('update', $advert);
-        $advert->delete();
-        // return back;
+        $base64Img=[];
+        foreach ($adv->pictures as $picture) {
+            $image = Storage::get('public/'.$picture->file_name);
+            // Read image path, convert to base64 encoding
+            $imageData = base64_encode($image);
+            // Format the image SRC: data:{mime};base64,{data};
+            $src = 'data: '.mime_content_type(getcwd().'/../storage/app/public/'.$picture->file_name).';base64,'.$imageData;
+            array_push($base64Img, $src);
+        }
+        return $base64Img;
     }
 }

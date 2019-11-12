@@ -83,7 +83,7 @@
                                         @if (old('category')==$category->id)
                                         {{ "selected" }}
                                         @else
-                                        {{ $category->id == $advert->category ? "selected" : "" }}
+                                        {{ $category->id == $advert->categories()->first()->id ? "selected" : "" }}
                                         @endif>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
@@ -105,7 +105,7 @@
                                 @elseif (session('bidcheckoff'))
                                 {{ "" }}>
                                 @else
-                                {{ $advert->startbid == null ? '' : 'checked' }}>
+                                {{ $advert->startbid === null ? "" : "checked" }}>
                                 @endif
                                 <label class="form-check-label" for="bids">
                                     Allow bids
@@ -136,38 +136,43 @@
                                 <h5 class="card-header mb-3">Change Image</h5>
                                 <div class="row">
                                     <div class="col-sm-4 offset-sm-4 imgUp">
-                                        @if ($base64Img)
+                                        @if (session('images') )
+                                        <div class="imagePreview" style="background-image: url('{{ session('images')[0] }}')"></div>
+                                        <input type="hidden" name="{{ session('imagekey') }}" value="{{ session('images')[0] }}">
+                                        <input type="hidden" name="imagename" value="{{ session('imagename') }}">
+                                        @else
                                         <div class="imagePreview" style="background-image: url('{{ $base64Img[0] }}')"></div>
+                                        <input id="imagename" type="hidden" name="unchanged" value="true">
+                                        @endif
                                         <label class="btn btn-primary" id="btn-primary">
                                             Change<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
                                                 style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
                                         </label>
                                     </div><!-- col-4 -->
                                     {{-- <i class=" fa fa-plus imgAdd"></i> --}}
-                                    @else
-                                    <div style="height:140px;">
+                                    {{-- <div style="height:140px;">
                                         <h2 class="card-text text-center mt-5">Missing Image</h2>
                                         <h4 class="card-text text-center">Contact</h4>
                                         <h5 class="card-text text-center">Administrator</h4>
-                                    </div>
-                                </div><!-- col-4 -->
-                                <i class=" fa fa-plus imgAdd"></i>
-                                @endif
-                            </div><!-- row -->
-                        </div><!-- container -->
-                        <div class="imgVal  mx-auto col-sm-4">
-                            <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
-                                <strong>@error('images') At least 1 image is required @enderror &nbsp;</strong>
-                            </span>
-                        </div>
-                        <hr>
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4 mt-3">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Save Changes') }}
-                                </button>
+                                    </div> --}}
+                                    {{-- </div><!-- col-4 --> --}}
+                                    {{-- <i class=" fa fa-plus imgAdd"></i> --}}
+                                    {{-- @endif --}}
+                                </div><!-- row -->
+                            </div><!-- container -->
+                            <div class="imgVal  mx-auto col-sm-4">
+                                <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
+                                    <strong>@error('images') At least 1 image is required @enderror &nbsp;</strong>
+                                </span>
                             </div>
-                        </div>
+                            <hr>
+                            <div class="form-group row">
+                                <div class="col-md-6 offset-md-4 mt-3">
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ __('Save Changes') }}
+                                    </button>
+                                </div>
+                            </div>
                     </form>
                 </div> {{-- Card Body --}}
             </div> {{-- Card --}}
