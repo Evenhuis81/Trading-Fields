@@ -78,7 +78,6 @@
                             <div class="col-md-6">
                                 <select name="category" id="category"
                                     class="form-control @error('category') is-invalid @enderror">
-                                    {{-- <option selected disabled>Choose...</option> --}}
                                     @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
                                         @if (old('category')==$category->id)
@@ -108,7 +107,6 @@
                                 @else
                                 {{ $advert->startbid == null ? '' : 'checked' }}>
                                 @endif
-                                {{-- {{ old('bids') == "on" ? ' checked' : (($advert->startbid == null) ? '' : ' checked') }}> --}}
                                 <label class="form-check-label" for="bids">
                                     Allow bids
                                 </label>

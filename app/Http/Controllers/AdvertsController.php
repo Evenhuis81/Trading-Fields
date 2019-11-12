@@ -58,17 +58,11 @@ class AdvertsController extends Controller
             // $imagee= asset('storage'.$picture->file_name);
             // $imagee = Storage::url($picture->file_name);
             // 'storage/advertimages/20191111092441-Magnetron.jpg'
-            $image = Storage::get('public'.$picture->file_name);
-            // dd($image);
+            $image = Storage::get('public/'.$picture->file_name);
             // Read image path, convert to base64 encoding
             $imageData = base64_encode($image);
             // Format the image SRC: data:{mime};base64,{data};
-
-            // dd(mime_content_type(getcwd().'/../storage/app/'.$picture->file_name));
-
-            // dd(mime_content_type(getcwd().$imagee));
-
-            $src = 'data: '.mime_content_type(getcwd().'/../storage/app/public'.$picture->file_name).';base64,'.$imageData;
+            $src = 'data: '.mime_content_type(getcwd().'/../storage/app/public/'.$picture->file_name).';base64,'.$imageData;
             array_push($base64Img, $src);
             // dd('hi');
         }
@@ -100,25 +94,8 @@ class AdvertsController extends Controller
             foreach ($advert->pictures as $picture) {
                 $picture->delete();
             }
-            // foreach ($request->file('images') as $image) {
-            //     $name = $image->getClientOriginalName();
-                
-            //     $img = new Picture();
-            //     $img->filename = date('YmdHis',time()).'-'.$name;
-            //     $img->owner_id = auth()->id();
-            //     $img->advert_id = $advert->id;
-            //     $img->save();
-            //     $image->move(public_path() . '/advertimages/', $img['filename']);
-            //     }   
         }
-        // if ($request['title']==$advert->title && $request['description']==$advert->description && $request['price']==$advert->price
-        //     && $request['category']==$advert->category) {
-        //         if ($advert->startbid==$request['bids'] or ($request['bids']=='on' && is_null(!$advert->startbid)) {
-        //             dd('true');
-        //         }
-        //     }
-
-        return redirect('/adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!');
+        return redirect('adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!');
     }
     public function storeImage($req, $adv)
     {
@@ -126,12 +103,12 @@ class AdvertsController extends Controller
             foreach ($req->file('images') as $image) {
                 $name = $image->getClientOriginalName();
                 $img = new Picture();
-                $img->file_name = '/advertimages/'.date('YmdHis',time()).'-'.$name;
+                $img->file_name = 'advertimages/'.date('YmdHis',time()).'-'.$name;
                 $img->owner_id = auth()->id();
                 $img->advert_id = $adv->id;
                 $img->save();
                 $imgcont = $image->get();
-                Storage::disk('local')->put('public'.$img['file_name'], $imgcont);
+                Storage::disk('public')->put($img['file_name'], $imgcont);
                 }
         } else {
             $pictr = $req['base64key'];
@@ -143,8 +120,7 @@ class AdvertsController extends Controller
             $img->owner_id = auth()->id();
             $img->advert_id = $adv->id;
             $img->save();
-            Storage::disk('local')->put('public'.$img['file_name'], $data);
-            // Storage::put($img['file_name'], $data);
+            Storage::disk('public')->put($img['file_name'], $data);
         }
     }
     public function destroy(Advert $advert)
