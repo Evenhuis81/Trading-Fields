@@ -36,9 +36,9 @@ class AdvertsController extends Controller
         // Validated Through Request
         $validated = $request->validated();
         // Create Advert
-        $request['bids'] ? $advert = Advert::create($validated + ['owner_id' => auth()->id()]) : $advert = Advert::create($validated + ['owner_id' => auth()->id(), 'startbid' => null]);
+        $request['bids'] ? $advert = Advert::create(collect($validated)->except(['category'])->toArray() + ['owner_id' => auth()->id()]) : $advert = Advert::create(collect($validated)->except(['category'])->toArray() + ['owner_id' => auth()->id(), 'startbid' => null]);
         // Create Picture(s)
-        $this->storeImage($request, $advert);
+        $this->storeImage($request, $validated, $advert);
         // Attach Category
         $advert->categories()->sync($validated['category']);
 
@@ -61,10 +61,14 @@ class AdvertsController extends Controller
         // Validated Through Request
         $validated = $request->validated();
         dd($validated);
-        // dd(collect($validated)->except(['category'])->toArray());
-        // dd($request['bids']);
-        //unset($validated["category"]);
-        //dd(collect($validated)->except(['category']));
+        // Check if new picture, if so: destroy old, create new
+        if (isset($validated['images'])) {
+            foreach ($advert->pictures as $picture) {
+                Storage::disk('public')->delete($picture['file_name']);
+                $picture->delete();
+            }
+            $this->storeImage($request, $validated, $advert);
+        }
         // Update Advert
         $request['bids'] ? $advert->update(collect($validated)->except(['category'])->toArray()) : $advert->update(collect($validated)->except(['category'])->toArray() + ['startbid' => null]);
         $advert->categories()->sync([$validated['category']]);
@@ -74,38 +78,6 @@ class AdvertsController extends Controller
         //                 // dd($advert->categories()->first()->id);
         //                 // dd($validated['category']);
         //                 if ($validated['category'] == $advert->categories()->first()->id) {
-        //                     dd('hi');
-        //                 }
-        //         }
-        //     }
-        // }
-
-        // $data = $request->session()->all();
-        // dd($data);
-        // $validator = Validator::make($request->all(), [
-        //     'title' => 'required|string|min:3|max:50',
-        //     'description' => 'required|string|min:3|max:500',
-        //     'price' => 'required|integer|min:0|max:10000',
-        //     'category' => 'required|integer',
-        //     'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
-        //     'images' => 'required|array|min:1',
-        //     'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        // ]);
-        // if ($validator->fails()) {
-        //     $failreturn = redirect('/adverts/'.$advert->id.'/edit')
-        //     ->withErrors($validator)
-        //     ->withInput();
-        //     if (is_null($request['bids'])) {
-        //         return $failreturn->with('bidcheckoff', 'a');
-        //     } else {
-        //         return $failreturn->with('bidcheckon', 'a');
-        //     }   
-        // }
-        // if ($request->hasFile('images')) {
-        //     foreach ($advert->pictures as $picture) {
-        //         $picture->delete();
-        //     }
-        // }
         return redirect('adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!');
     }
     public function destroy(Advert $advert)
@@ -113,9 +85,11 @@ class AdvertsController extends Controller
         $this->authorize('update', $advert);
         $advert->delete();
     }
-    public function storeImage($req, $adv)
+    public function storeImage($req, $val, $adv)
     {
-        if (isset($req['images'])) {
+        // dd($req->hasFile('images'));
+        if (isset($val['images']) && $req->hasFile('images')) {
+            // dd('hi');
             foreach ($req->file('images') as $image) {
                 $name = $image->getClientOriginalName();
                 $img = new Picture();
@@ -127,10 +101,13 @@ class AdvertsController extends Controller
                 Storage::disk('public')->put($img['file_name'], $imgcont);
                 }
         } else {
-            $pictr = $req['base64key'];
+            $pictr = $val['base64key'];
+            // dd($pictr);
             $type = explode(';', $pictr);
+            dd($val['base64key']);
             $data = base64_decode($type[1]);
-            $name = $req['imagename'];
+            // dd($data);
+            $name = $val['imagename'];
             $img = new Picture();
             $img->file_name = 'advertimages/'.date('YmdHis',time()).'-'.$name;
             $img->owner_id = auth()->id();
@@ -143,6 +120,8 @@ class AdvertsController extends Controller
     {
         $base64Img=[];
         foreach ($adv->pictures as $picture) {
+            // dd(mime_content_type(getcwd().'/../storage/app/public/'.$picture->file_name));
+            // dd(getcwd().'/../storage/app/public/'.$picture->file_name);
             $image = Storage::get('public/'.$picture->file_name);
             // Read image path, convert to base64 encoding
             $imageData = base64_encode($image);

@@ -56,6 +56,7 @@ class AdvertStoreRequest extends FormRequest
         ->withErrors($validator)
         ->withInput();
         if ($this->hasFile('images')) {
+            $picturename = $this->file('images')[0]->getClientOriginalName();
             foreach ($this->file('images') as $picture) {
                 $imageData = base64_encode(file_get_contents($picture));
                 $src = 'data: '.mime_content_type($picture->path()).';base64,'.$imageData;
@@ -74,6 +75,7 @@ class AdvertStoreRequest extends FormRequest
                     ->with('bidcheckon', 'a');
                 }
         } elseif ($this->input(['base64key'])) {
+            $picturename = $this->input('imagename');
             array_push($base64Img, $this->input(['base64key']));
             if(is_null($this->input(['bids']))) {
                 $redirect->with('images', $base64Img)

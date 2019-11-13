@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Advert extends Model
 {
     protected $fillable = [
-        'title', 'description', 'price', 'category', 'startbid', 'owner_id',
+        'title', 'description', 'price', 'startbid', 'owner_id',
     ];
 
     public function pictures() {
