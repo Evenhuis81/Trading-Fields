@@ -101,7 +101,6 @@
                             <div class="col-md-6 ml-5">
                                 <input class="form-check-input" type="checkbox" name="bids" id="bids"
                                     @if (session('bidcheckon'))
-                                    {{-- {{ dd('hiiiiiiiiiiiiiiiiiiiiiiiii') }} --}}
                                     {{ "checked" }}>
                                 @elseif (session('bidcheckoff'))
                                 {{ "" }}>

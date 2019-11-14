@@ -49391,7 +49391,7 @@ $(document).ready(function () {
     if ($(this).prop("checked") == false) {
       $("#bid").removeAttr("name");
     } else {
-      $("#bid").attr("name", "bid");
+      $("#bid").attr("name", "startbid");
     }
 
     $("#inputBid").toggle("slow");
@@ -49436,7 +49436,8 @@ $(document).ready(function () {
       } else {
         $("#imagename").attr({
           name: "imagename",
-          value: this.files[0].name
+          value: this.files[0].name // insert remove hidden input with name base64key etc
+
         });
         var reader = new FileReader(); // instance of the FileReader
 
@@ -49645,8 +49646,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

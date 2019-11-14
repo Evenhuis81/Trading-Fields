@@ -23,6 +23,8 @@ class AdvertsController extends Controller
 
     public function index()
     {
+        // $picArr = Storage::files('public/advertseederimages');
+        // dd($picArr);
         $adverts = Advert::where('owner_id', (auth()->id()))->get();
         return view('adverts.index', compact('adverts'));
     }
@@ -35,10 +37,13 @@ class AdvertsController extends Controller
     {
         // Validated Through Request
         $validated = $request->validated();
-        // Create Advert
-        $request['bids'] ? $advert = Advert::create(collect($validated)->except(['category'])->toArray() + ['owner_id' => auth()->id()]) : $advert = Advert::create(collect($validated)->except(['category'])->toArray() + ['owner_id' => auth()->id(), 'startbid' => null]);
+                // Create Advert
+        $validated['owner_id'] = auth()->id();
+        if (!$request['bids']) { $validated['startbid'] = null; }
+        $advert = Advert::create($validated);
+        // $request['bids'] ? $advert = Advert::create(collect($validated)->except(['category'])->toArray() + ['owner_id' => auth()->id()]) : $advert = Advert::create(collect($validated)->except(['category'])->toArray() + ['owner_id' => auth()->id(), 'startbid' => null]);
         // Create Picture(s)
-        $this->storeImage($request, $validated, $advert);
+        $this->storeImage($validated, $advert->id);
         // Attach Category
         $advert->categories()->sync($validated['category']);
 
@@ -60,17 +65,29 @@ class AdvertsController extends Controller
     {
         // Validated Through Request
         $validated = $request->validated();
-        dd($validated);
         // Check if new picture, if so: destroy old, create new
         if (isset($validated['images'])) {
+            // dd($validated);
+            // foreach ($validated['images'] as $image) {
+            //     dd($image);
+            // }
             foreach ($advert->pictures as $picture) {
                 Storage::disk('public')->delete($picture['file_name']);
                 $picture->delete();
             }
-            $this->storeImage($request, $validated, $advert);
-        }
+            $this->storeImage($validated, $advert->id);
+        } elseif (isset($validated['base64key'])) {
+            foreach ($advert->pictures as $picture) {
+                Storage::disk('public')->delete($picture['file_name']);
+                $picture->delete();
+            }
+            $this->storeImage($validated, $advert->id);
+        } // else {'something went wrong'}
         // Update Advert
-        $request['bids'] ? $advert->update(collect($validated)->except(['category'])->toArray()) : $advert->update(collect($validated)->except(['category'])->toArray() + ['startbid' => null]);
+        // $request['bids'] ? $advert->update(collect($validated)->except(['category'])->toArray()) : $advert->update(collect($validated)->except(['category'])->toArray() + ['startbid' => null]);
+        // dd(collect($validated + ['startbid' => null])->toArray();
+        if (!$request['bids']) { $validated['startbid'] = null; }
+        $advert->update($validated);
         $advert->categories()->sync([$validated['category']]);
         // if ($validated['title'] == $advert->title) {
         //     if ($validated['description'] == $advert->description) {
@@ -85,33 +102,32 @@ class AdvertsController extends Controller
         $this->authorize('update', $advert);
         $advert->delete();
     }
-    public function storeImage($req, $val, $adv)
+    public function storeImage($val, $id)
     {
         // dd($req->hasFile('images'));
-        if (isset($val['images']) && $req->hasFile('images')) {
-            // dd('hi');
-            foreach ($req->file('images') as $image) {
+        if (isset($val['images']) && isset($val['imagename'])) {
+            // dd('picturrr');
+            foreach ($val['images'] as $image) {
+                // dd($image);
                 $name = $image->getClientOriginalName();
                 $img = new Picture();
                 $img->file_name = 'advertimages/'.date('YmdHis',time()).'-'.$name;
                 $img->owner_id = auth()->id();
-                $img->advert_id = $adv->id;
+                $img->advert_id = $id;
                 $img->save();
                 $imgcont = $image->get();
                 Storage::disk('public')->put($img['file_name'], $imgcont);
                 }
-        } else {
+                // return with 'something went wrong msg,  ... or something ...' ;
+        } elseif (isset($val['base64key']) && isset($val['imagename'])) {
             $pictr = $val['base64key'];
-            // dd($pictr);
-            $type = explode(';', $pictr);
-            dd($val['base64key']);
+            $type = explode(',', $pictr);
             $data = base64_decode($type[1]);
-            // dd($data);
             $name = $val['imagename'];
             $img = new Picture();
             $img->file_name = 'advertimages/'.date('YmdHis',time()).'-'.$name;
             $img->owner_id = auth()->id();
-            $img->advert_id = $adv->id;
+            $img->advert_id = $id;
             $img->save();
             Storage::disk('public')->put($img['file_name'], $data);
         }

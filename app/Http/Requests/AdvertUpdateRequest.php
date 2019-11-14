@@ -33,6 +33,17 @@ class AdvertUpdateRequest extends FormRequest
             'category' => 'required|integer',
             'startbid' => ['integer', 'min:0', 'max:10000'],
             ];
+        } elseif ($this->hasFile('images')) {
+            return [
+                'title' => 'required|string|min:3|max:50',
+                'description' => 'required|string|min:3|max:500',
+                'price' => 'required|integer|min:0|max:10000',
+                'category' => 'required|integer',
+                'startbid' => ['integer', 'min:0', 'max:10000'],
+                'images' => 'required|array|min:1',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'imagename' => 'required',
+                ];
         } elseif ($this->input(['base64key'])) {
             return [
                 'title' => 'required|string|min:3|max:50',
@@ -44,24 +55,12 @@ class AdvertUpdateRequest extends FormRequest
                 'base64key' => 'required',
                 'imagename' => 'required',
                 ];
-        } else {
-            return [
-                'title' => 'required|string|min:3|max:50',
-                'description' => 'required|string|min:3|max:500',
-                'price' => 'required|integer|min:0|max:10000',
-                'category' => 'required|integer',
-                'startbid' => ['integer', 'min:0', 'max:10000'],
-                'images' => 'required|array|min:1',
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'imagename' => 'required',
-                ];
         }
     }
 
     public function withValidator($validator)
     {
         $advert = $this->route('advert');
-        // return redirect('adverts.edit');
         $picturename = "";
         $base64Img=[];
         $redirect = redirect()->route('adverts.edit', ['advert' => $advert->id])
@@ -102,12 +101,12 @@ class AdvertUpdateRequest extends FormRequest
                 ->with('bidcheckon', 'a');
             }
         }
-        //  else {
-        //     if(is_null($this->input(['bids']))) {
-        //         return $redirect->with('bidcheckoff', 'a');
-        //     } else {
-        //         return $redirect->with('bidcheckon', 'a');
-        //     }
-        // }
+         else {
+            if(is_null($this->input(['bids']))) {
+                return $redirect->with('bidcheckoff', 'a');
+            } else {
+                return $redirect->with('bidcheckon', 'a');
+            }
+        }
     }
 }

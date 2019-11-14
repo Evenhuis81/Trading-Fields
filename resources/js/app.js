@@ -34,14 +34,14 @@ const app = new Vue({
     el: "#app"
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     // For all pages
-    $(function() {
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
 
     // Login
-    $("#showPass").on("change", function() {
+    $("#showPass").on("change", function () {
         $("#password").attr(
             "type",
             $("#showPass").prop("checked") == true ? "text" : "password"
@@ -53,19 +53,19 @@ $(document).ready(function() {
         $("#inputBid").toggle();
     }
 
-    $("#bids").on("change", function() {
+    $("#bids").on("change", function () {
         // var bids = $('#inputBid');
         // var display = bids.css('display');
         if ($(this).prop("checked") == false) {
             $("#bid").removeAttr("name");
         } else {
-            $("#bid").attr("name", "bid");
+            $("#bid").attr("name", "startbid");
         }
         $("#inputBid").toggle("slow");
     });
 
     var imgmax = 0;
-    $(".imgAdd").click(function() {
+    $(".imgAdd").click(function () {
         imgmax += 1;
         $(this)
             .closest(".row")
@@ -78,7 +78,7 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on("click", "i.del", function() {
+    $(document).on("click", "i.del", function () {
         imgmax -= 1;
         $(this)
             .parent()
@@ -87,8 +87,8 @@ $(document).ready(function() {
             $(".imgAdd").css("display", "block");
         }
     });
-    $(function() {
-        $(document).on("change", ".uploadFile", function() {
+    $(function () {
+        $(document).on("change", ".uploadFile", function () {
             // var msize = 11600;
             var msize = 2 * 1024 * 1024;
             var uploadFile = $(this);
@@ -112,11 +112,12 @@ $(document).ready(function() {
                 $("#imagename").attr({
                     name: "imagename",
                     value: this.files[0].name
+                    // insert remove hidden input with name base64key etc
                 });
                 var reader = new FileReader(); // instance of the FileReader
                 reader.readAsDataURL(files[0]); // read the local file
 
-                reader.onloadend = function() {
+                reader.onloadend = function () {
                     // set image data as background of div
                     //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
                     uploadFile
@@ -135,14 +136,14 @@ $(document).ready(function() {
             .css("visibility", "visible")
             .hide()
             .fadeIn("slow");
-        imgMsg.delay(2000).fadeOut("slow", function() {
+        imgMsg.delay(2000).fadeOut("slow", function () {
             imgMsg.css("visibility", "hidden");
             imgMsg.css("display", display);
         });
     }
 
     // Manage Adverts
-    $(".delete").click(function() {
+    $(".delete").click(function () {
         var id = $(this).data("id");
         swal({
             title: "Are you sure?",
@@ -160,7 +161,7 @@ $(document).ready(function() {
                             "content"
                         )
                     },
-                    success: function() {
+                    success: function () {
                         $(".poss" + id)
                             .css({
                                 opacity: 0.5,
@@ -181,7 +182,7 @@ $(document).ready(function() {
     });
 
     // Edit Advert
-    $("#titlehover").on("click", function() {
+    $("#titlehover").on("click", function () {
         $(this).removeAttr("id");
         $(this).attr("id", "notitlehover");
         $("#titleText").hide();
