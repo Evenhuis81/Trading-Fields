@@ -34,14 +34,14 @@ const app = new Vue({
     el: "#app"
 });
 
-$(document).ready(function () {
+$(document).ready(function() {
     // For all pages
-    $(function () {
+    $(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
 
     // Login
-    $("#showPass").on("change", function () {
+    $("#showPass").on("change", function() {
         $("#password").attr(
             "type",
             $("#showPass").prop("checked") == true ? "text" : "password"
@@ -53,7 +53,7 @@ $(document).ready(function () {
         $("#inputBid").toggle();
     }
 
-    $("#bids").on("change", function () {
+    $("#bids").on("change", function() {
         // var bids = $('#inputBid');
         // var display = bids.css('display');
         if ($(this).prop("checked") == false) {
@@ -65,7 +65,7 @@ $(document).ready(function () {
     });
 
     var imgmax = 0;
-    $(".imgAdd").click(function () {
+    $(".imgAdd").click(function() {
         imgmax += 1;
         $(this)
             .closest(".row")
@@ -78,7 +78,7 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("click", "i.del", function () {
+    $(document).on("click", "i.del", function() {
         imgmax -= 1;
         $(this)
             .parent()
@@ -87,8 +87,8 @@ $(document).ready(function () {
             $(".imgAdd").css("display", "block");
         }
     });
-    $(function () {
-        $(document).on("change", ".uploadFile", function () {
+    $(function() {
+        $(document).on("change", ".uploadFile", function() {
             // var msize = 11600;
             var msize = 2 * 1024 * 1024;
             var uploadFile = $(this);
@@ -117,7 +117,7 @@ $(document).ready(function () {
                 var reader = new FileReader(); // instance of the FileReader
                 reader.readAsDataURL(files[0]); // read the local file
 
-                reader.onloadend = function () {
+                reader.onloadend = function() {
                     // set image data as background of div
                     //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
                     uploadFile
@@ -136,14 +136,14 @@ $(document).ready(function () {
             .css("visibility", "visible")
             .hide()
             .fadeIn("slow");
-        imgMsg.delay(2000).fadeOut("slow", function () {
+        imgMsg.delay(2000).fadeOut("slow", function() {
             imgMsg.css("visibility", "hidden");
             imgMsg.css("display", display);
         });
     }
 
     // Manage Adverts
-    $(".delete").click(function () {
+    $(".delete").click(function() {
         var id = $(this).data("id");
         swal({
             title: "Are you sure?",
@@ -161,7 +161,7 @@ $(document).ready(function () {
                             "content"
                         )
                     },
-                    success: function () {
+                    success: function() {
                         $(".poss" + id)
                             .css({
                                 opacity: 0.5,
@@ -182,7 +182,7 @@ $(document).ready(function () {
     });
 
     // Edit Advert
-    $("#titlehover").on("click", function () {
+    $("#titlehover").on("click", function() {
         $(this).removeAttr("id");
         $(this).attr("id", "notitlehover");
         $("#titleText").hide();
@@ -192,11 +192,59 @@ $(document).ready(function () {
         // });
     });
 
-    // $(".imagePreview2").ready(function() {
-    //     $("imagePreview2").css("background-image", "url(Auto.jpg)");
-    //     console.log("heier");
-    // });
-    // $(".butter").click(function() {
-    //     $(".imagePreview2").css("background-image", "url('$src')");
-    // });
+    // Main Index Page
+
+    $(".selectCats").on("click", function() {
+        let catArrPush = [];
+        let catArr = $(".selectCats");
+        for (let index = 0; index < catArr.length; index++) {
+            if (catArr[index].checked == true) {
+                catArrPush.push(catArr[index].value);
+            }
+        }
+        catArrPush.length === 0
+            ? $("#allCat").prop({ disabled: true, checked: true })
+            : $("#allCat").prop({ disabled: false, checked: false });
+        loadDoc(catArrPush);
+    });
+
+    $("#allCat").on("click", function() {
+        $(this).prop({ disabled: true });
+        let catArr = $(".selectCats");
+        for (let el of catArr) {
+            el.checked = false;
+        }
+        loadDoc();
+    });
+
+    function loadDoc(querystring = []) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById(
+                    "advertIndex"
+                ).innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", "advertindex?numbers=" + querystring, true);
+        xhttp.send();
+    }
+
+    $(".pagdination a").on("click", function(event) {
+        console.log("hi");
+        event.preventDefault();
+        return;
+
+        $("li").removeClass("active");
+        $(this)
+            .parent("li")
+            .addClass("active");
+
+        var myurl = $(this).attr("href");
+        var page = $(this)
+            .attr("href")
+            .split("page=")[1];
+
+        getData(page);
+    });
 });

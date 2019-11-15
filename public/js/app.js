@@ -49503,13 +49503,83 @@ $(document).ready(function () {
     $("#title").show(); // $("#title").popover({
     //     trigger: "focus"
     // });
-  }); // $(".imagePreview2").ready(function() {
-  //     $("imagePreview2").css("background-image", "url(Auto.jpg)");
-  //     console.log("heier");
-  // });
-  // $(".butter").click(function() {
-  //     $(".imagePreview2").css("background-image", "url('$src')");
-  // });
+  }); // Main Index Page
+
+  $(".selectCats").on("click", function () {
+    var catArrPush = [];
+    var catArr = $(".selectCats");
+
+    for (var index = 0; index < catArr.length; index++) {
+      if (catArr[index].checked == true) {
+        catArrPush.push(catArr[index].value);
+      }
+    }
+
+    catArrPush.length === 0 ? $("#allCat").prop({
+      disabled: true,
+      checked: true
+    }) : $("#allCat").prop({
+      disabled: false,
+      checked: false
+    });
+    loadDoc(catArrPush);
+  });
+  $("#allCat").on("click", function () {
+    $(this).prop({
+      disabled: true
+    });
+    var catArr = $(".selectCats");
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = catArr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var el = _step.value;
+        el.checked = false;
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+          _iterator["return"]();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    loadDoc();
+  });
+
+  function loadDoc() {
+    var querystring = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("advertIndex").innerHTML = this.responseText;
+      }
+    };
+
+    xhttp.open("GET", "advertindex?numbers=" + querystring, true);
+    xhttp.send();
+  }
+
+  $(".pagdination a").on("click", function (event) {
+    console.log("hi");
+    event.preventDefault();
+    return;
+    $("li").removeClass("active");
+    $(this).parent("li").addClass("active");
+    var myurl = $(this).attr("href");
+    var page = $(this).attr("href").split("page=")[1];
+    getData(page);
+  });
 });
 
 /***/ }),

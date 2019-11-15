@@ -31,7 +31,7 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $adverts = Advert::all();
+        $adverts = Advert::paginate(8);
         return view('index', compact('adverts', 'categories'));
     }
 }

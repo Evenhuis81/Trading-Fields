@@ -26,6 +26,8 @@ class AdvertsController extends Controller
         // $picArr = Storage::files('public/advertseederimages');
         // dd($picArr);
         $adverts = Advert::where('owner_id', (auth()->id()))->get();
+
+            // dd($adverts);
         return view('adverts.index', compact('adverts'));
     }
     public function create()
