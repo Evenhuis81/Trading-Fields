@@ -31,25 +31,16 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // dd($request->get('page'));
-            // if (empty($request->get('categories')) && empty($request->get('page'))) {
                 if (empty($request->get('categories'))) {
                 $adverts = Advert::paginate(8);
-                return view('partials.advertindex', ['adverts' => $adverts])->render();  
-            } elseif (!empty($request->get('categories')) && empty($request->get('page'))) {
-                $numbers = $request->get('categories');
-                $category_ids = preg_split("/\,/", $numbers);
-                $adverts = Advert::whereHas('categories', function ($query) use ($category_ids) {
-                $query->whereIn('categories.id', $category_ids);
-                })->paginate(8);
-                return view('partials.advertindex', ['adverts' => $adverts])->render();
+                return view('partials.advertindex', ['adverts' => $adverts]);  
             } else
             $numbers = $request->get('categories');
             $category_ids = preg_split("/\,/", $numbers);
             $adverts = Advert::whereHas('categories', function ($query) use ($category_ids) {
                 $query->whereIn('categories.id', $category_ids);
             })->paginate(8);
-            return view('partials.advertindex', ['adverts' => $adverts])->render();
+            return view('partials.advertindex', ['adverts' => $adverts]);
             
         }
         $adverts = Advert::paginate(8);
