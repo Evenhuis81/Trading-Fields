@@ -54,8 +54,6 @@ $(document).ready(function() {
     }
 
     $("#bids").on("change", function() {
-        // var bids = $('#inputBid');
-        // var display = bids.css('display');
         if ($(this).prop("checked") == false) {
             $("#bid").removeAttr("name");
         } else {
@@ -64,29 +62,6 @@ $(document).ready(function() {
         $("#inputBid").toggle("slow");
     });
 
-    var imgmax = 0;
-    $(".imgAdd").click(function() {
-        imgmax += 1;
-        $(this)
-            .closest(".row")
-            .find(".imgAdd")
-            .before(
-                '<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary" id="btn-primary">Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>'
-            );
-        if (imgmax == 2) {
-            $(".imgAdd").css("display", "none");
-        }
-    });
-
-    $(document).on("click", "i.del", function() {
-        imgmax -= 1;
-        $(this)
-            .parent()
-            .remove();
-        if (imgmax == 1) {
-            $(".imgAdd").css("display", "block");
-        }
-    });
     $(function() {
         $(document).on("change", ".uploadFile", function() {
             // var msize = 11600;
@@ -205,7 +180,11 @@ $(document).ready(function() {
         catArrPush.length === 0
             ? $("#allCat").prop({ disabled: true, checked: true })
             : $("#allCat").prop({ disabled: false, checked: false });
-        loadDoc(catArrPush);
+        // loadAjaxDoc(catArrPush);
+        let url = '?categories='+catArrPush;
+        // console.log(url);
+        // return;
+        loadAjaxDoc(url);
     });
 
     $("#allCat").on("click", function() {
@@ -214,37 +193,101 @@ $(document).ready(function() {
         for (let el of catArr) {
             el.checked = false;
         }
-        loadDoc();
-    });
-
-    function loadDoc(querystring = []) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById(
-                    "advertIndex"
-                ).innerHTML = this.responseText;
-            }
-        };
-        xhttp.open("GET", "advertindex?numbers=" + querystring, true);
-        xhttp.send();
-    }
-
-    $(".pagdination a").on("click", function(event) {
-        console.log("hi");
-        event.preventDefault();
-        return;
-
-        $("li").removeClass("active");
-        $(this)
-            .parent("li")
-            .addClass("active");
-
-        var myurl = $(this).attr("href");
-        var page = $(this)
-            .attr("href")
-            .split("page=")[1];
-
-        getData(page);
+        // let url = '';
+        loadAjaxDoc();
     });
 });
+
+function loadAjaxDoc(url) {
+    $.ajax({
+        url : url
+    }).done(function (data) {
+        $('#advertIndex').html(data);  
+    }).fail(function () {
+        alert('Articles could not be loaded.');
+    });
+}
+
+$(function() {
+    $('body').on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        // $('#load a').css('color', '#dfecf6');
+        $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/loading_spinner.gif" />');
+        let catArrPush = [];
+        let catArr = $(".selectCats");
+        for (let index = 0; index < catArr.length; index++) {
+            if (catArr[index].checked == true) {
+                catArrPush.push(catArr[index].value);
+            }
+        }
+        var url = $(this).attr('href');
+        if (catArrPush.length === 0) {
+            loadAjaxDoc(url);
+        } else {
+            url += '&categories='+catArrPush;
+            loadAjaxDoc(url);
+        }
+        // window.history.pushState("", "", url);
+    });
+});
+
+//     function loadDoc(querystring = []) {
+//         var xhttp = new XMLHttpRequest();
+//         xhttp.onreadystatechange = function() {
+//             if (this.readyState == 4 && this.status == 200) {
+//                 document.getElementById(
+//                     "advertIndex"
+//                 ).innerHTML = this.responseText;
+//             }
+//         };
+//         xhttp.open("GET", "advertindex?numbers=" + querystring, true);
+//         xhttp.send();
+//     }
+// });
+
+// var imgmax = 0;
+//     $(".imgAdd").click(function() {
+//         imgmax += 1;
+//         $(this)
+//             .closest(".row")
+//             .find(".imgAdd")
+//             .before(
+//                 '<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary" id="btn-primary">Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>'
+//             );
+//         if (imgmax == 2) {
+//             $(".imgAdd").css("display", "none");
+//         }
+//     });
+
+//     $(document).on("click", "i.del", function() {
+//         imgmax -= 1;
+//         $(this)
+//             .parent()
+//             .remove();
+//         if (imgmax == 1) {
+//             $(".imgAdd").css("display", "block");
+//         }
+//     });
+
+// var imgmax = 0;
+//     $(".imgAdd").click(function() {
+//         imgmax += 1;
+//         $(this)
+//             .closest(".row")
+//             .find(".imgAdd")
+//             .before(
+//                 '<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary" id="btn-primary">Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>'
+//             );
+//         if (imgmax == 2) {
+//             $(".imgAdd").css("display", "none");
+//         }
+//     });
+
+//     $(document).on("click", "i.del", function() {
+//         imgmax -= 1;
+//         $(this)
+//             .parent()
+//             .remove();
+//         if (imgmax == 1) {
+//             $(".imgAdd").css("display", "block");
+//         }

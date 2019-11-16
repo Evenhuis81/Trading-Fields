@@ -15,14 +15,14 @@
                     <label class="form-check-label col-10" for="allCat">
                         All categories
                     </label>
-                    <input class="form-check-input col-2" name="allCat" type="checkbox" id="allCat" checked disabled style="width:18px; height:18px;">
+                    <input class="form-check-input col-2" type="checkbox" id="allCat" checked disabled style="width:18px; height:18px;">
                 </div>
                 @foreach ($categories as $category)
                 <div class="form-check text-center mt-2 pb-2 border-bottom">
                     <label class="form-check-label col-10" for="cat{{ $category->id }}">
                         {{ $category->name }}
                     </label>
-                    <input class="form-check-input col-2 selectCats" type="checkbox" name="cats[]" style="width:18px; height:18px;" id="cat{{ $category->id }}" value="{{ $category->id }}">
+                    <input class="form-check-input col-2 selectCats" type="checkbox" style="width:18px; height:18px;" value="{{ $category->id }}">
                 </div>
                 @endforeach
             </div>
