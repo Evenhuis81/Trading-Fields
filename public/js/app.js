@@ -49577,6 +49577,12 @@ $(function () {
     } // window.history.pushState("", "", url);
 
   });
+});
+$(function () {
+  $('body').on('click', '#plainbutton', function () {
+    var textArr = document.querySelector('#plaindiv').innerHTML.split('\n');
+    console.log(textArr);
+  });
 }); //     function loadDoc(querystring = []) {
 //         var xhttp = new XMLHttpRequest();
 //         xhttp.onreadystatechange = function() {

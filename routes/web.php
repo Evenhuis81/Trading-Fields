@@ -8,3 +8,8 @@ Route::resource('adverts', 'AdvertsController');
 Auth::routes();
 
 Route::get('advertindex', 'AjaxController@index');
+
+
+Route::get('/cats', function() {
+    return view('cats');
+});

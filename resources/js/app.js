@@ -34,14 +34,14 @@ const app = new Vue({
     el: "#app"
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     // For all pages
-    $(function() {
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
 
     // Login
-    $("#showPass").on("change", function() {
+    $("#showPass").on("change", function () {
         $("#password").attr(
             "type",
             $("#showPass").prop("checked") == true ? "text" : "password"
@@ -53,7 +53,7 @@ $(document).ready(function() {
         $("#inputBid").toggle();
     }
 
-    $("#bids").on("change", function() {
+    $("#bids").on("change", function () {
         if ($(this).prop("checked") == false) {
             $("#bid").removeAttr("name");
         } else {
@@ -62,8 +62,8 @@ $(document).ready(function() {
         $("#inputBid").toggle("slow");
     });
 
-    $(function() {
-        $(document).on("change", ".uploadFile", function() {
+    $(function () {
+        $(document).on("change", ".uploadFile", function () {
             // var msize = 11600;
             var msize = 2 * 1024 * 1024;
             var uploadFile = $(this);
@@ -92,7 +92,7 @@ $(document).ready(function() {
                 var reader = new FileReader(); // instance of the FileReader
                 reader.readAsDataURL(files[0]); // read the local file
 
-                reader.onloadend = function() {
+                reader.onloadend = function () {
                     // set image data as background of div
                     //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
                     uploadFile
@@ -111,14 +111,14 @@ $(document).ready(function() {
             .css("visibility", "visible")
             .hide()
             .fadeIn("slow");
-        imgMsg.delay(2000).fadeOut("slow", function() {
+        imgMsg.delay(2000).fadeOut("slow", function () {
             imgMsg.css("visibility", "hidden");
             imgMsg.css("display", display);
         });
     }
 
     // Manage Adverts
-    $(".delete").click(function() {
+    $(".delete").click(function () {
         var id = $(this).data("id");
         swal({
             title: "Are you sure?",
@@ -136,7 +136,7 @@ $(document).ready(function() {
                             "content"
                         )
                     },
-                    success: function() {
+                    success: function () {
                         $(".poss" + id)
                             .css({
                                 opacity: 0.5,
@@ -157,7 +157,7 @@ $(document).ready(function() {
     });
 
     // Edit Advert
-    $("#titlehover").on("click", function() {
+    $("#titlehover").on("click", function () {
         $(this).removeAttr("id");
         $(this).attr("id", "notitlehover");
         $("#titleText").hide();
@@ -169,7 +169,7 @@ $(document).ready(function() {
 
     // Main Index Page
 
-    $(".selectCats").on("click", function() {
+    $(".selectCats").on("click", function () {
         let catArrPush = [];
         let catArr = $(".selectCats");
         for (let index = 0; index < catArr.length; index++) {
@@ -181,13 +181,13 @@ $(document).ready(function() {
             ? $("#allCat").prop({ disabled: true, checked: true })
             : $("#allCat").prop({ disabled: false, checked: false });
         // loadAjaxDoc(catArrPush);
-        let url = '?categories='+catArrPush;
+        let url = '?categories=' + catArrPush;
         // console.log(url);
         // return;
         loadAjaxDoc(url);
     });
 
-    $("#allCat").on("click", function() {
+    $("#allCat").on("click", function () {
         $(this).prop({ disabled: true });
         let catArr = $(".selectCats");
         for (let el of catArr) {
@@ -200,16 +200,16 @@ $(document).ready(function() {
 
 function loadAjaxDoc(url) {
     $.ajax({
-        url : url
+        url: url
     }).done(function (data) {
-        $('#advertIndex').html(data);  
+        $('#advertIndex').html(data);
     }).fail(function () {
         alert('Articles could not be loaded.');
     });
 }
 
-$(function() {
-    $('body').on('click', '.pagination a', function(e) {
+$(function () {
+    $('body').on('click', '.pagination a', function (e) {
         e.preventDefault();
         // $('#load a').css('color', '#dfecf6');
         $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/loading_spinner.gif" />');
@@ -224,10 +224,17 @@ $(function() {
         if (catArrPush.length === 0) {
             loadAjaxDoc(url);
         } else {
-            url += '&categories='+catArrPush;
+            url += '&categories=' + catArrPush;
             loadAjaxDoc(url);
         }
         // window.history.pushState("", "", url);
+    });
+});
+
+$(function () {
+    $('body').on('click', '#plainbutton', function () {
+        var textArr = document.querySelector('#plaindiv').innerHTML.split('\n');
+        console.log(textArr)
     });
 });
 

@@ -54,7 +54,7 @@ class AdvertsController extends Controller
     }
     public function show(Advert $advert)
     {
-        // dd($advert = Advert::findOrFail(88));
+        return view('adverts.show', ['advert' => $advert]);
     }
     public function edit(Advert $advert)
     {
