@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\User;
 use App\Picture;
 use App\Category;
 use Illuminate\Database\Eloquent\Model;
@@ -18,5 +19,9 @@ class Advert extends Model
 
     public function categories() {
         return $this->belongsToMany(Category::class)->withTimestamps();
+    }
+
+    public function owner() {
+        return $this->belongsTo(User::class);
     }
 }

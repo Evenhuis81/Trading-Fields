@@ -16,7 +16,7 @@
                 <div class="card-header">
                     <p class="card-text font-weight-bold">{{ $advert->title }}</p>
                     <hr>
-                    <p class="card-title">Views / Times Saved / {{ $advert->created_at }} </p>
+                    <p class="card-title">Views / Times Saved / {{ $advert->created_at->toDayDateTimeString() }} </p>
                     <a href="#" class="btn btn-primary mb-3">Save <i class="far fa-heart"></i></a>
                     <div class="row">
                         <div class="col-md-7 pl-0">
@@ -26,27 +26,79 @@
                         <div class="col-md-5">
                             {{-- Price / Type of delivery --}}
                             <h3 class="card-text font-weight-bold">€ {{ $advert->price }}</h3>
+                            <p class="card-text"><br>Levering<br><small>Ophalen</small></p>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                   <p class="card-text">Description:</p>
-                <h5 class="card-text">{{ $advert->description }}</h5>
+                    <p class="card-text">Description:</p>
+                    <h5 class="card-text">{{ $advert->description }}</h5>
                 </div>
                 <div class="card-footer text-muted" style="height=15px;">
                     <div class="row">
                         <p class="card-text my-auto">Share buttons / advertlink</p><a href="#" class="btn btn-primary ml-auto">Save <i class="far fa-heart"></i></a>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            {{-- Advertiser Info + Bid System --}}
-        </div>
+            </div> {{-- /Card --}}
+        </div> {{-- /Column 5 --}}
         <div class="col-md-2">
-            {{-- Right side advertisement (Sticky) --}}
-        </div>
+            {{-- Advertiser Info + Bid System --}}
+            <div class="card-body" style="background-color: #fffbe2">
+                <p class="card-text">{{ $advert->owner->name }}</p>
+                <p class="card-text">{{ str_replace("ago", "active on the site", $advert->owner->created_at->diffForHumans()) }}</p>
+                <a href="" class="card-text">View more adverts</a>
+                <hr>
+                <p><i class="fas fa-map-marker-alt"></i>Advertiser hometown</p>
+                <a href="" class="btn btn-primary w-100 pt-3" style="height:70px;"><i class="far fa-heart"><br>Bericht
+                    </i></a>
+            </div>
+            {{-- Bid system --}}
+            @if (!is_null($advert->startbid))
+            @auth
+            <div class="card-body mt-3" style="background-color: #fffbe2">
+                <div class="row">
+                    <h5 class="card-text ml-3">Bieden</h5>
+                    <p class="card-text ml-auto mr-3">(From €{{ $advert->startbid }},-)</p>
+                </div>
+                <form action="{{ route('addbid') }}" method="post">
+                    @csrf
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">€</div>
+                        </div>
+                        <input type="number" name="placebid" class="form-control" id="inlineFormInputGroup">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-light w-75 text-center">Place Bid</button>
+                    </div>
+                </form>
+            </div>
+            @else
+            <div class="card-body mt-3" style="background-color: #fffbe2">
+                <div class="row">
+                    <h5 class="card-text ml-3">Bieden</h5>
+                    <p class="card-text ml-auto mr-3">(From €{{ $advert->startbid }},-)</p>
+                    <p class="card-text ml-3">Login or Register to see and place Bids</p>
+                </div>
+            </div>
+            @endauth
+            @endif
+            <div class="card">
+                <div class="row">
+                    <p class="card-text"><strong>{{ $ }}</strong></p>
+                </div>
+            </div>
+            {{-- <p class="card-text">{{ str_replace("ago", "active on the site", $advert->owner->created_at->diffForHumans()) }}</p>
+            <a href="" class="card-text">View more adverts</a>
+            <hr>
+            <p><i class="fas fa-map-marker-alt"></i>Advertiser hometown</p>
+            <a href="" class="btn btn-primary w-50"><i class="far fa-heart"><br>Bericht</i></a> --}}
+        </div> {{-- /Info-BidSystem --}}
+    </div> {{-- /Row --}}
+    <div class="col-md-3">
+        {{-- Right side advertisement (Sticky) --}}
     </div>
+</div>
 </div>
 
 

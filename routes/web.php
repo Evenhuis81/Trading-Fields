@@ -7,7 +7,7 @@ Route::resource('adverts', 'AdvertsController');
 
 Auth::routes();
 
-Route::get('advertindex', 'AjaxController@index');
+Route::get('addbid', 'AjaxController@addbid')->name('addbid');
 
 
 Route::get('/cats', function() {
