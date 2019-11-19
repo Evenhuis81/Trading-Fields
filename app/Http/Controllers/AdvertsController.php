@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bid;
 use App\Advert;
 use App\Picture;
 use App\Category;
@@ -9,8 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Testing\File;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\AdvertStoreRequest;
 
+use App\Http\Requests\AdvertStoreRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\AdvertUpdateRequest;
 
@@ -51,8 +52,15 @@ class AdvertsController extends Controller
     }
     public function show(Advert $advert)
     {
-        if (!is_null($advert->startbid))
-            $bids = $advert->bids->order_by()
+        session()->flash('advert_id', $advert->id);
+        // dd($advert->startbid);
+        if (!is_null($advert->startbid)) {
+            if ($advert->bids->count()) {
+                session()->flash('bidcount', $advert->bids->count());
+                $bids = Bid::where('advert_id', $advert->id)->get();
+                return view('adverts.show', ['advert' => $advert], ['bids' => $bids]);
+            }
+        }
         return view('adverts.show', ['advert' => $advert]);
     }
     public function edit(Advert $advert)

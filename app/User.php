@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Bid;
 use App\Advert;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
@@ -43,12 +44,18 @@ class User extends Authenticatable
     //     return $this->hasMany(Image::class, 'owner_id');
     // }
 
-    public function advert() {
+    public function advert()
+    {
         return $this->hasMany(Advert::class);
     }
 
+    public function bids()
+    {
+        return $this->hasMany(Bid::class);
+    }
+
     public function time_active() {
-        dd($this->created_at->diffForHumans());
+        // dd($this->created_at->diffForHumans());
         // return $this->created_at;
         // $timeago = $this->get_time_ago($this->created_at);
         // $timeago = $this->get_time_ago();

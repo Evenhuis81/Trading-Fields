@@ -49504,7 +49504,7 @@ $(document).ready(function () {
       checked: false
     }); // loadAjaxDoc(catArrPush);
 
-    var url = '?categories=' + catArrPush; // console.log(url);
+    var url = "?categories=" + catArrPush; // console.log(url);
     // return;
 
     loadAjaxDoc(url);
@@ -49547,17 +49547,17 @@ function loadAjaxDoc(url) {
   $.ajax({
     url: url
   }).done(function (data) {
-    $('#advertIndex').html(data);
+    $("#advertIndex").html(data);
   }).fail(function () {
-    alert('Articles could not be loaded.');
+    alert("Articles could not be loaded.");
   });
 }
 
 $(function () {
-  $('body').on('click', '.pagination a', function (e) {
+  $("body").on("click", ".pagination a", function (e) {
     e.preventDefault(); // $('#load a').css('color', '#dfecf6');
 
-    $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/loading_spinner.gif" />');
+    $("#load").append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/loading_spinner.gif" />');
     var catArrPush = [];
     var catArr = $(".selectCats");
 
@@ -49567,20 +49567,72 @@ $(function () {
       }
     }
 
-    var url = $(this).attr('href');
+    var url = $(this).attr("href");
 
     if (catArrPush.length === 0) {
       loadAjaxDoc(url);
     } else {
-      url += '&categories=' + catArrPush;
+      url += "&categories=" + catArrPush;
       loadAjaxDoc(url);
     } // window.history.pushState("", "", url);
 
   });
-});
+}); // $('#my-form').submit( processForm );
+
 $(function () {
-  $('body').on('click', '#plainbutton', function () {
-    var textArr = document.querySelector('#plaindiv').innerHTML.split('\n');
+  $("#bid-form").on("submit", function (e) {
+    e.preventDefault(); // prevent the form submission
+
+    $.ajax({
+      type: "post",
+      // dataType: "JSON",
+      url: "/bids",
+      data: $(this).serialize(),
+      // serialize all form inputs
+      headers: {
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+      },
+      success: function success(response) {
+        console.log("de response terug");
+        console.log(response);
+        $(".bidcont").empty().html(response);
+      },
+      error: function error(data) {
+        console.log(data);
+      }
+    });
+  });
+}); // $(function() {
+//     $("#submitbid").on("click", function(e) {
+//         e.preventDefault();
+//         console.log(this);
+//         return;
+//         $.ajax({
+//             url: "bids/",
+//             type: "POST",
+//             headers: {
+//                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+//             },
+//             data: "",
+//             success: function() {
+//                 $(".poss" + id)
+//                     .css({
+//                         opacity: 0.5,
+//                         "user-select": "none"
+//                     })
+//                     .removeClass("hoverer")
+//                     .addClass("deleted");
+//                 swal("Poof! Your advert has been deleted!", {
+//                     icon: "success"
+//                 });
+//             }
+//         });
+//     });
+// });
+
+$(function () {
+  $("body").on("click", "#plainbutton", function () {
+    var textArr = document.querySelector("#plaindiv").innerHTML.split("\n");
     console.log(textArr);
   });
 }); //     function loadDoc(querystring = []) {

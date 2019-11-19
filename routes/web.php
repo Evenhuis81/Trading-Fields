@@ -7,7 +7,8 @@ Route::resource('adverts', 'AdvertsController');
 
 Auth::routes();
 
-Route::get('addbid', 'AjaxController@addbid')->name('addbid');
+Route::post('bids', 'AjaxController@store')->name('bids.store')->middleware('auth');
+// /{userid}/{advertid}
 
 
 Route::get('/cats', function() {

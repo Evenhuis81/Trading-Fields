@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Advert;
+use App\Bid;
 use Illuminate\Http\Request;
 
 class AjaxController extends Controller
@@ -20,9 +20,23 @@ class AjaxController extends Controller
     //     }
     //     return view('partials.advertindex', compact('adverts'));
     // }
-    public function addbid(Request $request)
+    public function store(Request $request)
     {
-        $this->authorize('auth');
-        
+        $highestbid = 0;
+        if (!is_null(session()->get('bidcount'))) {
+            $highestbid = Bid::latest()->first()->value;
+        };
+        $value = request()->validate([
+            'value' => "required|integer|min:$highestbid|max:10000",
+        ]);
+        // dd(auth()->id());
+        Bid::create([
+            'advert_id' => session()->get('advert_id'),
+            'owner_id' => auth()->id(),
+        ] + $value);
+        // $var = $request->session()->get('_previous');
+        // $var = explode("/", url()->previous());
+        $bids = Bid::all();
+        return view('partials.bidsshow', compact('bids'));
     }
 }

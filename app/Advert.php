@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Bid;
 use App\User;
 use App\Picture;
 use App\Category;
@@ -23,5 +24,9 @@ class Advert extends Model
 
     public function owner() {
         return $this->belongsTo(User::class);
+    }
+
+    public function bids () {
+        return $this->hasMany(Bid::class);
     }
 }
