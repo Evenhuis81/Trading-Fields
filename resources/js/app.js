@@ -240,27 +240,88 @@ $(function() {
 $(function() {
     $("#bid-form").on("submit", function(e) {
         e.preventDefault(); // prevent the form submission
+        var inputbid = $("input[name=inputbid]").val();
+        // formDataAsJson = JSON.stringify($("#bid-form").serializeArray());
         $.ajax({
             type: "post",
             // dataType: "JSON",
+            // contentType: "application/json; charset=utf-8",
             url: "/bids",
-            data: $(this).serialize(), // serialize all form inputs
+            // data: $(this).serialize(), // serialize all form inputs
+            // data: formDataAsJson,
+            data: { inputbid: inputbid },
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            success: function(response) {
-                console.log("de response terug");
-                console.log(response);
-                $(".bidcont")
-                    .empty()
-                    .html(response);
-            },
-            error: function(data) {
-                console.log(data);
+            success: function(data) {
+                if ($.isEmptyObject(data.error)) {
+                    alert(data.success);
+                } else {
+                    printErrorMsg(data.error);
+                }
             }
         });
     });
 });
+function printErrorMsg(msg) {
+    $(".print-error-msg")
+        .find("ul")
+        .html("");
+    $(".print-error-msg").css("display", "block");
+    $.each(msg, function(key, value) {
+        $(".print-error-msg")
+            .find("ul")
+            .append("<li>" + value + "</li>");
+    });
+}
+// success: function(response) {
+//     $(".bidcont")
+//         .empty()
+//         .html(response);
+// },
+// error: function(data) {
+// $("#errormsg").html(data.responseText);
+// }
+// error: function(xmlHttpRequest, textStatus, errorThrown) {
+//     alert(xmlHttpRequest.responseText);
+// }
+// error: function(data) {
+// var r = jQuery.parseJSON(response.responseText);
+// console.log(r);
+// alert("Message: " + r.Message);
+// alert("StackTrace: " + r.StackTrace);
+// alert("ExceptionType: " + r.ExceptionType);
+// $("#errormsg").html(
+//     '@error(\'value\')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror'
+// );
+
+// Log in the console
+// var errors = data.responseJSON;
+// console.log(errors);
+
+// or, what you are trying to achieve
+// render the response via js, pushing the error in your
+// blade page
+
+// var errors = response.responseJSON;
+// errorsHtml = '<div class="alert alert-danger"><ul>';
+// $.each(errors.errors, function(k, v) {
+//     errorsHtml += "<li>" + v + "</li>";
+// });
+// errorsHtml += "</ul></di>";
+
+// $("#error_message").html(errorsHtml);
+
+//appending to a <div id="error_message"></div> inside your form
+// }
+// error: function(request, status, error) {
+//     json = $.parseJSON(request.responseText);
+//     $.each(json.errors, function(key, value) {
+//         $(".alert-danger").show();
+//         $(".alert-danger").append("<p>" + value + "</p>");
+//     });
+//     $("#result").html("");
+// }
 
 // $(function() {
 //     $("#submitbid").on("click", function(e) {

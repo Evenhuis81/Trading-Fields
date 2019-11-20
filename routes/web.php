@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 Route::get('/', 'HomeController@index')->name('index');
 Route::get('/home', 'HomeController@home')->name('home')->middleware('auth');
 
@@ -11,6 +13,7 @@ Route::post('bids', 'AjaxController@store')->name('bids.store')->middleware('aut
 // /{userid}/{advertid}
 
 
-Route::get('/cats', function() {
+Route::post('/cats', function(Request $request) {
+    dd($request->input());
     return view('cats');
 });

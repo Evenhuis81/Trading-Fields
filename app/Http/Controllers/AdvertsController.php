@@ -25,8 +25,6 @@ class AdvertsController extends Controller
     public function index()
     {
         $adverts = Advert::where('owner_id', (auth()->id()))->get();
-
-            // dd($adverts);
         return view('adverts.index', compact('adverts'));
     }
     public function create()
@@ -53,13 +51,12 @@ class AdvertsController extends Controller
     public function show(Advert $advert)
     {
         session()->flash('advert_id', $advert->id);
-        // dd($advert->startbid);
         if (!is_null($advert->startbid)) {
             if ($advert->bids->count()) {
-                session()->flash('bidcount', $advert->bids->count());
-                $bids = Bid::where('advert_id', $advert->id)->get();
-                return view('adverts.show', ['advert' => $advert], ['bids' => $bids]);
+                session()->flash('startbid', $advert->bids->last()->value+1);
+                return view('adverts.show', ['advert' => $advert]);
             }
+            session()->flash('startbid', $advert->startbid+1);
         }
         return view('adverts.show', ['advert' => $advert]);
     }

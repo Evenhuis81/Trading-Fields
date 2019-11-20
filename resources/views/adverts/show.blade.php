@@ -67,17 +67,20 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">€</div>
                         </div>
-                        <input type="number" name="value" class="form-control">
-
+                        {{-- <input type="number" name="inputbid" value="{{ session('startbid') ? ($advert->bids->last()->value +1) : ($advert->startbid +1 ) }}" class="form-control"> --}}
+                        <input type="number" name="inputbid" value="{{ session('startbid') }}" class="form-control">
+                        <div class="alert alert-danger print-error-msg" style="display:none">
+                            <ul></ul>
+                        </div>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-light w-75 text-center">Place Bid</button>
+                        <button type="submit" class="btn btn-light w-75 border">Place Bid</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <div class="card bidcont">
+    <div class="card bidcontent">
         @include('partials.bidsshow')
     </div>
     @endauth
