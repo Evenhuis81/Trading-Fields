@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bid extends Model
 {
+    protected $fillable = [
+        'advert_id', 'value', 'owner_id',
+    ];
+
+
     public function advert()
     {
         return $this->belongsTo(Advert::class);

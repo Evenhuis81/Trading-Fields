@@ -55,46 +55,44 @@
             {{-- Bid system --}}
             @if (!is_null($advert->startbid))
             @auth
+            @if ($advert->owner_id !== auth()->id())
             <div class="card-body mt-3" style="background-color: #fffbe2">
                 <div class="row">
                     <h5 class="card-text ml-3">Bieden</h5>
                     <p class="card-text ml-auto mr-3">(From €{{ $advert->startbid }},-)</p>
-                    {{-- <p class="card-text ml-3" style="background-color: white;">Login or Register to see and place Bids</p> --}}
                 </div>
-                <form id="bid-form">
+                <form id="inputbid">
                     @csrf
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <div class="input-group-text">€</div>
                         </div>
-                        {{-- <input type="number" name="inputbid" value="{{ session('startbid') ? ($advert->bids->last()->value +1) : ($advert->startbid +1 ) }}" class="form-control"> --}}
-                        <input type="number" name="inputbid" value="{{ session('startbid') }}" class="form-control">
-                        <div class="alert alert-danger print-error-msg" style="display:none">
+                        <input type="number" id="getbid" name="inputbid" class="form-control">
+                        {{-- <div class="alert alert-danger print-error-msg" style="display:none">
                             <ul></ul>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-light w-75 border">Place Bid</button>
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
-    <div class="card bidcontent">
-        @include('partials.bidsshow')
-    </div>
-    @endauth
-    @endif
-    {{-- <p class="card-text">{{ str_replace("ago", "active on the site", $advert->owner->created_at->diffForHumans()) }}</p>
-    <a href="" class="card-text">View more adverts</a>
-    <hr>
-    <p><i class="fas fa-map-marker-alt"></i>Advertiser hometown</p>
-    <a href="" class="btn btn-primary w-50"><i class="far fa-heart"><br>Bericht</i></a> --}}
+            @endif
+            <div class="card bidcontent">
+                @include('partials.bidsshow')
+            </div>
+            @else
+            <div class="card-body">
+                <h5 class="card-text ml-3 text-center">Log in to Bid on this</h5>
+            </div>
+            @endauth
+            @endif
+        </div> {{-- /Column md-2 --}}
+    </div> {{-- /Row --}}
 </div> {{-- /Info-BidSystem --}}
 </div> {{-- /Row --}}
 <div class="col-md-3">
     {{-- Right side advertisement (Sticky) --}}
-</div>
 </div>
 </div>
 

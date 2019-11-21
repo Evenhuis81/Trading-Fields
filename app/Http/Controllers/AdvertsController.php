@@ -50,14 +50,13 @@ class AdvertsController extends Controller
     }
     public function show(Advert $advert)
     {
-        session()->flash('advert_id', $advert->id);
         if (!is_null($advert->startbid)) {
-            if ($advert->bids->count()) {
-                session()->flash('startbid', $advert->bids->last()->value+1);
-                return view('adverts.show', ['advert' => $advert]);
-            }
-            session()->flash('startbid', $advert->startbid+1);
-        }
+            session()->flash('startbid', $advert->startbid);
+            session()->flash('advert_id', $advert->id);
+        } else {
+            session()->forget('startbid');
+            session()->forget('advert_id');
+        };
         return view('adverts.show', ['advert' => $advert]);
     }
     public function edit(Advert $advert)

@@ -49577,19 +49577,18 @@ $(function () {
     } // window.history.pushState("", "", url);
 
   });
-}); // $('#my-form').submit( processForm );
-
+});
 $(function () {
-  $("#bid-form").on("submit", function (e) {
+  $("#inputbid").on("submit", function (e) {
     e.preventDefault(); // prevent the form submission
 
-    var inputbid = $("input[name=inputbid]").val(); // formDataAsJson = JSON.stringify($("#bid-form").serializeArray());
+    var inputbid = $("#getbid").val(); // formDataAsJson = JSON.stringify($("#bid-form").serializeArray());
 
     $.ajax({
       type: "post",
       // dataType: "JSON",
       // contentType: "application/json; charset=utf-8",
-      url: "/bids",
+      url: "/inputbid",
       // data: $(this).serialize(), // serialize all form inputs
       // data: formDataAsJson,
       data: {
@@ -49600,10 +49599,16 @@ $(function () {
       },
       success: function success(data) {
         if ($.isEmptyObject(data.error)) {
-          alert(data.success);
+          $(".bidcontent").html(data);
+          $("#getbid").val("");
+          attachDelete();
         } else {
-          printErrorMsg(data.error);
+          // printErrorMsg(data.error);
+          $("#getbid").addClass("is-invalid");
         }
+      },
+      failure: function failure(data) {
+        $("#getbid").addClass("is-invalid"); // printErrorMsg(data.error);
       }
     });
   });
@@ -49615,139 +49620,37 @@ function printErrorMsg(msg) {
   $.each(msg, function (key, value) {
     $(".print-error-msg").find("ul").append("<li>" + value + "</li>");
   });
-} // success: function(response) {
-//     $(".bidcont")
-//         .empty()
-//         .html(response);
-// },
-// error: function(data) {
-// $("#errormsg").html(data.responseText);
-// }
-// error: function(xmlHttpRequest, textStatus, errorThrown) {
-//     alert(xmlHttpRequest.responseText);
-// }
-// error: function(data) {
-// var r = jQuery.parseJSON(response.responseText);
-// console.log(r);
-// alert("Message: " + r.Message);
-// alert("StackTrace: " + r.StackTrace);
-// alert("ExceptionType: " + r.ExceptionType);
-// $("#errormsg").html(
-//     '@error(\'value\')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror'
-// );
-// Log in the console
-// var errors = data.responseJSON;
-// console.log(errors);
-// or, what you are trying to achieve
-// render the response via js, pushing the error in your
-// blade page
-// var errors = response.responseJSON;
-// errorsHtml = '<div class="alert alert-danger"><ul>';
-// $.each(errors.errors, function(k, v) {
-//     errorsHtml += "<li>" + v + "</li>";
-// });
-// errorsHtml += "</ul></di>";
-// $("#error_message").html(errorsHtml);
-//appending to a <div id="error_message"></div> inside your form
-// }
-// error: function(request, status, error) {
-//     json = $.parseJSON(request.responseText);
-//     $.each(json.errors, function(key, value) {
-//         $(".alert-danger").show();
-//         $(".alert-danger").append("<p>" + value + "</p>");
-//     });
-//     $("#result").html("");
-// }
-// $(function() {
-//     $("#submitbid").on("click", function(e) {
-//         e.preventDefault();
-//         console.log(this);
-//         return;
-//         $.ajax({
-//             url: "bids/",
-//             type: "POST",
-//             headers: {
-//                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-//             },
-//             data: "",
-//             success: function() {
-//                 $(".poss" + id)
-//                     .css({
-//                         opacity: 0.5,
-//                         "user-select": "none"
-//                     })
-//                     .removeClass("hoverer")
-//                     .addClass("deleted");
-//                 swal("Poof! Your advert has been deleted!", {
-//                     icon: "success"
-//                 });
-//             }
-//         });
-//     });
-// });
+}
 
-
-$(function () {
-  $("body").on("click", "#plainbutton", function () {
-    var textArr = document.querySelector("#plaindiv").innerHTML.split("\n");
-    console.log(textArr);
+function attachDelete() {
+  $(".deletebid").on("submit", function (e) {
+    e.preventDefault();
+    var bid = $(this).attr("action");
+    $.ajax({
+      type: "post",
+      url: "/deletebid",
+      data: {
+        bid: bid
+      },
+      headers: {
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+      },
+      success: function success(data) {
+        if ($.isEmptyObject(data.error)) {
+          $(".bidcontent").html(data);
+          attachDelete();
+        } else {
+          printErrorMsg(data.error);
+        }
+      },
+      failure: function failure(data) {
+        printErrorMsg(data.error);
+      }
+    });
   });
-}); //     function loadDoc(querystring = []) {
-//         var xhttp = new XMLHttpRequest();
-//         xhttp.onreadystatechange = function() {
-//             if (this.readyState == 4 && this.status == 200) {
-//                 document.getElementById(
-//                     "advertIndex"
-//                 ).innerHTML = this.responseText;
-//             }
-//         };
-//         xhttp.open("GET", "advertindex?numbers=" + querystring, true);
-//         xhttp.send();
-//     }
-// });
-// var imgmax = 0;
-//     $(".imgAdd").click(function() {
-//         imgmax += 1;
-//         $(this)
-//             .closest(".row")
-//             .find(".imgAdd")
-//             .before(
-//                 '<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary" id="btn-primary">Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>'
-//             );
-//         if (imgmax == 2) {
-//             $(".imgAdd").css("display", "none");
-//         }
-//     });
-//     $(document).on("click", "i.del", function() {
-//         imgmax -= 1;
-//         $(this)
-//             .parent()
-//             .remove();
-//         if (imgmax == 1) {
-//             $(".imgAdd").css("display", "block");
-//         }
-//     });
-// var imgmax = 0;
-//     $(".imgAdd").click(function() {
-//         imgmax += 1;
-//         $(this)
-//             .closest(".row")
-//             .find(".imgAdd")
-//             .before(
-//                 '<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary" id="btn-primary">Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>'
-//             );
-//         if (imgmax == 2) {
-//             $(".imgAdd").css("display", "none");
-//         }
-//     });
-//     $(document).on("click", "i.del", function() {
-//         imgmax -= 1;
-//         $(this)
-//             .parent()
-//             .remove();
-//         if (imgmax == 1) {
-//             $(".imgAdd").css("display", "block");
-//         }
+}
+
+attachDelete();
 
 /***/ }),
 

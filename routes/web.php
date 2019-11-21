@@ -9,9 +9,8 @@ Route::resource('adverts', 'AdvertsController');
 
 Auth::routes();
 
-Route::post('bids', 'AjaxController@store')->name('bids.store')->middleware('auth');
-// /{userid}/{advertid}
-
+Route::post('inputbid', 'AjaxController@inputbid')->middleware('auth');
+Route::post('deletebid', 'AjaxController@deletebid')->middleware('auth');
 
 Route::post('/cats', function(Request $request) {
     dd($request->input());
