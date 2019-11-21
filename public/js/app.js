@@ -49600,15 +49600,20 @@ $(function () {
       success: function success(data) {
         if ($.isEmptyObject(data.error)) {
           $(".bidcontent").html(data);
-          $("#getbid").val("");
+          $("#getbid").val("").removeClass("is-invalid");
+          $('#print-error-msg').html("");
+          $('#submitbutton').blur();
           attachDelete();
         } else {
           // printErrorMsg(data.error);
           $("#getbid").addClass("is-invalid");
+          $.each(data.error, function (key, value) {
+            $('#print-error-msg').html(value);
+          });
         }
       },
       failure: function failure(data) {
-        $("#getbid").addClass("is-invalid"); // printErrorMsg(data.error);
+        $("#getbid").addClass("is-invalid");
       }
     });
   });
@@ -49786,8 +49791,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

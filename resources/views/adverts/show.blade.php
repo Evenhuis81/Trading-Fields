@@ -41,9 +41,9 @@
                 </div>
             </div> {{-- /Card --}}
         </div> {{-- /Column 5 --}}
-        <div class="col-md-2">
+        <div class="col-md-3">
             {{-- Advertiser Info + Bid System --}}
-            <div class="card-body" style="background-color: #fffbe2">
+            <div class="card-body w-75" style="background-color: #fffbe2">
                 <p class="card-text">{{ $advert->owner->name }}</p>
                 <p class="card-text">{{ str_replace("ago", "active on the site", $advert->owner->created_at->diffForHumans()) }}</p>
                 <a href="" class="card-text">View more adverts</a>
@@ -56,7 +56,7 @@
             @if (!is_null($advert->startbid))
             @auth
             @if ($advert->owner_id !== auth()->id())
-            <div class="card-body mt-3" style="background-color: #fffbe2">
+            <div class="card-body mt-3 w-75" style="background-color: #fffbe2">
                 <div class="row">
                     <h5 class="card-text ml-3">Bieden</h5>
                     <p class="card-text ml-auto mr-3">(From €{{ $advert->startbid }},-)</p>
@@ -68,21 +68,24 @@
                             <div class="input-group-text">€</div>
                         </div>
                         <input type="number" id="getbid" name="inputbid" class="form-control">
+                        <span class="" role="alert" style="color:red;">
+                            <p id="print-error-msg"></p>
+                        </span>
                         {{-- <div class="alert alert-danger print-error-msg" style="display:none">
                             <ul></ul>
                         </div> --}}
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-light w-75 border">Place Bid</button>
+                        <button type="submit" id="submitbutton" class="btn btn-light w-75 border">Place Bid</button>
                     </div>
                 </form>
             </div>
             @endif
-            <div class="card bidcontent">
+            <div class="card bidcontent w-75">
                 @include('partials.bidsshow')
             </div>
             @else
-            <div class="card-body">
+            <div class="card-body w-755">
                 <h5 class="card-text ml-3 text-center">Log in to Bid on this</h5>
             </div>
             @endauth
@@ -91,7 +94,7 @@
     </div> {{-- /Row --}}
 </div> {{-- /Info-BidSystem --}}
 </div> {{-- /Row --}}
-<div class="col-md-3">
+<div class="col-md-2 ml-auto">
     {{-- Right side advertisement (Sticky) --}}
 </div>
 </div>
