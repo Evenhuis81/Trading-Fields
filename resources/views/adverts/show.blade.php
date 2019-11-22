@@ -54,29 +54,36 @@
             </div>
             {{-- Bid system --}}
             @if (!is_null($advert->startbid))
-            @auth
             @if ($advert->owner_id !== auth()->id())
             <div class="card-body mt-3 w-75" style="background-color: #fffbe2">
                 <div class="row">
-                    <h5 class="card-text ml-3">Bieden</h5>
+                    <h5 class="card-text ml-3">Bid</h5>
                     <p class="card-text ml-auto mr-3">(From €{{ $advert->startbid }},-)</p>
                 </div>
-                <form id="inputbid">
+                <form id="bidform">
                     @csrf
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <div class="input-group-text">€</div>
                         </div>
+                        @if (session('guestbd'))
+                        <input type="number" id="getbid" name="inputbid" value="{{ session('guestbd') }}" class="form-control" :autofocus="'autofocus'">
+                        @else
                         <input type="number" id="getbid" name="inputbid" class="form-control">
-                        <span class="" role="alert" style="color:red;">
-                            <p id="print-error-msg"></p>
-                        </span>
-                        {{-- <div class="alert alert-danger print-error-msg" style="display:none">
+                        @endif
+                    </div>
+                    <span class="text-center" role="alert" style="color:red;">
+                        <p id="print-error-msg"></p>
+                    </span>
+                    {{-- <div class="alert alert-danger print-error-msg" style="display:none">
                             <ul></ul>
                         </div> --}}
-                    </div>
                     <div class="text-center">
+                        @auth
                         <button type="submit" id="submitbutton" class="btn btn-light w-75 border">Place Bid</button>
+                        @else
+                        <button type="submit" id="visitorsubmit" class="btn btn-light w-75 border">Place Bid</button>
+                        @endauth
                     </div>
                 </form>
             </div>
@@ -84,11 +91,11 @@
             <div class="card bidcontent w-75">
                 @include('partials.bidsshow')
             </div>
-            @else
-            <div class="card-body w-755">
+            {{-- @else
+            <div class="card-body w-75">
                 <h5 class="card-text ml-3 text-center">Log in to Bid on this</h5>
             </div>
-            @endauth
+            @endauth --}}
             @endif
         </div> {{-- /Column md-2 --}}
     </div> {{-- /Row --}}

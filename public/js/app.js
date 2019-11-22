@@ -49579,7 +49579,7 @@ $(function () {
   });
 });
 $(function () {
-  $("#inputbid").on("submit", function (e) {
+  $("#bidform").on("submit", function (e) {
     e.preventDefault(); // prevent the form submission
 
     var inputbid = $("#getbid").val(); // formDataAsJson = JSON.stringify($("#bid-form").serializeArray());
@@ -49601,31 +49601,37 @@ $(function () {
         if ($.isEmptyObject(data.error)) {
           $(".bidcontent").html(data);
           $("#getbid").val("").removeClass("is-invalid");
-          $('#print-error-msg').html("");
-          $('#submitbutton').blur();
+          $("#print-error-msg").html("");
+          $("#submitbutton").blur();
           attachDelete();
         } else {
           // printErrorMsg(data.error);
           $("#getbid").addClass("is-invalid");
-          $.each(data.error, function (key, value) {
-            $('#print-error-msg').html(value);
-          });
+          $("#print-error-msg").html(data.error[0]);
+          $("#submitbutton").blur();
+          $("#getbid").focus(); // $.each(data.error, function(index, value) {
+          //     $("#print-error-msg").html(value);
+          // });
         }
       },
       failure: function failure(data) {
         $("#getbid").addClass("is-invalid");
+        $("#print-error-msg").html("something went wrong! call 911");
+        $("#submitbutton").blur();
       }
     });
   });
-});
-
-function printErrorMsg(msg) {
-  $(".print-error-msg").find("ul").html("");
-  $(".print-error-msg").css("display", "block");
-  $.each(msg, function (key, value) {
-    $(".print-error-msg").find("ul").append("<li>" + value + "</li>");
-  });
-}
+}); // function printErrorMsg(msg) {
+//     $(".print-error-msg")
+//         .find("ul")
+//         .html("");
+//     $(".print-error-msg").css("display", "block");
+//     $.each(msg, function(key, value) {
+//         $(".print-error-msg")
+//             .find("ul")
+//             .append("<li>" + value + "</li>");
+//     });
+// }
 
 function attachDelete() {
   $(".deletebid").on("submit", function (e) {
@@ -49656,6 +49662,47 @@ function attachDelete() {
 }
 
 attachDelete();
+$("#visitorsubmit").on("click", function (e) {
+  e.preventDefault();
+  swal("You have to login or register to place bids", {
+    buttons: {
+      cancel: true,
+      Register: true,
+      Login: true
+    }
+  }).then(function (value) {
+    switch (value) {
+      case "Register": //
+      // break;
+
+      case "Login":
+        var inputbid = $("#getbid").val();
+        location.replace("/login?redirect=meh&guestbid=" + inputbid);
+      // break;
+      // default:
+      // swal("Got away safely!");
+    }
+  }); // var bid = $(this).attr("action");
+  // $.ajax({
+  //     type: "post",
+  //     url: "/deletebid",
+  //     data: { bid: bid },
+  //     headers: {
+  //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+  //     },
+  //     success: function (data) {
+  //         if ($.isEmptyObject(data.error)) {
+  //             $(".bidcontent").html(data);
+  //             attachDelete();
+  //         } else {
+  //             printErrorMsg(data.error);
+  //         }
+  //     },
+  //     failure: function (data) {
+  //         printErrorMsg(data.error);
+  //     }
+  // });
+});
 
 /***/ }),
 
@@ -49791,8 +49838,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
