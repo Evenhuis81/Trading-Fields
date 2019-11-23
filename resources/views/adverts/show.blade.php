@@ -66,8 +66,8 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">€</div>
                         </div>
-                        @if (session('guestbd'))
-                        <input type="number" id="getbid" name="inputbid" value="{{ session('guestbd') }}" class="form-control" :autofocus="'autofocus'">
+                        @if (session('guestbid'))
+                        <input type="number" id="getbid" name="inputbid" value="{{ session('guestbid') }}" class="form-control" :autofocus="'autofocus'">
                         @else
                         <input type="number" id="getbid" name="inputbid" class="form-control">
                         @endif
@@ -87,10 +87,16 @@
                     </div>
                 </form>
             </div>
+            @include('partials.bidsshow')
+            @else
+            <div style="height:100px;"></div>
+            <div class="w-75">
+            <a class="container-fluid btn btn-success btn-lg text-dark" href="{{ route('adverts.edit', [$advert->id]) }}" style="border: 2px solid black"><strong>Edit Advert</strong></a>
+        </div>
             @endif
-            <div class="card bidcontent w-75">
-                @include('partials.bidsshow')
-            </div>
+            
+            
+            
             {{-- @else
             <div class="card-body w-75">
                 <h5 class="card-text ml-3 text-center">Log in to Bid on this</h5>

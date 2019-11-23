@@ -334,7 +334,7 @@ $("#visitorsubmit").on("click", function(e) {
             // break;
             case "Login":
                 var inputbid = $("#getbid").val();
-                location.replace("/login?redirect=meh&guestbid=" + inputbid);
+                location.href = ("/login?redirect=" + inputbid);
             // break;
             // default:
             // swal("Got away safely!");

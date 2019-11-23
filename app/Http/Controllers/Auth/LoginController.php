@@ -35,47 +35,37 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        dd(request()->get()->first());
-        if ( \request()->get( 'redirect' ) ) {
-            // session()->put( 'redirect.url', \request()->get( 'redirect_to' ) );
-            // session()->put( 'redirect.url', 'a' );
-            session()->put('redirect.url', url()->previous());
-            session()->put('redirect.bid', request()->get('guestbid'));
-            dd(session()->all());
-        }
         $this->middleware('guest')->except('logout');
     }
 
     public function showLoginForm()
     {
-        if (session()->has('guestbd')) {
-            if (session('link')) {
-                $myPath     = session('link');
-                $loginPath  = url('/login');
-                $previous   = url()->previous();
+        if (request()->get('redirect')) {
+            session()->put('guestbid', request()->get('redirect'));
+            session()->forget('redirect');
+        }
+        if (session('link')) {
+            $myPath     = session('link');
+            $loginPath  = url('/login');
+            $previous   = url()->previous();
 
-                if ($previous = $loginPath) {
-                    session(['link' => $myPath]);
-                }
-                else{
-                    session(['link' => $previous]);
-                }
+            if ($previous = $loginPath) {
+                session(['link' => $myPath]);
+            } else {
+                session(['link' => $previous]);
             }
-            else{
-                // session(['guestbid'])
-                session(['link' => url()->previous()]);
-            }
+        } else {
+            session(['link' => url()->previous()]);
         }
         return view('auth.login');
     }
 
     protected function authenticated()
         {
-            if(session()->has('redirect.url')) {
-                return redirect( session()->get( 'redirect.url' ) );
-            }
             if (session('link')) {
-                return redirect(session('link'))->with('guestbd', session('guestbd'));
+                $link = session('link');
+                session()->forget('link');
+                return redirect($link)->with('guestbid', session('guestbid'));
             }
             return redirect('/home');
         }

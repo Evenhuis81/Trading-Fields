@@ -1,3 +1,4 @@
+<div class="card bidcontent w-75">
 @foreach ($advert->bids->sortByDesc('value') as $bid)
 @if ($bid->owner->id == auth()->id())
 <div class="row mx-0" style="height: 2.5rem;color:green;">
@@ -18,3 +19,4 @@
 </div>
 @endif
 @endforeach
+</div>

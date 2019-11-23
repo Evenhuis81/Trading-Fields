@@ -99,6 +99,10 @@ class AdvertsController extends Controller
     public function destroy(Advert $advert)
     {
         $this->authorize('update', $advert);
+        foreach ($advert->pictures as $picture) {
+            Storage::disk('public')->delete($picture['file_name']);
+            $picture->delete();
+        }
         $advert->delete();
     }
     public function storeImage($val, $id)
