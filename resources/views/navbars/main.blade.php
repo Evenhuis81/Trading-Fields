@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-2 sticky-top">
+<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-2 fixed-top">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Marktplaats') }}

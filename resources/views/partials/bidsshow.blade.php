@@ -1,5 +1,7 @@
-<div class="card bidcontent w-75">
-@foreach ($advert->bids->sortByDesc('value') as $bid)
+{{-- @foreach ($advert->bids->sortByDesc('value') as $bid) --}}
+@foreach ($advert->bids->sortByDesc(function($bid) {
+    return [$bid->value, $bid->created_at];
+}) as $bid)
 @if ($bid->owner->id == auth()->id())
 <div class="row mx-0" style="height: 2.5rem;color:green;">
     <p class="card-text ml-3 font-weight-bold my-auto">{{ $bid->owner->name }}</p>
@@ -19,4 +21,3 @@
 </div>
 @endif
 @endforeach
-</div>

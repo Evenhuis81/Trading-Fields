@@ -75,4 +75,16 @@ class RegisterController extends Controller
         'isAdman' => $isAdman,
     ]);
     }
+
+    protected function registered()
+    {
+        dd('yes');
+        if (session('link')) {
+            $link = session('link');
+            session()->forget('link');
+            return redirect($link)->with('guestbid', session('guestbid'));
+        }
+        return redirect('/home');
+    }
+
 }

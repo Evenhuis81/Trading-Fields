@@ -67,7 +67,7 @@
                             <div class="input-group-text">€</div>
                         </div>
                         @if (session('guestbid'))
-                        <input type="number" id="getbid" name="inputbid" value="{{ session('guestbid') }}" class="form-control" :autofocus="'autofocus'">
+                        <input type="number" id="getbid" name="inputbid" value="{{ session('guestbid') }}" class="form-control" :autofocus="'autofocus'" onfocus="var temp_value=this.value; this.value=''; this.value=temp_value">
                         @else
                         <input type="number" id="getbid" name="inputbid" class="form-control">
                         @endif
@@ -87,7 +87,9 @@
                     </div>
                 </form>
             </div>
+            <div class="card bidcontent w-75">
             @include('partials.bidsshow')
+            </div>
             @else
             <div style="height:100px;"></div>
             <div class="w-75">

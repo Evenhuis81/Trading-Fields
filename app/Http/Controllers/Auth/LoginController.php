@@ -8,17 +8,6 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -38,25 +27,35 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
+        if(session('link')) {
+            return view('auth.login');
+        }
         if (request()->get('redirect')) {
+            define("LINK", url()->previous());
+            session()->put('link', constant("LINK"));
             session()->put('guestbid', request()->get('redirect'));
-            session()->forget('redirect');
+            // $request->request->remove('redirect');
+            // session()->put('temp', url()->previous());
+            // session()->forget('temp');
+            // return view('auth.login')->with('multiredirect', constant("LINK"));
+            return view('auth.login');
         }
-        if (session('link')) {
-            $myPath     = session('link');
-            $loginPath  = url('/login');
-            $previous   = url()->previous();
+        // if (request()->get('multiredirect'))
+        // if (session('link')) {
+        //     $myPath     = session('link');
+        //     $loginPath  = url('/login');
+        //     $previous   = url()->previous();
 
-            if ($previous = $loginPath) {
-                session(['link' => $myPath]);
-            } else {
-                session(['link' => $previous]);
-            }
-        } else {
-            session(['link' => url()->previous()]);
-        }
+        //     if ($previous = $loginPath) {
+        //         session(['link' => $myPath]);
+        //     } else {
+        //         session(['link' => $previous]);
+        //     }
+        // } else {
+        //     session(['link' => url()->previous()]);
+        // }
         return view('auth.login');
     }
 

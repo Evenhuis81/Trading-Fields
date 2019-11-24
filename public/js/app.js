@@ -49672,11 +49672,25 @@ $("#visitorsubmit").on("click", function (e) {
     }
   }).then(function (value) {
     switch (value) {
-      case "Register": //
+      case "Register":
+        var inputbid = $("#getbid").val();
+
+        if (inputbid == '') {
+          inputbid = 'null';
+        }
+
+        ;
+        location.href = "/register?redirect=" + inputbid;
       // break;
 
       case "Login":
         var inputbid = $("#getbid").val();
+
+        if (inputbid == '') {
+          inputbid = 'null';
+        }
+
+        ;
         location.href = "/login?redirect=" + inputbid;
       // break;
       // default:
