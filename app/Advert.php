@@ -7,9 +7,13 @@ use App\User;
 use App\Picture;
 use App\Category;
 use Illuminate\Database\Eloquent\Model;
+use CyrildeWit\EloquentViewable\Viewable;
+use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
-class Advert extends Model
+class Advert extends Model implements ViewableContract
 {
+    use Viewable;
+
     protected $fillable = [
         'title', 'description', 'price', 'startbid', 'owner_id',
     ];

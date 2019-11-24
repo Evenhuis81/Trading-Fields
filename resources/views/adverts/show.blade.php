@@ -16,7 +16,7 @@
                 <div class="card-header">
                     <p class="card-text font-weight-bold">{{ $advert->title }}</p>
                     <hr>
-                    <p class="card-title">Views / Times Saved / {{ $advert->created_at->toDayDateTimeString() }} </p>
+                    <p class="card-title">{{ views($advert)->count() }} / Times Saved / {{ $advert->created_at->toDayDateTimeString() }} </p>
                     <a href="#" class="btn btn-primary mb-3">Save <i class="far fa-heart"></i></a>
                     <div class="row">
                         <div class="col-md-7 pl-0">

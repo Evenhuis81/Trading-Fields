@@ -57,6 +57,7 @@ class AdvertsController extends Controller
             session()->forget('startbid');
             session()->forget('advert_id');
         };
+        views($advert)->record();
         return view('adverts.show', ['advert' => $advert]);
     }
     public function edit(Advert $advert)
