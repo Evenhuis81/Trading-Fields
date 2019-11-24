@@ -336,14 +336,15 @@ $("#visitorsubmit").on("click", function (e) {
                 };
                 var inputbid = "143";
                 location.href = ("/register?redirect=" + inputbid);
-            break;
+                break;
+            // If no break, it goes to "Login", why?
             case "Login":
                 var inputbid = $("#getbid").val();
                 if (inputbid == '') {
                     inputbid = 'null';
                 };
                 location.href = ("/login?redirect=" + inputbid);
-            break;
+                break;
             // default:
             // swal("Got away safely!");
         }

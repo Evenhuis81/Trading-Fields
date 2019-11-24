@@ -28,6 +28,7 @@
 <body>
     <div id="app">
         @include('navbars.main')
+        @yield('searchbar')
         @yield('content')
     </div>
 </body>

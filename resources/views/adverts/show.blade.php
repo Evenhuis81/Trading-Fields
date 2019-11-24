@@ -1,6 +1,9 @@
 @extends('layouts.main')
 
 @section('content')
+@section('searchbar')
+    @include('layouts.searchbar')
+@endsection
 
 <div class="container-fluid">
     <div class="row">
@@ -16,7 +19,7 @@
                 <div class="card-header">
                     <p class="card-text font-weight-bold">{{ $advert->title }}</p>
                     <hr>
-                    <p class="card-title">{{ views($advert)->count() }} / Times Saved / {{ $advert->created_at->toDayDateTimeString() }} </p>
+                    <p class="card-title">Views: {{ views($advert)->count() }} / Times Saved:  / {{ $advert->created_at->toDayDateTimeString() }} </p>
                     <a href="#" class="btn btn-primary mb-3">Save <i class="far fa-heart"></i></a>
                     <div class="row">
                         <div class="col-md-7 pl-0">
@@ -36,7 +39,7 @@
                 </div>
                 <div class="card-footer text-muted" style="height=15px;">
                     <div class="row">
-                        <p class="card-text my-auto">Share buttons / advertlink</p><a href="#" class="btn btn-primary ml-auto">Save <i class="far fa-heart"></i></a>
+                        <p class="card-text my-auto">Share buttons / advertlink</p><a class="btn btn-primary ml-auto">Save <i class="far fa-heart"></i></a>
                     </div>
                 </div>
             </div> {{-- /Card --}}

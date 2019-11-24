@@ -49683,6 +49683,7 @@ $("#visitorsubmit").on("click", function (e) {
         var inputbid = "143";
         location.href = "/register?redirect=" + inputbid;
         break;
+      // If no break, it goes to "Login", why?
 
       case "Login":
         var inputbid = $("#getbid").val();
