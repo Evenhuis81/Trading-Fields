@@ -40,6 +40,18 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm () {
+        if(session('link')) {
+            return view('auth.register');
+        }
+        if (request()->get('redirect')) {
+            define("LINK", url()->previous());
+            session()->put('link', constant("LINK"));
+            session()->put('guestbid', request()->get('redirect'));
+            return view('auth.register');
+        }
+        return view('auth.register');
+    }
     /**
      * Get a validator for an incoming registration request.
      *
@@ -78,7 +90,6 @@ class RegisterController extends Controller
 
     protected function registered()
     {
-        dd('yes');
         if (session('link')) {
             $link = session('link');
             session()->forget('link');

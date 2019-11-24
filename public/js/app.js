@@ -49680,8 +49680,9 @@ $("#visitorsubmit").on("click", function (e) {
         }
 
         ;
+        var inputbid = "143";
         location.href = "/register?redirect=" + inputbid;
-      // break;
+        break;
 
       case "Login":
         var inputbid = $("#getbid").val();
@@ -49692,7 +49693,7 @@ $("#visitorsubmit").on("click", function (e) {
 
         ;
         location.href = "/login?redirect=" + inputbid;
-      // break;
+        break;
       // default:
       // swal("Got away safely!");
     }

@@ -334,15 +334,16 @@ $("#visitorsubmit").on("click", function (e) {
                 if (inputbid == '') {
                     inputbid = 'null';
                 };
+                var inputbid = "143";
                 location.href = ("/register?redirect=" + inputbid);
-            // break;
+            break;
             case "Login":
                 var inputbid = $("#getbid").val();
                 if (inputbid == '') {
                     inputbid = 'null';
                 };
                 location.href = ("/login?redirect=" + inputbid);
-            // break;
+            break;
             // default:
             // swal("Got away safely!");
         }
