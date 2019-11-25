@@ -34,14 +34,14 @@ const app = new Vue({
     el: "#app"
 });
 
-$(document).ready(function () {
+$(document).ready(function() {
     // For all pages
-    $(function () {
+    $(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
 
     // Login
-    $("#showPass").on("change", function () {
+    $("#showPass").on("change", function() {
         $("#password").attr(
             "type",
             $("#showPass").prop("checked") == true ? "text" : "password"
@@ -53,7 +53,7 @@ $(document).ready(function () {
         $("#inputBid").toggle();
     }
 
-    $("#bids").on("change", function () {
+    $("#bids").on("change", function() {
         if ($(this).prop("checked") == false) {
             $("#bid").removeAttr("name");
         } else {
@@ -62,8 +62,8 @@ $(document).ready(function () {
         $("#inputBid").toggle("slow");
     });
 
-    $(function () {
-        $(document).on("change", ".uploadFile", function () {
+    $(function() {
+        $(document).on("change", ".uploadFile", function() {
             // var msize = 11600;
             var msize = 2 * 1024 * 1024;
             var uploadFile = $(this);
@@ -92,7 +92,7 @@ $(document).ready(function () {
                 var reader = new FileReader(); // instance of the FileReader
                 reader.readAsDataURL(files[0]); // read the local file
 
-                reader.onloadend = function () {
+                reader.onloadend = function() {
                     // set image data as background of div
                     //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
                     uploadFile
@@ -111,14 +111,14 @@ $(document).ready(function () {
             .css("visibility", "visible")
             .hide()
             .fadeIn("slow");
-        imgMsg.delay(2000).fadeOut("slow", function () {
+        imgMsg.delay(2000).fadeOut("slow", function() {
             imgMsg.css("visibility", "hidden");
             imgMsg.css("display", display);
         });
     }
 
     // Manage Adverts
-    $(".delete").click(function () {
+    $(".delete").click(function() {
         var id = $(this).data("id");
         swal({
             title: "Are you sure?",
@@ -136,7 +136,7 @@ $(document).ready(function () {
                             "content"
                         )
                     },
-                    success: function () {
+                    success: function() {
                         $(".poss" + id)
                             .css({
                                 opacity: 0.5,
@@ -157,7 +157,7 @@ $(document).ready(function () {
     });
 
     // Edit Advert
-    $("#titlehover").on("click", function () {
+    $("#titlehover").on("click", function() {
         $(this).removeAttr("id");
         $(this).attr("id", "notitlehover");
         $("#titleText").hide();
@@ -169,7 +169,7 @@ $(document).ready(function () {
 
     // Main Index Page
 
-    $(".selectCats").on("click", function () {
+    $(".selectCats").on("click", function() {
         let catArrPush = [];
         let catArr = $(".selectCats");
         for (let index = 0; index < catArr.length; index++) {
@@ -187,7 +187,7 @@ $(document).ready(function () {
         loadAjaxDoc(url);
     });
 
-    $("#allCat").on("click", function () {
+    $("#allCat").on("click", function() {
         $(this).prop({ disabled: true });
         let catArr = $(".selectCats");
         for (let el of catArr) {
@@ -196,22 +196,102 @@ $(document).ready(function () {
         // let url = '';
         loadAjaxDoc();
     });
+
+    // Searchbar
+    $("#search").keyup(function() {
+        var query = $(this).val();
+        if (query != "") {
+            $.ajax({
+                url: "/autocomplete",
+                method: "POST",
+                data: { query: query },
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                },
+                success: function(data) {
+                    $(".searchList").fadeIn();
+                    $(".searchList").html(data);
+                    attachKeypress();
+                }
+            });
+
+            // headers: {
+            //     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+            // },
+        } else {
+            $(".searchList").empty();
+        }
+    });
+
+    $(document).on("click", "li", function() {
+        $("#search").val($(this).text());
+        // console.log($(this).text());
+        // $(".searchList").fadeOut();
+    });
+
+    $("#search").click(function(e) {
+        e.stopPropagation();
+        jQuery(".searchList").fadeIn(500);
+    });
+
+    $("body").click(function(e) {
+        if (!$(e.target).hasClass(".searchList")) {
+            jQuery(".searchList").fadeOut(500);
+        }
+    });
+
+    $("body").keydown(function(e) {
+        if (e.keyCode === 27 || e.which === 27) {
+            jQuery(".searchList").fadeOut(500);
+        }
+    });
 });
+
+function attachKeypress() {
+    $("body").keydown(function(e) {
+        if (e.keyCode === 40 || e.which === 40) {
+            // jQuery(".searchList").fadeOut(500);
+            e.stopPropagation();
+            // alert("ye");
+        } else if (e.keyCode === 38 || e.which === 38) {
+            e.stopPropagation();
+            //
+        }
+    });
+    //     $(".dropss").bind("keydown", function(event) {
+    //         console.log("heee");
+    //         return;
+    //         var keyChar = String.fromCharCode(event.keyCode);
+    //         var selectedItem = $(this)
+    //             .find("a")
+    //             .filter(function() {
+    //                 return (
+    //                     $(this)
+    //                         .text()
+    //                         .indexOf(keyChar) === 0
+    //                 );
+    //             })
+    //             .first();
+    //         selectedItem.focus();
+    //     });
+}
+
+// attachKeypress();
 
 function loadAjaxDoc(url) {
     $.ajax({
         url: url
     })
-        .done(function (data) {
+        .done(function(data) {
             $("#advertIndex").html(data);
         })
-        .fail(function () {
+        .fail(function() {
             alert("Articles could not be loaded.");
         });
 }
 
-$(function () {
-    $("body").on("click", ".pagination a", function (e) {
+$(function() {
+    $("body").on("click", ".pagination a", function(e) {
         e.preventDefault();
         // $('#load a').css('color', '#dfecf6');
         $("#load").append(
@@ -235,8 +315,9 @@ $(function () {
     });
 });
 
-$(function () {
-    $("#bidform").on("submit", function (e) {
+// Show page
+$(function() {
+    $("#bidform").on("submit", function(e) {
         e.preventDefault(); // prevent the form submission
         var inputbid = $("#getbid").val();
         // formDataAsJson = JSON.stringify($("#bid-form").serializeArray());
@@ -251,7 +332,7 @@ $(function () {
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            success: function (data) {
+            success: function(data) {
                 if ($.isEmptyObject(data.error)) {
                     $(".bidcontent").html(data);
                     $("#getbid")
@@ -271,7 +352,7 @@ $(function () {
                     // });
                 }
             },
-            failure: function (data) {
+            failure: function(data) {
                 $("#getbid").addClass("is-invalid");
                 $("#print-error-msg").html("something went wrong! call 911");
                 $("#submitbutton").blur();
@@ -292,7 +373,7 @@ $(function () {
 // }
 
 function attachDelete() {
-    $(".deletebid").on("submit", function (e) {
+    $(".deletebid").on("submit", function(e) {
         e.preventDefault();
         var bid = $(this).attr("action");
         $.ajax({
@@ -302,7 +383,7 @@ function attachDelete() {
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            success: function (data) {
+            success: function(data) {
                 if ($.isEmptyObject(data.error)) {
                     $(".bidcontent").html(data);
                     attachDelete();
@@ -310,7 +391,7 @@ function attachDelete() {
                     printErrorMsg(data.error);
                 }
             },
-            failure: function (data) {
+            failure: function(data) {
                 printErrorMsg(data.error);
             }
         });
@@ -319,7 +400,7 @@ function attachDelete() {
 
 attachDelete();
 
-$("#visitorsubmit").on("click", function (e) {
+$("#visitorsubmit").on("click", function(e) {
     e.preventDefault();
     swal("You have to login or register to place bids", {
         buttons: {
@@ -331,19 +412,18 @@ $("#visitorsubmit").on("click", function (e) {
         switch (value) {
             case "Register":
                 var inputbid = $("#getbid").val();
-                if (inputbid == '') {
-                    inputbid = 'null';
-                };
+                if (inputbid == "") {
+                    inputbid = "null";
+                }
                 var inputbid = "143";
-                location.href = ("/register?redirect=" + inputbid);
+                location.href = "/register?redirect=" + inputbid;
                 break;
-            // If no break, it goes to "Login", why?
             case "Login":
                 var inputbid = $("#getbid").val();
-                if (inputbid == '') {
-                    inputbid = 'null';
-                };
-                location.href = ("/login?redirect=" + inputbid);
+                if (inputbid == "") {
+                    inputbid = "null";
+                }
+                location.href = "/login?redirect=" + inputbid;
                 break;
             // default:
             // swal("Got away safely!");

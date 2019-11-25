@@ -49540,8 +49540,79 @@ $(document).ready(function () {
     }
 
     loadAjaxDoc();
+  }); // Searchbar
+
+  $("#search").keyup(function () {
+    var query = $(this).val();
+
+    if (query != "") {
+      $.ajax({
+        url: "/autocomplete",
+        method: "POST",
+        data: {
+          query: query
+        },
+        headers: {
+          "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        success: function success(data) {
+          $(".searchList").fadeIn();
+          $(".searchList").html(data);
+          attachKeypress();
+        }
+      }); // headers: {
+      //     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+      // },
+    } else {
+      $(".searchList").empty();
+    }
+  });
+  $(document).on("click", "li", function () {
+    $("#search").val($(this).text()); // console.log($(this).text());
+    // $(".searchList").fadeOut();
+  });
+  $("#search").click(function (e) {
+    e.stopPropagation();
+    jQuery(".searchList").fadeIn(500);
+  });
+  $("body").click(function (e) {
+    if (!$(e.target).hasClass(".searchList")) {
+      jQuery(".searchList").fadeOut(500);
+    }
+  });
+  $("body").keydown(function (e) {
+    if (e.keyCode === 27 || e.which === 27) {
+      jQuery(".searchList").fadeOut(500);
+    }
   });
 });
+
+function attachKeypress() {
+  $("body").keydown(function (e) {
+    if (e.keyCode === 40 || e.which === 40) {
+      // jQuery(".searchList").fadeOut(500);
+      e.stopPropagation(); // alert("ye");
+    } else if (e.keyCode === 38 || e.which === 38) {
+      e.stopPropagation(); //
+    }
+  }); //     $(".dropss").bind("keydown", function(event) {
+  //         console.log("heee");
+  //         return;
+  //         var keyChar = String.fromCharCode(event.keyCode);
+  //         var selectedItem = $(this)
+  //             .find("a")
+  //             .filter(function() {
+  //                 return (
+  //                     $(this)
+  //                         .text()
+  //                         .indexOf(keyChar) === 0
+  //                 );
+  //             })
+  //             .first();
+  //         selectedItem.focus();
+  //     });
+} // attachKeypress();
+
 
 function loadAjaxDoc(url) {
   $.ajax({
@@ -49577,7 +49648,8 @@ $(function () {
     } // window.history.pushState("", "", url);
 
   });
-});
+}); // Show page
+
 $(function () {
   $("#bidform").on("submit", function (e) {
     e.preventDefault(); // prevent the form submission
@@ -49675,24 +49747,21 @@ $("#visitorsubmit").on("click", function (e) {
       case "Register":
         var inputbid = $("#getbid").val();
 
-        if (inputbid == '') {
-          inputbid = 'null';
+        if (inputbid == "") {
+          inputbid = "null";
         }
 
-        ;
         var inputbid = "143";
         location.href = "/register?redirect=" + inputbid;
         break;
-      // If no break, it goes to "Login", why?
 
       case "Login":
         var inputbid = $("#getbid").val();
 
-        if (inputbid == '') {
-          inputbid = 'null';
+        if (inputbid == "") {
+          inputbid = "null";
         }
 
-        ;
         location.href = "/login?redirect=" + inputbid;
         break;
       // default:
@@ -49854,8 +49923,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

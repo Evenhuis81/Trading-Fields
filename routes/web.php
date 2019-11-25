@@ -16,3 +16,5 @@ Route::post('/cats', function(Request $request) {
     dd($request->input());
     return view('cats');
 });
+
+Route::post('autocomplete', 'AutocompleteController@fetch');
