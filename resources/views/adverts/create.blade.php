@@ -30,11 +30,11 @@
                     <form method="POST" action="{{ route('adverts.store') }}" enctype="multipart/form-data">
                         @csrf
 
+                        <h5 class="card-header mb-3">{{ __('Title and Description') }}</h5>
                         <div class="form-group row">
                             <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
                             <div class="col-md-6">
                                 <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" autofocus>
-
                                 @error('title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -42,14 +42,11 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label for="description"
                                 class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
-
                             <div class="col-md-6">
                                 <textarea id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description') }}</textarea>
-
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -57,26 +54,6 @@
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="form-group row">
-                            <div class="form-check col-md-4 text-md-right mt-2">
-                                <label for="price">Asking Price:</label>
-                            </div>
-                            <div class="col-md-3 input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">€</div>
-                                </div>
-                                <input id="price" type="number"
-                                    class="form-control @error('price') is-invalid @enderror" name="price"
-                                    value="{{ old('price') }}">
-                                @error('price')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
                         <div class="form-group row">
                             <div class="form-group col-md-4 text-md-right mt-2">
                                 <label for="category col-form-label">Category:</label>
@@ -97,6 +74,43 @@
                                 @enderror
                             </div>
                         </div>
+                        <hr>
+
+                        <h5 class="card-header mb-3">{{ __('Characteristics') }}</h5>
+                        <div class="form-group row">
+                            <div class="form-group col-md-4 text-md-right mt-2">
+                                <label for="category col-form-label">Condition:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select name="condition" id="condition" class="form-control">
+                                    <option selected>Choose...</option>
+                                    <option value="new">{{ __('New') }}</option>
+                                    <option value="asgoodasnew">{{ __('As good as new') }}</option>
+                                    <option value="used">{{ __('Used') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <h5 class="card-header mb-3">{{ __('Price') }}</h5>
+                        <div class="form-group row">
+                            <div class="form-check col-md-4 text-md-right mt-2">
+                                <label for="price">Asking Price:</label>
+                            </div>
+                            <div class="col-md-3 input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">€</div>
+                                </div>
+                                <input id="price" type="number"
+                                    class="form-control @error('price') is-invalid @enderror" name="price"
+                                    value="{{ old('price') }}">
+                                @error('price')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="form-group row">
                             <div class="form-check col-md-4">
@@ -108,7 +122,7 @@
                                 @else {{ "checked" }}>
                                 @endif
                                 <label class="form-check-label" for="bids">
-                                    Allow bids
+                                    {{ __('Allow bids') }}
                                 </label>
                             </div>
                         </div>
@@ -131,26 +145,25 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="container">
-                            <h5 class="card-header mb-3">Add Image</h5>
-                            <div class="row">
-                                <div class="col-sm-4 offset-sm-4 imgUp">
-                                    @if (session('images') )
-                                    <div class="imagePreview" style="background-image: url('{{ session('images')[0] }}')"></div>
-                                    <input type="hidden" name="{{ session('imagekey') }}" value="{{ session('images')[0] }}">
-                                    <input type="hidden" name="imagename" value="{{ session('imagename') }}">
-                                    @else
-                                    <div class="imagePreview"></div>
-                                    <input id="imagename" type="hidden" name="" value="">
-                                    @endif
-                                    <label class="btn btn-primary" id="btn-primary">
-                                        Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
-                                            style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
-                                    </label>
-                                </div><!-- col-4 -->
-                                {{-- <i class=" fa fa-plus imgAdd"></i> --}}
-                            </div><!-- row -->
-                        </div><!-- container -->
+
+                        <h5 class="card-header mb-3">Add Image</h5>
+                        <div class="form-group row">
+                            <div class="col-sm-4 offset-sm-4 imgUp">
+                                @if (session('images') )
+                                <div class="imagePreview" style="background-image: url('{{ session('images')[0] }}')"></div>
+                                <input type="hidden" name="{{ session('imagekey') }}" value="{{ session('images')[0] }}">
+                                <input type="hidden" name="imagename" value="{{ session('imagename') }}">
+                                @else
+                                <div class="imagePreview"></div>
+                                <input id="imagename" type="hidden" name="" value="">
+                                @endif
+                                <label class="btn btn-primary" id="btn-primary">
+                                    Upload<input type="file" name="images[]" class="uploadFile" value="Upload Photo"
+                                        style="width: 0px;height: 0px;overflow: hidden;" accept="image/*">
+                                </label>
+                            </div><!-- col-4 -->
+                            {{-- <i class=" fa fa-plus imgAdd"></i> --}}
+                        </div><!-- row -->
                         <div class="imgVal  mx-auto col-sm-4">
                             <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
                                 <strong>@error('images') An image is required @enderror &nbsp;</strong>
@@ -158,11 +171,9 @@
                         </div>
                         <hr>
                         <div class="form-group row">
-                            <div class="col-md-6 offset-md-4 mt-3">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Create Advert') }}
-                                </button>
-                            </div>
+                            <button type="submit" class="btn btn-primary mx-auto">
+                                {{ __('Create Advert') }}
+                            </button>
                         </div>
                     </form>
                 </div> {{-- Card Body --}}

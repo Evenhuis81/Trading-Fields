@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top mb-2">
+<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top mb-3">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Marktplaats') }}
@@ -68,6 +68,6 @@
                 </li>
                 @endguest
             </ul>
-        </div>  {{-- Navbar-Collapse --}}
-    </div>  {{-- Container --}}
+        </div> {{-- Navbar-Collapse --}}
+    </div> {{-- Container --}}
 </nav>

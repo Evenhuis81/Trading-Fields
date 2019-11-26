@@ -1,9 +1,9 @@
 @extends('layouts.main')
 
 @section('content')
-@section('searchbar')
+{{-- @section('searchbar')
     @include('layouts.searchbar')
-@endsection
+@endsection --}}
 
 <div class="container-fluid">
     <div class="row">
@@ -19,7 +19,7 @@
                 <div class="card-header">
                     <p class="card-text font-weight-bold">{{ $advert->title }}</p>
                     <hr>
-                    <p class="card-title">Views: {{ views($advert)->count() }} / Times Saved:  / {{ $advert->created_at->toDayDateTimeString() }} </p>
+                    <p class="card-title">Views: {{ views($advert)->count() }} / Times Saved: / {{ $advert->created_at->toDayDateTimeString() }} </p>
                     <a href="#" class="btn btn-primary mb-3">Save <i class="far fa-heart"></i></a>
                     <div class="row">
                         <div class="col-md-7 pl-0">
@@ -91,17 +91,17 @@
                 </form>
             </div>
             <div class="card bidcontent w-75">
-            @include('partials.bidsshow')
+                @include('partials.bidsshow')
             </div>
             @else
             <div style="height:100px;"></div>
             <div class="w-75">
-            <a class="container-fluid btn btn-success btn-lg text-dark" href="{{ route('adverts.edit', [$advert->id]) }}" style="border: 2px solid black"><strong>Edit Advert</strong></a>
-        </div>
+                <a class="container-fluid btn btn-success btn-lg text-dark" href="{{ route('adverts.edit', [$advert->id]) }}" style="border: 2px solid black"><strong>Edit Advert</strong></a>
+            </div>
             @endif
-            
-            
-            
+
+
+
             {{-- @else
             <div class="card-body w-75">
                 <h5 class="card-text ml-3 text-center">Log in to Bid on this</h5>
