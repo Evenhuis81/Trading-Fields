@@ -36,8 +36,9 @@ class AdvertsController extends Controller
     {
         // Validated Through Request
         $validated = $request->validated();
+        // dd($validated);
                 // Create Advert
-        $validated['owner_id'] = auth()->id();
+        // $validated['owner_id'] = auth()->id();
         if (!$request['bids']) { $validated['startbid'] = null; }
         $advert = Advert::create($validated);
         // Create Picture(s)
@@ -55,7 +56,7 @@ class AdvertsController extends Controller
         //     abort(403, 'no no');
         // }
         // Not working aka resourcecontroller overwrites, research
-        $this->startbidCheck;
+        // $this->startbidCheck;
         if (!is_null($advert->startbid)) {
             session()->flash('startbid', $advert->startbid);
             session()->flash('advert_id', $advert->id);

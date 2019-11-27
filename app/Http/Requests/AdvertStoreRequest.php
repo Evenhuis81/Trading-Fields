@@ -16,6 +16,13 @@ class AdvertStoreRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'owner_id' => auth()->id(),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +33,7 @@ class AdvertStoreRequest extends FormRequest
         // base64img = key?
         if ($this->input(['base64key'])) {
             return [
-            'owner_id' => auth()->id(),
+            'owner_id' => 'required|integer|min:0',
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
             'price' => 'required|integer|min:0|max:10000',
@@ -38,6 +45,7 @@ class AdvertStoreRequest extends FormRequest
             ];
         } else {
             return [
+                'owner_id' => 'required|integer|min:0',
                 'title' => 'required|string|min:3|max:50',
                 'description' => 'required|string|min:3|max:500',
                 'price' => 'required|integer|min:0|max:10000',
