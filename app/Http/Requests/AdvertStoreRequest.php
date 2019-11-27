@@ -26,6 +26,7 @@ class AdvertStoreRequest extends FormRequest
         // base64img = key?
         if ($this->input(['base64key'])) {
             return [
+            'owner_id' => auth()->id(),
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
             'price' => 'required|integer|min:0|max:10000',

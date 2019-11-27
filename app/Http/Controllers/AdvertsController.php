@@ -55,6 +55,7 @@ class AdvertsController extends Controller
         //     abort(403, 'no no');
         // }
         // Not working aka resourcecontroller overwrites, research
+        $this->startbidCheck;
         if (!is_null($advert->startbid)) {
             session()->flash('startbid', $advert->startbid);
             session()->flash('advert_id', $advert->id);
@@ -62,6 +63,7 @@ class AdvertsController extends Controller
             session()->forget('startbid');
             session()->forget('advert_id');
         };
+
         session('guestbid') ?: views($advert)->record();
         return view('adverts.show', ['advert' => $advert]);
     }
