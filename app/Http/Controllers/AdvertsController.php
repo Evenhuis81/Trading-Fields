@@ -52,7 +52,6 @@ class AdvertsController extends Controller
     public function show(Advert $advert)
     {
         // if (! $advert) {
-        //     dd('ye');
         //     abort(403, 'no no');
         // }
         // Not working aka resourcecontroller overwrites, research

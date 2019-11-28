@@ -1,6 +1,7 @@
-<div class="container mb-1">
-    <div class="row">
-        <div class="col-lg-10 mx-auto">
+<nav class="navbar navbar-light bg-light">
+    <div class="container mb-1">
+        {{-- <div class="row"> --}}
+        <div class="col-md-12 mx-auto">
             <form id="searchform" method="POST" action="{{ route('search') }}">
                 @csrf
                 <div class="form-row">
@@ -10,7 +11,7 @@
                     </div>
                     <div class="form-group col-md-3 px-0">
                         <select id="category" class="form-control" name="category">
-                            <option selected>All categories...</option>
+                            <option selected value="0">All categories...</option>
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
@@ -21,7 +22,7 @@
                     </div>
                     <div class="form-group col-md-3 px-0">
                         <select id="distance" class="form-control" name="distance">
-                            <option selected>All distances...</option>
+                            <option selected value="0">All distances...</option>
                             <option value="3">{{ __('< 3 km') }}</option>
                             <option value="5">{{ __('< 5 km') }}</option>
                             <option value="10">{{ __('< 10 km') }}</option>
@@ -37,5 +38,6 @@
                 </div>
             </form>
         </div>
+        {{-- </div> --}}
     </div>
-</div>
+</nav>

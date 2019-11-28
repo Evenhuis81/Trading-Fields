@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 class SearchController extends Controller
 {
     public function search() {
-        dd(request()->all());
+        if (!request('searchdata')) {return redirect('/');}
+        
+        
+        request()->all();
+        
+        return view('index.searchresults');
     }
 }

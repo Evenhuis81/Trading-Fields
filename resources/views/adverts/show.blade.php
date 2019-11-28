@@ -1,9 +1,9 @@
 @extends('layouts.main')
 
 @section('content')
-{{-- @section('searchbar')
-    @include('layouts.searchbar')
-@endsection --}}
+@section('searchbar')
+@include('layouts.searchbar')
+@endsection
 
 <div class="container-fluid">
     <div class="row">

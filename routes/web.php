@@ -13,7 +13,7 @@ Route::post('/inputbid', 'AjaxController@inputbid')->middleware('auth');
 Route::post('/deletebid', 'AjaxController@deletebid')->middleware('auth');
 
 Route::post('autocomplete', 'AutocompleteController@fetch');
-Route::post('/search', 'SearchController@search')->name('search');
+Route::post('search', 'SearchController@search')->name('search');
 
 
 // Route::post('/cats', function(Request $request) {
