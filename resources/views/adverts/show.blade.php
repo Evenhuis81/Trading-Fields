@@ -5,6 +5,10 @@
 @include('layouts.searchbar')
 @endsection
 
+@foreach ($advert->categories as $item)
+    {{ $item->id }}
+@endforeach
+
 <div class="container-fluid">
     <div class="row">
         {{-- Advertisement --}}
@@ -56,8 +60,7 @@
                     </i></a>
             </div>
             {{-- Bid system --}}
-            @if (!is_null($advert->startbid))
-            @if ($advert->owner_id !== auth()->id())
+            @if (!is_null($advert->startbid) && $advert->owner_id !== auth()->id())
             <div class="card-body mt-3 w-75" style="background-color: #fffbe2">
                 <div class="row">
                     <h5 class="card-text ml-3">Bid</h5>
@@ -78,9 +81,6 @@
                     <span class="text-center" role="alert" style="color:red;">
                         <p id="print-error-msg"></p>
                     </span>
-                    {{-- <div class="alert alert-danger print-error-msg" style="display:none">
-                            <ul></ul>
-                        </div> --}}
                     <div class="text-center">
                         @auth
                         <button type="submit" id="submitbutton" class="btn btn-light w-75 border">Place Bid</button>
@@ -93,28 +93,24 @@
             <div class="card bidcontent w-75">
                 @include('partials.bidsshow')
             </div>
-            @else
+            @elseif ($advert->owner_id == auth()->id())
+            <div class="card bidcontent w-75">
+                @include('partials.bidsshow')
+            </div>
             <div style="height:100px;"></div>
             <div class="w-75">
                 <a class="container-fluid btn btn-success btn-lg text-dark" href="{{ route('adverts.edit', [$advert->id]) }}" style="border: 2px solid black"><strong>Edit Advert</strong></a>
             </div>
             @endif
-
-
-
-            {{-- @else
-            <div class="card-body w-75">
-                <h5 class="card-text ml-3 text-center">Log in to Bid on this</h5>
-            </div>
-            @endauth --}}
-            @endif
         </div> {{-- /Column md-2 --}}
     </div> {{-- /Row --}}
 </div> {{-- /Info-BidSystem --}}
 </div> {{-- /Row --}}
+
 <div class="col-md-2 ml-auto">
     {{-- Right side advertisement (Sticky) --}}
 </div>
+
 </div>
 
 

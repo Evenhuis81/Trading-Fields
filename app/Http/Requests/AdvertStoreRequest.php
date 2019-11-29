@@ -18,8 +18,14 @@ class AdvertStoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        if ($this->input(['bids'])) {
+            $bid = $this->input(['startbid']);
+            } else {
+                $bid = null;
+            };
         $this->merge([
             'owner_id' => auth()->id(),
+            'startbid' => $bid,
         ]);
     }
 

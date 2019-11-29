@@ -80,7 +80,7 @@
                                     class="form-control @error('category') is-invalid @enderror">
                                     @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
-                                        @if (old('category')==$category->id)
+                                        @if (old('category') == $category->id)
                                         {{ "selected" }}
                                         @else
                                         {{ $category->id == $advert->categories()->first()->id ? "selected" : "" }}
@@ -108,13 +108,13 @@
                                 {{ $advert->startbid === null ? "" : "checked" }}>
                                 @endif
                                 <label class="form-check-label" for="bids">
-                                    Allow bids
+                                    Allow bids{{ $advert->startbid === null ? "" : " (current startbid = ".$advert->startbid.")" }}
                                 </label>
                             </div>
                         </div>
                         <div class="form-group row" id="inputBid" style="display: none">
                             <div class="form-check col-md-4 text-md-right mt-2">
-                                <label for="bid col-form-label">Change Starting bid:</label>
+                            <label for="bid col-form-label">Change Starting bid:</label>
                             </div>
                             <div class="col-md-3 input-group mb-2">
                                 <div class="input-group-prepend">

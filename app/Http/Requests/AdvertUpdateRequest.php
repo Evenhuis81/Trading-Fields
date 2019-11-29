@@ -15,7 +15,19 @@ class AdvertUpdateRequest extends FormRequest
     public function authorize()
     {
         $advert = $this->route('advert');
-        return $advert && $this->user()->can('update', $advert);
+        return $this->user()->can('update', $advert);
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->input(['bids'])) {
+            $bid = $this->input(['startbid']);
+            } else {
+                $bid = null;
+            };
+        $this->merge([
+            'startbid' => $bid,
+        ]);
     }
 
     /**
@@ -31,7 +43,7 @@ class AdvertUpdateRequest extends FormRequest
             'description' => 'required|string|min:3|max:500',
             'price' => 'required|integer|min:0|max:10000',
             'category' => 'required|integer',
-            'startbid' => ['integer', 'min:0', 'max:10000'],
+            'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
             ];
         } elseif ($this->hasFile('images')) {
             return [
@@ -39,7 +51,7 @@ class AdvertUpdateRequest extends FormRequest
                 'description' => 'required|string|min:3|max:500',
                 'price' => 'required|integer|min:0|max:10000',
                 'category' => 'required|integer',
-                'startbid' => ['integer', 'min:0', 'max:10000'],
+                'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
                 'images' => 'required|array|min:1',
                 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'imagename' => 'required',
