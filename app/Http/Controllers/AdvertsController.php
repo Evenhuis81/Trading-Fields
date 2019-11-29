@@ -36,6 +36,7 @@ class AdvertsController extends Controller
     public function store(AdvertStoreRequest $request)
     {
         $validated = $request->validated();
+        // onderstaande code levert error op: Undefined variable: advert 
         $this->storeImage($validated, $advert->id);
         $advert = Advert::create($validated);
         $advert->categories()->sync($validated['category']);

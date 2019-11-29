@@ -30,6 +30,7 @@ class HomeController extends Controller
     
     public function index(Request $request)
     {
+        // probeer consistent te zijn met inspringen van code blokken
         if ($request->ajax()) {
                 if (empty($request->get('categories'))) {
                 $adverts = Advert::paginate(8);

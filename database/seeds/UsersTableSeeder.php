@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('admin'),
             'isAdmin' => true,
         ]);
+        // wees consistent met inspringen: laat alle regels even veel inspringen
         User::create([
         'name' => 'Adman',
         'email' => 'adman@adman.nl',

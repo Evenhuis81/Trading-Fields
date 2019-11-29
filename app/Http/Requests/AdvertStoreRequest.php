@@ -13,6 +13,7 @@ class AdvertStoreRequest extends FormRequest
      */
     public function authorize()
     {
+        // controleren of gebruiker is ingelogd?
         return true;
     }
 

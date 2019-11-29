@@ -24,6 +24,7 @@
                     <p class="card-text font-weight-bold">{{ $advert->title }}</p>
                     <hr>
                     <p class="card-title">Views: {{ views($advert)->count() }} / Times Saved: / {{ $advert->created_at->toDayDateTimeString() }} </p>
+                    <!-- save optie staat niet in user-stories. Probeer functionaliteit te beperken tot strict noodzakelijk / opgegeven user stories -->
                     <a href="#" class="btn btn-primary mb-3">Save <i class="far fa-heart"></i></a>
                     <div class="row">
                         <div class="col-md-7 pl-0">
@@ -32,6 +33,9 @@
                         </div>
                         <div class="col-md-5">
                             {{-- Price / Type of delivery --}}
+
+                            <!-- labels ontbreken voor prijs -->
+                            <!-- meerdere talen (Engels, Nederlands) worden door elkaar gebruikt. Kies 1 taal. -->
                             <h3 class="card-text font-weight-bold">€ {{ $advert->price }}</h3>
                             <p class="card-text"><br>Levering<br><small>Ophalen</small></p>
                         </div>

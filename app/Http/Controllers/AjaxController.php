@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 
 class AjaxController extends Controller
 {
+    // probeer controller methods te beperken tot CRUD-functies voor consistentie. Dus: store() i.p.v. inputbid,
+    // delete() i.p.v. deletebid. Noem deze controller BidController, omdat deze controller alleen bid acties uitvoert.
+    // Dat het om het afhandelen van AJAX requests gaat kun je aan de returned responses zien.
     public function inputbid(Request $request)
     {
         $startbid = session('startbid');

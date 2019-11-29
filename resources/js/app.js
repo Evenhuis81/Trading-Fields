@@ -34,6 +34,9 @@ const app = new Vue({
     el: "#app"
 });
 
+// maak voor iedere pagina een eigen aparte javascript file en include deze alleen voor de desbetreffende pagina voor betere
+// projectorganisatie van bestanden en betere leesbaarheid / lagere laadtijd / makkelijker debuggen van code
+
 $(document).ready(function() {
     // For all pages
     $(function() {
