@@ -2,6 +2,7 @@
 
 @section('content')
 
+{{-- {{ dd(old()) }} --}}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -25,7 +26,13 @@
                         <div class="form-group row my-0 align-items-center" id="titlehover">
                             <label for="title" class="col-md-2 offset-md-2 col-form-label text-md-right py-0 pz-0" id="titlehover2">{{ __('Title =>') }}</label>
                             <div class="col-md-6">
-                                <p class="card-text mb-0" id="titleText" style="margin-left: 13px;">{{ old('title') ? old('title') : $advert->title }}</p>
+                                <p class="card-text mb-0" id="titleText" style="margin-left: 13px;">
+                                {{-- @if (session('success'))
+                                0
+                                 --}}
+                                    {{ old('title') ? old('title') : $advert->title }}
+                                
+                                </p>
                                 <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') ? old('title') : "$advert->title" }}" style="display: none; padding-bottom: 7px;" autofocus>
                             </div>
                         </div>

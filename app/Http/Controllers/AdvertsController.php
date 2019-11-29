@@ -61,7 +61,8 @@ class AdvertsController extends Controller
         $this->updateImage($validated, $advert);
         $advert->update($validated);
         $advert->categories()->sync([$validated['category']]);
-        return redirect('adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!');
+        return redirect('adverts/'.$advert->id.'/edit')->with('success', 'You have successfully edited your Advert!')
+                                                        ->with('startbid', "0");
     }
     public function destroy(Advert $advert)
     {

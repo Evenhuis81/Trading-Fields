@@ -92,7 +92,6 @@ class AdvertUpdateRequest extends FormRequest
                     ->with('imagekey', 'base64key')
                     ->with('bidcheckoff', 'a');
                 } else {
-                    // dd('hi');
                     return $redirect->with('images', $base64Img)
                     ->with('imagename', $picturename)
                     ->with('imagekey', 'base64key')

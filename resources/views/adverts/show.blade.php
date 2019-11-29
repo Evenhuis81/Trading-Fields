@@ -5,9 +5,9 @@
 @include('layouts.searchbar')
 @endsection
 
-@foreach ($advert->categories as $item)
+{{-- @foreach ($advert->categories as $item)
     {{ $item->id }}
-@endforeach
+@endforeach --}}
 
 <div class="container-fluid">
     <div class="row">
