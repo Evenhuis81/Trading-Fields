@@ -20,10 +20,12 @@ class UsersTableSeeder extends Seeder
         ]);
         // wees consistent met inspringen: laat alle regels even veel inspringen
         User::create([
-        'name' => 'Adman',
-        'email' => 'adman@adman.nl',
-        'password' => bcrypt('adman'),
-        'isAdman' => true,
+            'name' => 'Adman',
+            'email' => 'adman@adman.nl',
+            'password' => bcrypt('adman'),
+            'zipcode' => '1215AA',
+            'phonenr' => '0612345678',
+            'isAdman' => true,
         ]);
         User::create([
             'name' => 'Adman2',

@@ -12,6 +12,7 @@
                     <div class="form-group col-md-3 px-0 mb-0">
                         <select id="category" class="form-control" name="category">
                             <option selected value="0">All categories...</option>
+                            {{-- Categories injected from CategoryComposer --}}
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach

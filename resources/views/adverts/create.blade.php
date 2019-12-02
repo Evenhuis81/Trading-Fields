@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-md-3 input-group mb-2">
                                 <div class="input-group-prepend">
-                                <div class="input-group-text">{{ __('€') }}</div>
+                                    <div class="input-group-text">{{ __('€') }}</div>
                                 </div>
                                 <input id="price" type="number"
                                     class="form-control @error('price') is-invalid @enderror" name="price"
@@ -174,9 +174,22 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="phonenr" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number (optional)') }}</label>
+                            <div class="col-md-6">
+                                <input id="phonenr" type="telnr" class="form-control @error('phonenr') is-invalid @enderror" name="phonenr"
+                                    value="{{ old('phonenr') ? old('phonenr') : auth()->user()->phonenr }}">
+                                @error('phonenr')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="zipcode" class="col-md-4 col-form-label text-md-right">{{ __('Zipcode') }}</label>
                             <div class="col-md-6">
-                                <input id="zipcode" type="text" class="form-control @error('zipcode') is-invalid @enderror" name="zipcode" value="{{ old('zipcode') ? old('zipcode') : session('latestadvert') ? session('latestadvert') : "" }}">
+                                <input id="zipcode" type="text" class="form-control @error('zipcode') is-invalid @enderror" name="zipcode"
+                                    value="{{ old('zipcode') ? old('zipcode') : auth()->user()->zipcode }}">
                                 @error('zipcode')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

@@ -17,9 +17,13 @@ class CreateAdvertsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('description');
+            $table->string('condition')->nullable();
             $table->unsignedInteger('price');
-            // $table->unsignedBigInteger('category');
             $table->unsignedInteger('startbid')->nullable();
+            $table->string('delivery');
+            $table->string('name');
+            $table->string('phonenr', 10)->nullable();
+            $table->string('zipcode', 6);
             $table->unsignedBigInteger('owner_id');
             $table->timestamps();
             $table->foreign('owner_id')->references('id')->on('users');

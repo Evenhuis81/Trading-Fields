@@ -28,7 +28,7 @@ class ComposerServiceProvider extends ServiceProvider
         $norepeat = 'App\Http\ViewComposers\CategoryComposer';
         view()->composer('adverts.edit', $norepeat);
         view()->composer('adverts.create', $norepeat);
-        view()->composer('adverts.create', 'App\Http\ViewComposers\AdvertComposer@lastzip');
+        // view()->composer('adverts.create', 'App\Http\ViewComposers\AdvertComposer@lastzip');
         view()->composer('layouts.searchbar', $norepeat);
     }
 }

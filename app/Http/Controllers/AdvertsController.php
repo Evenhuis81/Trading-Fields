@@ -6,7 +6,7 @@ use App\Bid;
 use App\Advert;
 use App\Picture;
 use App\Category;
-// use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
 use App\Repositories\AdvertRepository;
 use Illuminate\Support\Facades\Storage;
@@ -14,9 +14,11 @@ use App\Http\Requests\AdvertStoreRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\AdvertUpdateRequest;
 
+// use Illuminate\Http\Request;
+
 class AdvertsController extends Controller
 {  
-    protected $advertRepository;
+    private $advertRepository;
 
     public function __construct(AdvertRepository $advertRepository)
     {
@@ -26,19 +28,20 @@ class AdvertsController extends Controller
 
     public function index()
     {
-        $adverts = $this->advertRepository->admanAdverts();
+        $adverts = $this->advertRepository->getByUser();
         return view('adverts.index', compact('adverts'));
     }
     public function create()
     {
+        // Bound to view: Categories (ComposerServiceProvider->CategoryComposer)
         return view('adverts.create');
     }
     public function store(AdvertStoreRequest $request)
     {
         $validated = $request->validated();
-        // onderstaande code levert error op: Undefined variable: advert 
-        $this->storeImage($validated, $advert->id);
+        // onderstaande code levert error op: Undefined variable: advert  ==>>  Create Advert must be before storeimage (duh)
         $advert = Advert::create($validated);
+        $this->storeImage($validated, $advert->id);
         $advert->categories()->sync($validated['category']);
         return redirect('/adverts/create')->with('success', 'Successfully Create New Advert!')
                                             ->with('advertid', $advert->id);
@@ -52,6 +55,7 @@ class AdvertsController extends Controller
     }
     public function edit(Advert $advert)
     {
+        // Bound to view: Categories (ComposerServiceProvider->CategoryComposer)
         $this->authorize('update', $advert);
         $base64Img = $this->convertBase64($advert);
         return view('adverts.edit', compact('advert', 'base64Img'));

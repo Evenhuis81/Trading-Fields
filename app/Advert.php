@@ -15,7 +15,7 @@ class Advert extends Model implements ViewableContract
     use Viewable;
 
     protected $fillable = [
-        'title', 'description', 'price', 'startbid', 'owner_id',
+        'title', 'description', 'condition', 'price', 'startbid', 'delivery', 'name', 'phonenr', 'zipcode', 'owner_id',
     ];
 
     public function pictures() {

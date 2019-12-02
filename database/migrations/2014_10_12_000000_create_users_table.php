@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phonenr', 10)->nullable();
+            $table->string('zipcode', 6)->nullable();
             // user roles bij toekomstige projecten in aparte / eigen roles table plaatsen
             $table->boolean('isAdmin')->default(false);
             $table->boolean('isAdman')->default(false);

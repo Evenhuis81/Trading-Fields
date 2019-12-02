@@ -3,10 +3,18 @@
 namespace App\Repositories;
 
 use App\Advert;
+use App\User;
+use App\Repositories\Interfaces\AdvertRepositoryInterface;
 
-class AdvertRepository
+class AdvertRepository implements AdvertRepositoryInterface
 {
-    public function admanAdverts() {
-        return Advert::where('owner_id', (auth()->id()))->get();
+    public function all()
+    {
+        return Advert::all();
+    }
+
+    public function getByUser()
+    {
+        return Advert::where('owner_id', auth()->id())->get();
     }
 }

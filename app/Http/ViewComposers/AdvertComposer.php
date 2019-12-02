@@ -32,7 +32,7 @@ class AdvertComposer
 
     public function lastzip(AdvertRepository $adverts, View $view)
     {
-        dd($lastzip);
-        $view->with('lastzip', $this->lastzip);
+        // dd($lastzip);
+        // $view->with('lastzip', $this->lastzip);
     }
 }
