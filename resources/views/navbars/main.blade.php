@@ -34,7 +34,7 @@
                         {{ Auth::user()->name }} <span class="caret"></span>
                     </a>
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="z-index:1030;">
                         @adman
                         <a class="dropdown-item" href="{{ route('adverts.create') }}">{{ __('New Advert') }}</a>
                         <a class="dropdown-item" href="{{ route('adverts.index') }}">{{ __('Manage Adverts') }}</a>

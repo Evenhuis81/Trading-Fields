@@ -23,7 +23,8 @@ class UsersTableSeeder extends Seeder
             'name' => 'Adman',
             'email' => 'adman@adman.nl',
             'password' => bcrypt('adman'),
-            'zipcode' => '1215AA',
+            // 'zipcode' => DB::table('pp4')->where('id', rand(1, 4000))->value('postcode')->get().'AA',
+            'zipcode' => '9923PC',
             'phonenr' => '0612345678',
             'isAdman' => true,
         ]);
