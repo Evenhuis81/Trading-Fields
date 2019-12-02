@@ -25,10 +25,10 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // dd('hi');
         $norepeat = 'App\Http\ViewComposers\CategoryComposer';
         view()->composer('adverts.edit', $norepeat);
         view()->composer('adverts.create', $norepeat);
+        view()->composer('adverts.create', 'App\Http\ViewComposers\AdvertComposer@lastzip');
         view()->composer('layouts.searchbar', $norepeat);
     }
 }
