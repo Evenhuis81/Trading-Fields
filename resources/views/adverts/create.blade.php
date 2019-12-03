@@ -54,14 +54,14 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row mb-0">
                             <div class="form-group col-md-4 text-md-right">
                                 <label for="category" class="col-form-label">{{ __('Category') }}</label>
                             </div>
                             <div class="col-md-6">
                                 <select name="category" id="category"
                                     class="form-control @error('category') is-invalid @enderror">
-                                    <option selected disabled>Choose...</option>
+                                    <option selected disabled>{{ __('Choose...') }}</option>
                                     @foreach ($categories as $category)
                                     <option value="{{ $category->id }}" @if (old('category')==$category->id)
                                         {{ "selected" }} @endif>{{ $category->name }}</option>
@@ -74,23 +74,21 @@
                                 @enderror
                             </div>
                         </div>
-                        <hr>
 
                         <h5 class="card-header mb-3">{{ __('Characteristics') }}</h5>
-                        <div class="form-group row">
+                        <div class="form-group row mb-0">
                             <div class="form-group col-md-4 text-md-right">
                                 <label for="condition" class="col-form-label">{{ __('Condition') }}</label>
                             </div>
                             <div class="col-md-6">
                                 <select name="condition" id="condition" class="form-control">
-                                    <option selected>{{ __('Choose...') }}</option>
-                                    <option value="new">{{ __('New') }}</option>
-                                    <option value="asgoodasnew">{{ __('As good as new') }}</option>
-                                    <option value="used">{{ __('Used') }}</option>
+                                    <option selected disabled>{{ __('Choose...') }}</option>
+                                    @foreach ($conditions as $condition)
+                                    <option value="{{ $condition->id }}">{{ $condition->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
-                        <hr>
 
                         <h5 class="card-header mb-3">{{ __('Price') }}</h5>
                         <div class="form-group row">
@@ -112,7 +110,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mb-1">
                             <div class="form-check col-md-4">
                             </div>
                             <div class="col-md-6 ml-5">
@@ -144,22 +142,20 @@
                                 @enderror
                             </div>
                         </div>
-                        <hr>
 
                         <h5 class="card-header mb-3">{{ __('Delivery') }}</h5>
-                        <div class="form-group row">
+                        <div class="form-group row mb-0">
                             <div class="form-group col-md-4 text-md-right">
                                 <label for="delivery" class="col-form-label">{{ __('Delivery') }}</label>
                             </div>
                             <div class="col-md-6">
                                 <select name="delivery" id="delivery" class="form-control">
-                                    <option selected value="collect">{{ __('Collect') }}</option>
-                                    <option value="dispatch">{{ __('Dispatch') }}</option>
-                                    <option value="collectordispatch">{{ __('Collect or Dispatch') }}</option>
+                                    @foreach ($deliveries as $delivery)
+                                    <option value="{{ $delivery->id }}">{{ $delivery->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
-                        <hr>
 
                         <h5 class="card-header mb-3">{{ __('Contact Information') }}</h5>
                         <div class="form-group row">
@@ -173,6 +169,14 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="form-group row mb-0">
+                            <p class="col-md-4 text-md-right">{{ __('E-mail') }}</p>
+                            <div class="col-md-6">
+                                <p>&nbsp&nbsp{{ auth()->user()->email }}</p>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="phonenr" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number (optional)') }}</label>
                             <div class="col-md-6">
@@ -198,7 +202,7 @@
                             </div>
                         </div>
 
-                        <h5 class="card-header mb-3">Add Image</h5>
+                        <h5 class="card-header mb-3">{{ __('Add Image') }}</h5>
                         <div class="form-group row">
                             <div class="col-sm-4 offset-sm-4 imgUp">
                                 @if (session('images') )
@@ -218,7 +222,7 @@
                         </div><!-- row -->
                         <div class="imgVal mx-auto col-sm-4">
                             <span class="card-text" id="imgMsg" style="visibility: visible; color: red">
-                                <strong>@error('images') An image is required @enderror &nbsp;</strong>
+                                <strong>@error('images') {{ __('An image is required') }} @enderror &nbsp;</strong>
                             </span>
                         </div>
                         <hr>

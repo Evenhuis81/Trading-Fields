@@ -7,6 +7,8 @@ use App\Advert;
 use App\Picture;
 use App\Category;
 
+use App\Delivery;
+use App\Condition;
 use App\Http\Controllers\Controller;
 use App\Repositories\AdvertRepository;
 use Illuminate\Support\Facades\Storage;
@@ -34,7 +36,9 @@ class AdvertsController extends Controller
     public function create()
     {
         // Bound to view: Categories (ComposerServiceProvider->CategoryComposer)
-        return view('adverts.create');
+        $deliveries = Delivery::all();
+        $conditions = Condition::all();
+        return view('adverts.create', compact('deliveries', 'conditions'));
     }
     public function store(AdvertStoreRequest $request)
     {

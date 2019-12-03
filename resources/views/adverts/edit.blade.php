@@ -2,7 +2,6 @@
 
 @section('content')
 
-{{-- {{ dd(old()) }} --}}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -27,11 +26,7 @@
                             <label for="title" class="col-md-2 offset-md-2 col-form-label text-md-right py-0 pz-0" id="titlehover2">{{ __('Title =>') }}</label>
                             <div class="col-md-6">
                                 <p class="card-text mb-0" id="titleText" style="margin-left: 13px;">
-                                {{-- @if (session('success'))
-                                0
-                                 --}}
                                     {{ old('title') ? old('title') : $advert->title }}
-                                
                                 </p>
                                 <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') ? old('title') : "$advert->title" }}" style="display: none; padding-bottom: 7px;" autofocus>
                             </div>
@@ -87,7 +82,7 @@
                                     class="form-control @error('category') is-invalid @enderror">
                                     @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
-                                        @if (old('category') == $category->id)
+                                        @if (old('category')==$category->id)
                                         {{ "selected" }}
                                         @else
                                         {{ $category->id == $advert->categories()->first()->id ? "selected" : "" }}
@@ -105,7 +100,7 @@
                         <div class="form-group row">
                             <div class="form-check col-md-4">
                             </div>
-                            <div class="col-md-6 ml-5">
+                            <div class="col-md-6 ml-4">
                                 <input class="form-check-input" type="checkbox" name="bids" id="bids"
                                     @if (session('bidcheckon'))
                                     {{ "checked" }}>
@@ -121,7 +116,7 @@
                         </div>
                         <div class="form-group row" id="inputBid" style="display: none">
                             <div class="form-check col-md-4 text-md-right mt-2">
-                            <label for="bid col-form-label">Change Starting bid:</label>
+                                <label for="bid col-form-label">Change Starting bid:</label>
                             </div>
                             <div class="col-md-3 input-group mb-2">
                                 <div class="input-group-prepend">

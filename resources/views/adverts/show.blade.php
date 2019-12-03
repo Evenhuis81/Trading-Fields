@@ -5,9 +5,7 @@
 @include('layouts.searchbar')
 @endsection
 
-{{-- @foreach ($advert->categories as $item)
-    {{ $item->id }}
-@endforeach --}}
+
 
 <div class="container-fluid">
     <div class="row">
@@ -23,6 +21,7 @@
                 <div class="card-header">
                     <p class="card-text font-weight-bold">{{ $advert->title }}</p>
                     <hr>
+                    {{-- This is just dummy element (mostly) --}}
                     <p class="card-title">Views: {{ views($advert)->count() }} / Times Saved: / {{ $advert->created_at->toDayDateTimeString() }} </p>
                     <!-- save optie staat niet in user-stories. Probeer functionaliteit te beperken tot strict noodzakelijk / opgegeven user stories -->
                     <a href="#" class="btn btn-primary mb-3">Save <i class="far fa-heart"></i></a>
@@ -37,17 +36,26 @@
                             <!-- labels ontbreken voor prijs -->
                             <!-- meerdere talen (Engels, Nederlands) worden door elkaar gebruikt. Kies 1 taal. -->
                             <h3 class="card-text font-weight-bold">€ {{ $advert->price }}</h3>
-                            <p class="card-text"><br>Levering<br><small>Ophalen</small></p>
+                            <h4 class="card-text"><br>Delivery<br><small>{{ $advert->delivery->name }}</small></h4>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">Description:</p>
+                    @if (!is_null($advert->condition))
+                    <div class="row">
+                        <div class="col-3">
+                            <h5 class="card-text">Condition:</h5>
+                        </div>
+                        <h5 class="card-text">{{ $advert->condition->name }}</h5>
+                    </div>
+                    <hr>
+                    @endif
+                    <h5 class="card-text"><b>Description:</b></h5>
                     <h5 class="card-text">{{ $advert->description }}</h5>
                 </div>
-                <div class="card-footer text-muted" style="height=15px;">
+                <div class="card-footer">
                     <div class="row">
-                        <p class="card-text my-auto">Share buttons / advertlink</p><a class="btn btn-primary ml-auto">Save <i class="far fa-heart"></i></a>
+                        <p class="card-text my-auto">Share buttons / advertlink</p><a href="#" class="btn btn-primary ml-auto">Save <i class="far fa-heart"></i></a>
                     </div>
                 </div>
             </div> {{-- /Card --}}
@@ -57,10 +65,13 @@
             <div class="card-body w-75" style="background-color: #fffbe2">
                 <p class="card-text">{{ $advert->owner->name }}</p>
                 <p class="card-text">{{ str_replace("ago", "active on the site", $advert->owner->created_at->diffForHumans()) }}</p>
-                <a href="" class="card-text">View more adverts</a>
+                <a href="#" class="card-text">View more adverts</a>
                 <hr>
-                <p><i class="fas fa-map-marker-alt"></i>Advertiser hometown</p>
-                <a href="" class="btn btn-primary w-100 pt-3" style="height:70px;"><i class="far fa-heart"><br>Bericht
+                <p><i class="fas fa-map-marker-alt"></i> Hometown of advertiser</p>
+                @if (!is_null($advert->phonenr))
+                <p><i class="fas fa-phone"></i> {{ $advert->phonenr }}</p>
+                @endif
+                <a href="#" class="btn btn-primary w-100 pt-3" style="height:70px;"><i class="far fa-heart"><br>Bericht
                     </i></a>
             </div>
             {{-- Bid system --}}

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-light bg-light fixed-top fixed-top-2 py-1" style="z-index:1000;">
+<nav class="navbar navbar-light bg-light fixed-top fixed-top-2 py-2" style="z-index:1000;">
     <div class="container">
         {{-- <div class="row"> --}}
         <div class="col-md-12 mx-auto">

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePp4Table extends Migration
+class CreatePp4sTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreatePp4Table extends Migration
     {
         $path = 'https://raw.githubusercontent.com/bobdenotter/4pp/master/4pp.sql';
         DB::unprepared(file_get_contents($path));
-        Schema::rename('4pp', 'pp4');
+        Schema::rename('4pp', 'pp4s');
     }
 
     /**
@@ -26,6 +26,6 @@ class CreatePp4Table extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pp4');
+        Schema::dropIfExists('pp4s');
     }
 }

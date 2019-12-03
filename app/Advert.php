@@ -6,6 +6,8 @@ use App\Bid;
 use App\User;
 use App\Picture;
 use App\Category;
+use App\Delivery;
+use App\Condition;
 use Illuminate\Database\Eloquent\Model;
 use CyrildeWit\EloquentViewable\Viewable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
@@ -32,5 +34,13 @@ class Advert extends Model implements ViewableContract
 
     public function bids () {
         return $this->hasMany(Bid::class);
+    }
+
+    public function condition() {
+        return $this->belongsTo(Condition::class);
+    }
+
+    public function delivery() {
+        return $this->belongsTo(Delivery::class);
     }
 }

@@ -19,6 +19,7 @@ class AdvertStoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        // dd($this);
         if ($this->input(['bids'])) {
             $bid = $this->input(['startbid']);
             } else {
@@ -43,14 +44,14 @@ class AdvertStoreRequest extends FormRequest
             'owner_id' => 'required|integer|min:0',
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
-            'condition' => 'nullable|string',
+            'condition' => 'nullable|integer',
             'price' => 'required|integer|min:0|max:10000',
             'category' => 'required|integer',
             'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
-            'delivery' => 'required|string',
+            'delivery' => 'required|integer',
             'name' => 'required|string|min:3|max:50',
             'phonenr' => 'nullable|string|min:10|max:10',
-            'zipcode' => 'string|min:6|max:6',
+            'zipcode' => 'required|string|min:6|max:6',
             // how to validate base64 as file? (convert + validate?)
             'base64key' => 'required',
             'imagename' => 'required',
@@ -60,14 +61,14 @@ class AdvertStoreRequest extends FormRequest
                 'owner_id' => 'required|integer|min:0',
                 'title' => 'required|string|min:3|max:50',
                 'description' => 'required|string|min:3|max:500',
-                'condition' => 'nullable|string',
+                'condition' => 'nullable|integer',
                 'price' => 'required|integer|min:0|max:10000',
                 'category' => 'required|integer',
                 'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
-                'delivery' => 'required|string',
+                'delivery' => 'required|integer',
                 'name' => 'required|string|min:3|max:50',
                 'phonenr' => 'nullable|string|min:10|max:10',
-                'zipcode' => 'string|min:6|max:6',
+                'zipcode' => 'required|string|min:6|max:6',
                 'images' => 'required|array|min:1',
                 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'imagename' => 'required',

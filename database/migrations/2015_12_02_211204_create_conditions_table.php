@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConditionTable extends Migration
+class CreateConditionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateConditionTable extends Migration
      */
     public function up()
     {
-        Schema::create('condition', function (Blueprint $table) {
+        Schema::create('conditions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->timestamps();
@@ -27,6 +27,6 @@ class CreateConditionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('condition');
+        Schema::dropIfExists('conditions');
     }
 }
