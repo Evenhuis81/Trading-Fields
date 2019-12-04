@@ -82,9 +82,10 @@
                             </div>
                             <div class="col-md-6">
                                 <select name="condition" id="condition" class="form-control">
-                                    <option selected disabled>{{ __('Choose...') }}</option>
+                                    <option>{{ __('Choose...') }}</option>
                                     @foreach ($conditions as $condition)
-                                    <option value="{{ $condition->id }}">{{ $condition->name }}</option>
+                                    <option value="{{ $condition->id }}" @if (old('condition')==$condition->id)
+                                        {{ "selected" }} @endif>>{{ $condition->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
