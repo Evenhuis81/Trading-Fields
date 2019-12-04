@@ -67,7 +67,10 @@
                 <p class="card-text">{{ str_replace("ago", "active on the site", $advert->owner->created_at->diffForHumans()) }}</p>
                 <a href="#" class="card-text">View more adverts</a>
                 <hr>
-                <p><i class="fas fa-map-marker-alt"></i> Hometown of advertiser</p>
+                <p><i class="fas fa-map-marker-alt"></i>
+                     {{-- Hometown of advertiser --}}
+                     {{ $advert->hometown($advert->zipcode) }}
+                    </p>
                 @if (!is_null($advert->phonenr))
                 <p><i class="fas fa-phone"></i> {{ $advert->phonenr }}</p>
                 @endif

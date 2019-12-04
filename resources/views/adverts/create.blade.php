@@ -2,6 +2,8 @@
 
 @section('content')
 
+{{-- {{ dd(old('zipcode')) }} --}}
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -182,7 +184,11 @@
                             <label for="phonenr" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number (optional)') }}</label>
                             <div class="col-md-6">
                                 <input id="phonenr" type="telnr" class="form-control @error('phonenr') is-invalid @enderror" name="phonenr"
-                                    value="{{ old('phonenr') ? old('phonenr') : auth()->user()->phonenr }}">
+                                @if (session('bidcheckoff') || session('bidcheckon') && (old('phonenr')===null))
+                                value="">
+                                @else
+                                value="{{ old('phonenr') ? old('phonenr') : auth()->user()->phonenr }}">
+                                @endif
                                 @error('phonenr')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

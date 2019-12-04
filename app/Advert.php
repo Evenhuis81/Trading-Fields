@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Bid;
+use App\Pp4;
 use App\User;
 use App\Picture;
 use App\Category;
@@ -42,5 +43,9 @@ class Advert extends Model implements ViewableContract
 
     public function delivery() {
         return $this->belongsTo(Delivery::class);
+    }
+
+    public function hometown($zipcode) {
+        return Pp4::where('postcode', substr($zipcode, 0, 4))->value('woonplaats');
     }
 }

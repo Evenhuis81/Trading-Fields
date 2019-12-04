@@ -9,7 +9,6 @@ use Faker\Generator as Faker;
 $factory->define(Advert::class, function (Faker $faker) {
     $count = Pp4::count();
     $zipcode = Pp4::where('id', rand(1, $count))->value('postcode');
-    $randnum = rand(00000000,99999999);
     $letter1 = chr(rand(65,90));
     $letter2 = chr(rand(65,90));
     return [

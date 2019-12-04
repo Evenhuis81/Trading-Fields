@@ -19,7 +19,6 @@ class AdvertStoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        // dd($this);
         if ($this->input(['bids'])) {
             $bid = $this->input(['startbid']);
             } else {
@@ -47,7 +46,7 @@ class AdvertStoreRequest extends FormRequest
             'condition' => 'nullable|integer',
             'price' => 'required|integer|min:0|max:10000',
             'category' => 'required|integer',
-            'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
+            'startbid' => ['nullable', 'integer', 'min:0', 'max:'.$this->input(['price'])],
             'delivery' => 'required|integer',
             'name' => 'required|string|min:3|max:50',
             'phonenr' => 'nullable|string|min:10|max:10',
@@ -64,7 +63,7 @@ class AdvertStoreRequest extends FormRequest
                 'condition' => 'nullable|integer',
                 'price' => 'required|integer|min:0|max:10000',
                 'category' => 'required|integer',
-                'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
+                'startbid' => ['nullable', 'integer', 'min:0', 'max:'.$this->input(['price'])],
                 'delivery' => 'required|integer',
                 'name' => 'required|string|min:3|max:50',
                 'phonenr' => 'nullable|string|min:10|max:10',
