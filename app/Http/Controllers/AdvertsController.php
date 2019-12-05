@@ -53,8 +53,14 @@ class AdvertsController extends Controller
     public function show(Advert $advert)
     {
         $this->startbidCheck($advert);
-        session('guestbid') ?: views($advert)->record();
-
+        if(session('guestbid')) {
+            if ($advert->owner_id == auth()->id()) {
+                session()->flash('nobidforowner', 'You can\'t bid on your own Advert!');
+            }
+        } else {
+            views($advert)->record();
+        }
+        
         return view('adverts.show', ['advert' => $advert]);
     }
     public function edit(Advert $advert)

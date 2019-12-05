@@ -115,6 +115,13 @@
             <div class="card bidcontent w-75">
                 @include('partials.bidsshow')
             </div>
+            {{-- {{ dd(session('nobidforowner')) }} --}}
+            @if (session('nobidforowner'))
+            {{-- <span class="invalid-feedback" role="alert">
+                <strong>{{ session('nobidforowner') }}</strong>
+            </span> --}}
+            <p class="text-center" style="width:75%; border:1px solid red; margin-top:1rem; color:red; bold-weight:600;">{{ session('nobidforowner') }}</p>
+            @endif
             <div style="height:100px;"></div>
             <div class="w-75">
                 <a class="container-fluid btn btn-success btn-lg text-dark" href="{{ route('adverts.edit', [$advert->id]) }}" style="border: 2px solid black"><strong>Edit Advert</strong></a>

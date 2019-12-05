@@ -18,7 +18,7 @@ $factory->define(Advert::class, function (Faker $faker) {
         'price' => rand(0, 500),
         'delivery_id' => rand(1, 3),
         'name' => rand(0, 1) ? "Adman" : "Adman2",
-        'phonenr' => rand(0, 1) ? null : '06'.$randnum,
+        'phonenr' => rand(0, 1) ? null : '06'.rand(00000000, 99999999),
         'zipcode' => $zipcode.$letter1.$letter2,
         'startbid' => rand(0, 1) ? null : rand(0, 200),
         'owner_id' => rand(2, 3),
