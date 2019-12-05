@@ -25,6 +25,15 @@
 //     // padding-right: 1rem;
 //     text-overflow: ellipsis;
 // }
+.box {
+    transition: box-shadow .3s;
+    
+  }
+  .box:hover {
+    font-weight: 600;
+    box-shadow: 0 0 11px rgba(33,33,33,.2); 
+  }
+
 .oneLineEllipsis {
     height: 22px;
     white-space: nowrap;

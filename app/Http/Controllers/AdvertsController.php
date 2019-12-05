@@ -43,7 +43,8 @@ class AdvertsController extends Controller
     public function store(AdvertStoreRequest $request)
     {
         $validated = $request->validated();
-        // onderstaande code levert error op: Undefined variable: advert  ==>>  Create Advert must be before storeimage (duh)
+        // make zipcode letters uppercase , check first if they aren't , etc ==> make new method to handle zipcode and save it in user table if usertable has zipcode null
+        // onderstaande code levert error op: Undefined variable: advert  ==>>  Create Advert must be before storeimage cause it needs advertid
         $advert = Advert::create($validated);
         $this->storeImage($validated, $advert->id);
         $advert->categories()->sync($validated['category']);

@@ -9,9 +9,10 @@ class SearchController extends Controller
 {
     public function search() {
         // dd(request());
-        if (!request('query')) {return redirect('/');}
+        // if (!request('query')) {return redirect('/');}
         $query = request('query');
         $adverts = Advert::where('title', 'LIKE', "%{$query}%")->get();
+        if ($adverts->count()==0) {return redirect('/');}
 
         return view('index.searchresults', compact('adverts'));
     }
