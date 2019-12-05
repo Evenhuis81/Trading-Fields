@@ -2,8 +2,6 @@
 
 @section('content')
 
-{{-- {{ dd(old('zipcode')) }} --}}
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -31,7 +29,6 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('adverts.store') }}" enctype="multipart/form-data">
                         @csrf
-
                         <h5 class="card-header mb-3">{{ __('Title and Description') }}</h5>
                         <div class="form-group row">
                             <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
@@ -83,11 +80,11 @@
                                 <label for="condition" class="col-form-label">{{ __('Condition') }}</label>
                             </div>
                             <div class="col-md-6">
-                                <select name="condition" id="condition" class="form-control">
-                                    <option>{{ __('Choose...') }}</option>
+                                <select name="condition_id" id="condition" class="form-control">
+                                    <option value="">{{ __('Choose...') }}</option>
                                     @foreach ($conditions as $condition)
-                                    <option value="{{ $condition->id }}" @if (old('condition')==$condition->id)
-                                        {{ "selected" }} @endif>>{{ $condition->name }}</option>
+                                    <option value="{{ $condition->id }}" @if (old('condition_id')==$condition->id)
+                                        {{ "selected" }} @endif>{{ $condition->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -152,7 +149,7 @@
                                 <label for="delivery" class="col-form-label">{{ __('Delivery') }}</label>
                             </div>
                             <div class="col-md-6">
-                                <select name="delivery" id="delivery" class="form-control">
+                                <select name="delivery_id" id="delivery" class="form-control">
                                     @foreach ($deliveries as $delivery)
                                     <option value="{{ $delivery->id }}">{{ $delivery->name }}</option>
                                     @endforeach
@@ -184,8 +181,8 @@
                             <label for="phonenr" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number (optional)') }}</label>
                             <div class="col-md-6">
                                 <input id="phonenr" type="telnr" class="form-control @error('phonenr') is-invalid @enderror" name="phonenr"
-                                @if (session('bidcheckoff') || session('bidcheckon') && (old('phonenr')===null))
-                                value="">
+                                    @if (session('bidcheckoff') || session('bidcheckon') && (old('phonenr')===null))
+                                    value="">
                                 @else
                                 value="{{ old('phonenr') ? old('phonenr') : auth()->user()->phonenr }}">
                                 @endif

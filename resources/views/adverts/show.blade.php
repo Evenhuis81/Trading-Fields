@@ -55,7 +55,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        <p class="card-text my-auto">Share buttons / advertlink</p><a href="#" class="btn btn-primary ml-auto">Save <i class="far fa-heart"></i></a>
+                        <p class="card-text my-auto">Twitter-facebooklinks / Advertlink</p><a href="#" class="btn btn-primary ml-auto">Save <i class="far fa-heart"></i></a>
                     </div>
                 </div>
             </div> {{-- /Card --}}
@@ -68,9 +68,9 @@
                 <a href="#" class="card-text">View more adverts</a>
                 <hr>
                 <p><i class="fas fa-map-marker-alt"></i>
-                     {{-- Hometown of advertiser --}}
-                     {{ $advert->hometown($advert->zipcode) }}
-                    </p>
+                    {{-- Hometown of advertiser --}}
+                    {{ $advert->hometown($advert->zipcode) }}
+                </p>
                 @if (!is_null($advert->phonenr))
                 <p><i class="fas fa-phone"></i> {{ $advert->phonenr }}</p>
                 @endif

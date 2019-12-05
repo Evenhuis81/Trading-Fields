@@ -22,7 +22,7 @@ class AutocompleteController extends Controller
                     $output .= '<li><a class="dropdown-item border-bottom border-top">'.$row->title.'</a></li>';
                 }
                 $output .= '</ul>';
-                echo $output;
+                return $output;
             }
         }
     }

@@ -1,12 +1,11 @@
 <nav class="navbar navbar-light bg-light fixed-top fixed-top-2 py-2" style="z-index:1000;">
     <div class="container">
-        {{-- <div class="row"> --}}
         <div class="col-md-12 mx-auto">
             <form id="searchform" method="POST" action="{{ route('search') }}">
                 @csrf
                 <div class="form-row mb-0">
                     <div class="form-group col-md-4 px-0 mb-0">
-                        <input type="text" name="searchdata" id="search" class="form-control">
+                        <input type="text" name="query" id="search" class="form-control">
                         <div class="searchList"></div>
                     </div>
                     <div class="form-group col-md-3 px-0 mb-0">
@@ -19,7 +18,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-1 px-0 mb-0">
-                        <input type="text" class="form-control" id="zip" name="zip" placeholder="Zipcode">
+                        <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="Zipcode">
                     </div>
                     <div class="form-group col-md-3 px-0 mb-0">
                         <select id="distance" class="form-control" name="distance">
@@ -39,6 +38,5 @@
                 </div>
             </form>
         </div>
-        {{-- </div> --}}
     </div>
 </nav>

@@ -65,10 +65,12 @@ class AdvertsController extends Controller
     }
     public function edit(Advert $advert)
     {
+        $deliveries = Delivery::all();
+        $conditions = Condition::all();
         // Bound to view: Categories (ComposerServiceProvider->CategoryComposer)
         $this->authorize('update', $advert);
         $base64Img = $this->convertBase64($advert);
-        return view('adverts.edit', compact('advert', 'base64Img'));
+        return view('adverts.edit', compact('advert', 'base64Img', 'deliveries', 'conditions'));
     }
     public function update(AdvertUpdateRequest $request, Advert $advert)
     {

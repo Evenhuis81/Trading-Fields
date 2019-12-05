@@ -19,6 +19,11 @@ class AdvertStoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        if (!is_int($this->input(['condition_id']))) {
+            $this->merge([
+                'condition_id' => null,
+            ]);
+        };
         if ($this->input(['bids'])) {
             $bid = $this->input(['startbid']);
             } else {
@@ -37,17 +42,18 @@ class AdvertStoreRequest extends FormRequest
      */
     public function rules()
     {
+        // dd($this);
         // base64img = key?
         if ($this->input(['base64key'])) {
             return [
             'owner_id' => 'required|integer|min:0',
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
-            'condition' => 'nullable|integer',
+            'condition_id' => 'nullable|integer',
             'price' => 'required|integer|min:0|max:10000',
             'category' => 'required|integer',
             'startbid' => ['nullable', 'integer', 'min:0', 'max:'.$this->input(['price'])],
-            'delivery' => 'required|integer',
+            'delivery_id' => 'required|integer',
             'name' => 'required|string|min:3|max:50',
             'phonenr' => 'nullable|string|min:10|max:10',
             'zipcode' => 'required|string|min:6|max:6',
@@ -60,11 +66,11 @@ class AdvertStoreRequest extends FormRequest
                 'owner_id' => 'required|integer|min:0',
                 'title' => 'required|string|min:3|max:50',
                 'description' => 'required|string|min:3|max:500',
-                'condition' => 'nullable|integer',
+                'condition_id' => 'nullable|integer',
                 'price' => 'required|integer|min:0|max:10000',
                 'category' => 'required|integer',
                 'startbid' => ['nullable', 'integer', 'min:0', 'max:'.$this->input(['price'])],
-                'delivery' => 'required|integer',
+                'delivery_id' => 'required|integer',
                 'name' => 'required|string|min:3|max:50',
                 'phonenr' => 'nullable|string|min:10|max:10',
                 'zipcode' => 'required|string|min:6|max:6',

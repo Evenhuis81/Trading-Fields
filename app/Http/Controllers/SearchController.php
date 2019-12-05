@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Advert;
+// use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
     public function search() {
-        if (!request('searchdata')) {return redirect('/');}
-        
-        
-        request()->all();
-        
-        return view('index.searchresults');
+        // dd(request());
+        if (!request('query')) {return redirect('/');}
+        $query = request('query');
+        $adverts = Advert::where('title', 'LIKE', "%{$query}%")->get();
+
+        return view('index.searchresults', compact('adverts'));
     }
 }

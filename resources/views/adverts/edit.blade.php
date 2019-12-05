@@ -2,6 +2,7 @@
 
 @section('content')
 
+{{-- {{ dd(session('bidcheckon')) }} --}}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -22,6 +23,7 @@
                     <form action="/adverts/{{ $advert->id }}" method="post" enctype="multipart/form-data">
                         @method('patch')
                         @csrf
+                        <h5 class="card-header mb-3">{{ __('Title and Description') }}</h5>
                         <div class="form-group row my-0 align-items-center" id="titlehover">
                             <label for="title" class="col-md-2 offset-md-2 col-form-label text-md-right py-0 pz-0" id="titlehover2">{{ __('Title =>') }}</label>
                             <div class="col-md-6">
@@ -45,7 +47,10 @@
                             <label for="description"
                                 class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
                             <div class="col-md-6">
-                                <textarea rows="3" cols="50" value="" id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description') ? old('description') : $advert->description }}</textarea>
+                                <textarea rows="3" cols="50" value="" id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description">@if (session('bidcheckoff') || session('bidcheckon') && (old('description')===null)){{ "" }}
+                                @elseif (old('description')){{ old('description') }}
+                                @else{{ $advert->description }}
+                                @endif</textarea>
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -54,6 +59,58 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <div class="form-group col-md-4 text-md-right mt-2">
+                                <label for="category col-form-label">Category:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select name="category" id="category"
+                                    class="form-control @error('category') is-invalid @enderror">
+                                    @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}"
+                                        @if (old('category')==$category->id)
+                                        {{ "selected" }}
+                                        @elseif (!old('category') && $category->id == $advert->categories()->first()->id)
+                                        {{ "selected" }}
+                                        @endif>{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('category')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <h5 class="card-header mb-3">{{ __('Characteristics') }}</h5>
+                        <div class="form-group row mb-0">
+                            <div class="form-group col-md-4 text-md-right">
+                                <label for="condition" class="col-form-label">{{ __('Condition') }}</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select name="condition_id" id="condition" class="form-control">
+                                    <option
+                                        @if (session('bidcheckoff') || session('bidcheckon') && (old('condition_id')===null))
+                                        {{ "selected" }}
+                                        @endif>{{ __('Choose...') }}</option>
+                                    @foreach ($conditions as $condition)
+                                    <option value="{{ $condition->id }}"
+                                        @if (!session('bidcheckoff') && !session('bidcheckon') && old('condition_id')==$condition->id)
+                                        {{ "selected" }}
+                                        @elseif (!session('bidcheckoff') && !session('bidcheckon') && $condition->id == $advert->condition_id)
+                                        {{ "selected" }}
+                                        @elseif (old('condition_id')==$condition->id)
+                                        {{ "selected" }}
+                                        @elseif ($condition->id == $advert->condition_id)
+                                        {{ "selected" }}
+                                        @endif>{{ $condition->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <h5 class="card-header mb-3">{{ __('Price') }}</h5>
                         <div class="form-group row">
                             <div class="form-check col-md-4 text-md-right mt-2">
                                 <label for="price">Asking Price:</label>
@@ -73,31 +130,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="form-group col-md-4 text-md-right mt-2">
-                                <label for="category col-form-label">Category:</label>
-                            </div>
-                            <div class="col-md-6">
-                                <select name="category" id="category"
-                                    class="form-control @error('category') is-invalid @enderror">
-                                    @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                        @if (old('category')==$category->id)
-                                        {{ "selected" }}
-                                        @else
-                                        {{ $category->id == $advert->categories()->first()->id ? "selected" : "" }}
-                                        @endif>{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('category')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
+                        <div class="form-group row mb-1">
                             <div class="form-check col-md-4">
                             </div>
                             <div class="col-md-6 ml-4">
@@ -126,6 +159,74 @@
                                     class="form-control @error('startbid') is-invalid @enderror" name="startbid"
                                     value="{{ old('startbid') ? old('startbid') : "0" }}">
                                 @error('startbid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <h5 class="card-header mb-3">{{ __('Delivery') }}</h5>
+                        <div class="form-group row mb-0">
+                            <div class="form-group col-md-4 text-md-right">
+                                <label for="delivery" class="col-form-label">{{ __('Delivery') }}</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select name="delivery_id" id="delivery" class="form-control">
+                                    @foreach ($deliveries as $delivery)
+                                    <option value="{{ $delivery->id }}"
+                                        @if (old('delivery_id')==$delivery->id)
+                                        {{ "selected" }}
+                                        @elseif ($delivery->id == $advert->delivery_id)
+                                        {{ "selected" }}
+                                        @endif>{{ $delivery->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <h5 class="card-header mb-3">{{ __('Contact Information') }}</h5>
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name for Advert') }}</label>
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') ? old('name') : auth()->user()->name }}">
+                                @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-0">
+                            <p class="col-md-4 text-md-right">{{ __('E-mail') }}</p>
+                            <div class="col-md-6">
+                                <p>&nbsp&nbsp{{ auth()->user()->email }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="phonenr" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number (optional)') }}</label>
+                            <div class="col-md-6">
+                                <input id="phonenr" type="telnr" class="form-control @error('phonenr') is-invalid @enderror" name="phonenr"
+                                    @if (session('bidcheckoff') || session('bidcheckon') && (old('phonenr')===null))
+                                    value="">
+                                @else
+                                value="{{ old('phonenr') ? old('phonenr') : $advert->phonenr }}">
+                                @endif
+                                @error('phonenr')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="zipcode" class="col-md-4 col-form-label text-md-right">{{ __('Zipcode') }}</label>
+                            <div class="col-md-6">
+                                <input id="zipcode" type="text" class="form-control @error('zipcode') is-invalid @enderror" name="zipcode"
+                                    value="{{ old('zipcode') ? old('zipcode') : $advert->zipcode }}">
+                                @error('zipcode')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

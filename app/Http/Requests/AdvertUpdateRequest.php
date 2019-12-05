@@ -20,12 +20,18 @@ class AdvertUpdateRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        if (!is_int($this->input(['condition_id']))) {
+            $this->merge([
+                'condition_id' => null,
+            ]);
+        }
         if ($this->input(['bids'])) {
             $bid = $this->input(['startbid']);
             } else {
                 $bid = null;
             };
         $this->merge([
+            // merge owner_id?? (like with create) or useless (cause doublecheck)  >> I think no
             'startbid' => $bid,
         ]);
     }
@@ -41,17 +47,27 @@ class AdvertUpdateRequest extends FormRequest
             return [
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
+            'condition_id' => 'nullable|integer',
             'price' => 'required|integer|min:0|max:10000',
             'category' => 'required|integer',
-            'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
+            'startbid' => ['nullable', 'integer', 'min:0', 'max:'.$this->input(['price'])],
+            'delivery_id' => 'required|integer',
+            'name' => 'required|string|min:3|max:50',
+            'phonenr' => 'nullable|string|min:10|max:10',
+            'zipcode' => 'required|string|min:6|max:6',
             ];
         } elseif ($this->hasFile('images')) {
             return [
                 'title' => 'required|string|min:3|max:50',
                 'description' => 'required|string|min:3|max:500',
+                'condition_id' => 'nullable|integer',
                 'price' => 'required|integer|min:0|max:10000',
                 'category' => 'required|integer',
-                'startbid' => ['nullable', 'integer', 'min:0', 'max:10000'],
+                'startbid' => ['nullable', 'integer', 'min:0', 'max:'.$this->input(['price'])],
+                'delivery_id' => 'required|integer',
+                'name' => 'required|string|min:3|max:50',
+                'phonenr' => 'nullable|string|min:10|max:10',
+                'zipcode' => 'required|string|min:6|max:6',
                 'images' => 'required|array|min:1',
                 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'imagename' => 'required',
@@ -60,10 +76,14 @@ class AdvertUpdateRequest extends FormRequest
             return [
                 'title' => 'required|string|min:3|max:50',
                 'description' => 'required|string|min:3|max:500',
+                'condition_id' => 'nullable|integer',
                 'price' => 'required|integer|min:0|max:10000',
                 'category' => 'required|integer',
-                'startbid' => ['integer', 'min:0', 'max:10000'],
-                // how to validate base64 as file? (convert + validate?)
+                'startbid' => ['integer', 'min:0', 'max:'.$this->input(['price'])],
+                'delivery_id' => 'required|integer',
+                'name' => 'required|string|min:3|max:50',
+                'phonenr' => 'nullable|string|min:10|max:10',
+                'zipcode' => 'required|string|min:6|max:6',
                 'base64key' => 'required',
                 'imagename' => 'required',
                 ];
@@ -72,6 +92,7 @@ class AdvertUpdateRequest extends FormRequest
 
     public function withValidator($validator)
     {
+        // dd($validator);
         $advert = $this->route('advert');
         $picturename = "";
         $base64Img=[];
