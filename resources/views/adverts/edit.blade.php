@@ -47,10 +47,11 @@
                             <label for="description"
                                 class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
                             <div class="col-md-6">
-                                <textarea rows="3" cols="50" value="" id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description">@if (session('bidcheckoff') || session('bidcheckon') && (old('description')===null)){{ "" }}
+                                <textarea rows="3" cols="50" value="" id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description') ? old('description') : $advert->description }}</textarea>
+                                {{-- @if (session('bidcheckoff') || session('bidcheckon') && (old('description')===null)){{ "" }}
                                 @elseif (old('description')){{ old('description') }}
                                 @else{{ $advert->description }}
-                                @endif</textarea>
+                                @endif --}}
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -208,12 +209,12 @@
                         <div class="form-group row">
                             <label for="phonenr" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number (optional)') }}</label>
                             <div class="col-md-6">
-                                <input id="phonenr" type="telnr" class="form-control @error('phonenr') is-invalid @enderror" name="phonenr"
-                                    @if (session('bidcheckoff') || session('bidcheckon') && (old('phonenr')===null))
+                                <input id="phonenr" type="telnr" class="form-control @error('phonenr') is-invalid @enderror" name="phonenr" value="{{ old('phonenr') ? old('phonenr') : $advert->phonenr }}">
+                                {{-- @if (session('bidcheckoff') || session('bidcheckon') && (old('phonenr')===null))
                                     value="">
                                 @else
                                 value="{{ old('phonenr') ? old('phonenr') : $advert->phonenr }}">
-                                @endif
+                                @endif --}}
                                 @error('phonenr')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

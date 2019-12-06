@@ -6,7 +6,11 @@
 @endsection
 
 <div class="container mt-2">
-    <p class="text-center mb-0 text-success font-weight-bold">{{ $adverts->count() }} searchresult{{ $adverts->count()==1 ? "" : "s" }}</p>
+    <p class="text-center mb-0 pt-2 text-success font-weight-bold">{{ $adverts->count() }} searchresult{{ $adverts->count()==1 ? "" : "s" }}</p>
+    @if (session('categoryfilter'))
+    <hr class="mx-auto w-25">
+    <p class="text-center mb-2 text-primary font-weight-bold" style="font-size: 1rem;">Your filters: <span class="text-light bg-dark">&nbsp{{ session('categoryfilter')}}&nbsp</span></p>
+    @endif
     <div class="row">
 
         <div class="col-md-2">

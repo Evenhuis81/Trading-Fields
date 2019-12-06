@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 // use App\Advert;
+use App\Rules\Zipcode;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdvertUpdateRequest extends FormRequest
@@ -54,7 +55,7 @@ class AdvertUpdateRequest extends FormRequest
             'delivery_id' => 'required|integer',
             'name' => 'required|string|min:3|max:50',
             'phonenr' => 'nullable|string|min:10|max:10',
-            'zipcode' => 'required|string|min:6|max:6',
+            'zipcode' => ['bail', 'required', 'string', 'min:6', 'max:6', new Zipcode],
             ];
         } elseif ($this->hasFile('images')) {
             return [
@@ -67,7 +68,7 @@ class AdvertUpdateRequest extends FormRequest
                 'delivery_id' => 'required|integer',
                 'name' => 'required|string|min:3|max:50',
                 'phonenr' => 'nullable|string|min:10|max:10',
-                'zipcode' => 'required|string|min:6|max:6',
+                'zipcode' => ['bail', 'required', 'string', 'min:6', 'max:6', new Zipcode],
                 'images' => 'required|array|min:1',
                 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'imagename' => 'required',
@@ -83,7 +84,7 @@ class AdvertUpdateRequest extends FormRequest
                 'delivery_id' => 'required|integer',
                 'name' => 'required|string|min:3|max:50',
                 'phonenr' => 'nullable|string|min:10|max:10',
-                'zipcode' => 'required|string|min:6|max:6',
+                'zipcode' => ['bail', 'required', 'string', 'min:6', 'max:6', new Zipcode],
                 'base64key' => 'required',
                 'imagename' => 'required',
                 ];

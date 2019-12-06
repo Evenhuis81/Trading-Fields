@@ -35,12 +35,6 @@ class Zipcode implements Rule
             return false;
         }
         return Pp4::where('postcode', $postal)->exists();
-        // if (!is_int($postint)) {
-        //     return false;
-        // }
-        // dd($postal);
-        // return false;
-        // return true;
     }
 
     /**

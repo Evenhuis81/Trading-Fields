@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Bid;
+use App\User;
 use App\Advert;
 use App\Picture;
-use App\Category;
 
+use App\Category;
 use App\Delivery;
 use App\Condition;
 use App\Http\Controllers\Controller;
@@ -43,13 +44,23 @@ class AdvertsController extends Controller
     public function store(AdvertStoreRequest $request)
     {
         $validated = $request->validated();
-        // make zipcode letters uppercase , check first if they aren't , etc ==> make new method to handle zipcode and save it in user table if usertable has zipcode null
+        // Make zipcode letters uppercase and save it in user table if zipcode null (aka 1st time input)
+        $zipcode = $this->zipcode($validated['zipcode']);
+        $validated['zipcode'] = $zipcode;
         // onderstaande code levert error op: Undefined variable: advert  ==>>  Create Advert must be before storeimage cause it needs advertid
         $advert = Advert::create($validated);
         $this->storeImage($validated, $advert->id);
         $advert->categories()->sync($validated['category']);
         return redirect('/adverts/create')->with('success', 'Successfully Create New Advert!')
                                             ->with('advertid', $advert->id);
+    }
+    public function zipcode($zip)
+    {
+        $zipcode = strtoupper($zip);
+        if (auth()->user()->zipcode===null) {
+            User::find(auth()->user()->id)->update(['zipcode' => $zipcode]);
+        }
+        return $zipcode;
     }
     public function show(Advert $advert)
     {
@@ -76,6 +87,8 @@ class AdvertsController extends Controller
     public function update(AdvertUpdateRequest $request, Advert $advert)
     {
         $validated = $request->validated();
+        $zipcode = $this->zipcode($validated['zipcode']);
+        $validated['zipcode'] = $zipcode;
         $this->updateImage($validated, $advert);
         $advert->update($validated);
         $advert->categories()->sync([$validated['category']]);
@@ -113,6 +126,7 @@ class AdvertsController extends Controller
             $img->save();
             Storage::disk('public')->put($img['file_name'], $data);
         }
+        return;
     }
     public function convertBase64($adv)
     {
@@ -143,6 +157,7 @@ class AdvertsController extends Controller
             }
             $this->storeImage($val, $adv->id);
         }
+        return;
     }
 
     public function deleteImage($adv) {
@@ -150,6 +165,7 @@ class AdvertsController extends Controller
             Storage::disk('public')->delete($picture['file_name']);
             $picture->delete();
         }
+        return;
     }
     public function startbidCheck($adv) {
         {
@@ -161,5 +177,6 @@ class AdvertsController extends Controller
                 session()->forget('advert_id');
             };
         }
+        return;
     }
 }
