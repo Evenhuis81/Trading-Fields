@@ -10644,6 +10644,10 @@ a.text-dark:focus {
   }
 }
 
+.break-out {
+  width: 100vw;
+}
+
 .threeLineEllipsis {
   height: 66px;
   overflow: hidden;

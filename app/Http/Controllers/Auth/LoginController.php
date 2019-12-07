@@ -64,8 +64,10 @@ class LoginController extends Controller
             if (session('link')) {
                 $link = session('link');
                 session()->forget('link');
+                session()->forget('zip');
                 return redirect($link)->with('guestbid', session('guestbid'));
             }
+            session()->forget('zip');
             return redirect('/home');
         }
 }

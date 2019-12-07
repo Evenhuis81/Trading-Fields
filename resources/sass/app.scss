@@ -7,6 +7,14 @@
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
+.break-out {
+    width: 100vw;
+    // position: relative;
+    // background-color: lightgreen;
+    // left: calc(-1 * (100vw - 100%)/2);
+    // color: rgba(0, 0, 0, 6);
+}
+
 // Manage Adverts
 .threeLineEllipsis {
     height: 66px;

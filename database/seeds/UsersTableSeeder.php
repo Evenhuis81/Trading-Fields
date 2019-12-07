@@ -1,5 +1,6 @@
 <?php
 
+use App\Pp4;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $count = Pp4::count();
+        $zipcode = Pp4::where('id', rand(1, $count))->value('postcode');
         User::create([
             'name' => 'Admin',
             'email' => 'admin@admin.nl',
@@ -24,7 +27,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'adman@adman.nl',
             'password' => bcrypt('adman'),
             // 'zipcode' => DB::table('pp4')->where('id', rand(1, 4000))->value('postcode')->get().'AA',
-            'zipcode' => ,
+            'zipcode' => $zipcode.chr(rand(65,90)).chr(rand(65,90)),
             'phonenr' => '0612345678',
             'isAdman' => true,
         ]);
