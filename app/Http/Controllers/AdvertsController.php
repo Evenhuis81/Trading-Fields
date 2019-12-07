@@ -98,7 +98,7 @@ class AdvertsController extends Controller
     public function destroy(Advert $advert)
     {
         $this->authorize('update', $advert);
-        $this->deleteImage();
+        $this->deleteImage($advert);
         $advert->delete();
     }
     public function storeImage($val, $id)

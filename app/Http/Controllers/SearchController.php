@@ -62,6 +62,7 @@ class SearchController extends Controller
                 return redirect('/');
             }
         }
+
         // fake else (see =all comment)
         // return ('index.searchresults', compact('adverts'));
     }
