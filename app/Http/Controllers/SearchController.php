@@ -16,7 +16,10 @@ class SearchController extends Controller
         // session()->forget('categoryfilter');
 
         // Empty search redirects back to homepage (distance only works with valid zipcode) (=all, can remove if and make it last fake-else)
-        if (!request('query') && !request('category') && !request('zipcode')) {return redirect('/');}
+        if (!request('query') && !request('category') && !request('zipcode')) {
+            $cookie = cookie()->forget('pc');
+            return redirect('/')->withCookie($cookie);
+        }
         
         // No input search with category, without zipcode, gives category result only
         if (!request('query') && request('category') && !request('zipcode')) {
@@ -32,7 +35,7 @@ class SearchController extends Controller
         if (request('query') && !request('category') && !request('zipcode')) {
             $query = request('query');
             $adverts = Advert::where('title', 'LIKE', "%{$query}%")->get();
-            if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'Search gave no results');}
+            if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
             return view('index.searchresults', compact('adverts'));
         }
 
@@ -43,7 +46,7 @@ class SearchController extends Controller
                 $q->wherein('categories.id', [request('category')]);
             })->get();
             if (!$adverts->count()) {
-                return redirect('/')->with('noresultmsg', 'Search gave no results');
+                return redirect('/')->with('noresultmsg', 'search gave no results');
             } else {
                 // can replace else with last fake else(=all)
                 return view('index.searchresults', compact('adverts'));
@@ -54,10 +57,9 @@ class SearchController extends Controller
             $zipcode = $this->zipcheck(request('zipcode'));
             if ($zipcode) {
                 $zip = strtoupper(request('zipcode'));
-                session()->put('zip', $zip);
-                return redirect('/');
+                return redirect('/')->withCookie('pc', $zip, 526000);
             } else {
-                session()->flash('invalidzipmsg', 'That is not a valid zipcode');
+                session()->flash('invalidzipmsg', 'not a valid zipcode');
                 session()->flash('invalidzip', request('zipcode'));
                 return redirect('/');
             }

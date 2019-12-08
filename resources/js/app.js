@@ -39,6 +39,25 @@ const app = new Vue({
 
 $(document).ready(function() {
     // For all pages
+    $(".closecookie").on("click", function() {
+        // console.log('clicked');
+        $.ajax({
+            type: "post",
+            url: "/acceptedcookies",
+            // data: { inputbid: inputbid },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+            },
+            success: function() {
+                    alert('yes');
+                },
+            failure: function() {
+                    alert('no');
+            }
+        });
+        // Ajax post make cookie accepted
+    })
+
     $(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -218,10 +237,6 @@ $(document).ready(function() {
                     attachKeypress();
                 }
             });
-
-            // headers: {
-            //     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-            // },
         } else {
             $(".searchList").empty();
         }

@@ -25,9 +25,9 @@
                         {{-- if searchzip logged in usertable not null, put in value --}}
                         {{-- <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ auth()->user() ? auth()->user()->searchzip : "" }}" placeholder="Zipcode"> --}}
                         <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="Zipcode"
-                        {{-- What to do with >, like this or after every value (like this = no repeat+good extension implementation@home, what coudd be the value of the other) --}}
-                        @if (session('zip'))
-                        value="{{ session('zip') }}"
+                        {{-- What to do with >, like this or after every value (like this = no repeat+good extension implementation@home, what could be the value of the other) --}}
+                        @if (request()->cookie('pc'))
+                        value="{{ request()->cookie('pc') }}"
                         @elseif (session('invalidzip'))
                         value="{{ session('invalidzip') }}"
                         @endif>

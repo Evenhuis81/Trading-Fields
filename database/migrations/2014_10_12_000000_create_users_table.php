@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phonenr', 10)->nullable();
             $table->string('zipcode', 6)->nullable();
-            $table->string('searchzip', 6)->nullable();
             // user roles bij toekomstige projecten in aparte / eigen roles table plaatsen
             $table->boolean('isAdmin')->default(false);
             $table->boolean('isAdman')->default(false);
