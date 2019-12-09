@@ -14,7 +14,7 @@ class AdvertsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Advert::class,30)->create();
+        factory(Advert::class,4699)->create();
         $adverts = Advert::all();
         // $pictures = array('advertseederimages/Auto.jpg', 'advertseederimages/Fiets.jpg', 'advertseederimages/Horloge.jpg', 'advertseederimages/Magnetron.jpg', 'advertseederimages/Monitor.jpg', 'advertseederimages/Naafdoppen.jpg', 'advertseederimages/Phone.jpg', 'advertseederimages/Piano.jpg', 'advertseederimages/Schoen.jpg', 'advertseederimages/Slijpmachine.jpg', 'advertseederimages/Stoel.jpg', 'advertseederimages/Wasmachine.jpg', );
         $picArr = Storage::files('/public/advertseederimages');

@@ -6,9 +6,13 @@ use App\Pp4;
 use App\Advert;
 use Faker\Generator as Faker;
 
-$factory->define(Advert::class, function (Faker $faker) {
-    $count = Pp4::count();
-    $zipcode = Pp4::where('id', rand(1, $count))->value('postcode');
+$autoIncrement = autoIncrement();
+
+$factory->define(Advert::class, function (Faker $faker) use ($autoIncrement) {
+    $autoIncrement->next();
+    // $count = Pp4::count();
+    // $zipcode = Pp4::where('id', rand(1, $count))->value('postcode');
+    $zipcode = Pp4::where('id', $autoIncrement->current())->value('postcode');
     return [
         'title' => ucfirst($faker->word()).' '.ucfirst($faker->word()),
         'description' => $faker->realText(150),
@@ -22,3 +26,10 @@ $factory->define(Advert::class, function (Faker $faker) {
         'owner_id' => rand(2, 3),
     ];
 });
+
+function autoIncrement()
+{
+    for ($i = 0; $i < 4700; $i++) {
+        yield $i;
+    }
+}

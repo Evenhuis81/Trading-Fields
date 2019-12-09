@@ -6,6 +6,7 @@ use App\Pp4;
 use App\Advert;
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 // use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -56,6 +57,59 @@ class SearchController extends Controller
                         // 6th
                     } else {
                         // 2nd
+                        $lat = Pp4::where('postcode', substr($zip, 0, 4))->value('latitude');
+                        $lon = Pp4::where('postcode', substr($zip, 0, 4))->value('longitude');
+                        // $rad = request('distance');
+                        // $lat = $_GET['lat']; // latitude of centre of bounding circle in degrees
+                        // $lon = $_GET['lon']; // longitude of centre of bounding circle in degrees
+                        // $rad = $_GET['rad']; // radius of bounding circle in kilometers
+
+                        $R = 6371;  // earth's mean radius, km
+
+                        // first-cut bounding box (in degrees)
+                        // $maxLat = $lat + rad2deg($rad/$R);
+                        // $minLat = $lat - rad2deg($rad/$R);
+                        // $maxLon = $lon + rad2deg(asin($rad/$R) / cos(deg2rad($lat)));
+                        // $minLon = $lon - rad2deg(asin($rad/$R) / cos(deg2rad($lat)));
+
+                        // $sql = "Id, Postcode, Latitude, Longitude,
+                        //             acos(sin(:lat)*sin(radians(Latitude)) + cos(:lat)*cos(radians(Latitude))*cos(radians(Longitude)-:lon)) * :R As D
+                        //         From (
+                        //             Select Id, Postcode, Latitude, Longitude
+                        //             From Pp4
+                        //             Where Latitude Between :minLat And :maxLat
+                        //             And Longitude Between :minLon And :maxLon
+                        //         ) As FirstCut
+                        //         Where acos(sin(:lat)*sin(radians(Latitude)) + cos(:lat)*cos(radians(Latitude))*cos(radians(Longitude)-:lon)) * :R < :rad
+                        //         Order by D";
+                        // $params = [
+                        //     'lat'    => deg2rad($lat),
+                        //     'lon'    => deg2rad($lon),
+                        //     'minLat' => $minLat,
+                        //     'minLon' => $minLon,
+                        //     'maxLat' => $maxLat,
+                        //     'maxLon' => $maxLon,
+                        //     'rad'    => $rad,
+                        //     'R'      => $R,
+                        // ];
+
+                        $radius = 5;
+                        $points = Pp4::selectRaw("id, postcode, latitude, longitude,
+                                ( 6371 * acos( cos( radians(?) ) *
+                                cos( radians( latitude ) )
+                                * cos( radians( longitude ) - radians(?)
+                                ) + sin( radians(?) ) *
+                                sin( radians( latitude ) ) )
+                                ) AS distance", [$lat, $lon, $lat])
+                            // ->where('active', '1')
+                            ->having("distance", "<", $radius)
+                            ->orderBy("distance")
+                            ->get();
+
+                        // $points = Pp4::select(DB::raw($sql))->setBindings($params)->get();
+                        dd(intval(round($points[12]->distance)));
+                        // $points = $db->prepare($sql);
+                        // $points->execute($params);
                     }
                 }
                 if (request('category')) {
