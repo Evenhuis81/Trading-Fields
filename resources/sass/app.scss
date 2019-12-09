@@ -7,6 +7,14 @@
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
+body {
+    padding-top: 122px;
+}
+
+.fixed-top-2 {
+    margin-top: 55px;
+}
+
 .break-out {
     width: 100vw;
     // position: relative;
@@ -168,12 +176,4 @@
 
 a:hover {
     cursor: pointer;
-}
-
-body {
-    padding-top: 100px;
-}
-
-.fixed-top-2 {
-    margin-top: 55px;
 }

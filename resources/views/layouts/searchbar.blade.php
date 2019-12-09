@@ -1,4 +1,4 @@
-<nav class="navbar navbar-light bg-light fixed-top fixed-top-2 py-2" style="z-index:1000;">
+<nav class="navbar navbar-light bg-light fixed-top fixed-top-2 pt-2 pb-0" style="z-index:1000;">
     <div class="container">
         {{-- @if (session('yes'))
         {{ dd(session('yes')) }}
@@ -8,7 +8,14 @@
                 @csrf
                 <div class="form-row mb-0">
                     <div class="form-group col-md-4 px-0 mb-0">
-                        <input type="text" name="query" id="search" class="form-control">
+                        <input type="text" name="searchquery" id="search" class="form-control"
+                        {{-- again the > option where to place, in this case I can place it outside, but that means session->forget has to be placed outside aswell --}}
+                        {{-- after testing, can't place it here, but after 2nd request for it on searchresult page, but the quest still remains --}}
+                        @if (session('queryinput'))
+                            value="{{ session('queryinput') }}"
+                            {{-- this works like this tho, how? i've put it inside input element as an attribute? php code breaking out of element? --}}
+                            {{-- {{ session()->forget('queryinput') }} --}}
+                        @endif>
                         <div class="searchList"></div>
                     </div>
                     <div class="form-group col-md-3 px-0 mb-0">
@@ -16,6 +23,7 @@
                             <option value="">All categories...</option>
                             {{-- Categories injected from CategoryComposer --}}
                             @foreach ($categories as $category)
+                            {{-- categoryinput only need to exist when on search page, so have to use PHP_GET function and check if categoryinput is there? (permanent session storage, can't use flash, cause of F5) --}}
                             <option value="{{ $category->id }}" @if (session('categoryinput')) {{ $category->id == session('categoryinput') ? "selected" : "" }}@endif>{{ $category->name }}</option>
                             @endforeach
                             {{ session()->forget('categoryinput') }}
@@ -26,7 +34,9 @@
                         {{-- <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ auth()->user() ? auth()->user()->searchzip : "" }}" placeholder="Zipcode"> --}}
                         <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="Zipcode"
                         {{-- What to do with >, like this or after every value (like this = no repeat+good extension implementation@home, what could be the value of the other) --}}
-                        @if (request()->cookie('pc'))
+                        @if (session('nozipflash'))
+                        value=""
+                        @elseif (request()->cookie('pc'))
                         value="{{ request()->cookie('pc') }}"
                         @elseif (session('invalidzip'))
                         value="{{ session('invalidzip') }}"

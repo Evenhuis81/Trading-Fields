@@ -6,10 +6,13 @@
 @endsection
 
 <div class="container mt-2">
-    <p class="text-center mb-0 pt-2 text-success font-weight-bold">{{ $adverts->count() }} searchresult{{ $adverts->count()==1 ? "" : "s" }}</p>
+<p class="text-center mb-0 pt-2 text-success font-weight-bold">{{ $adverts->count() }} searchresult{{ $adverts->count()==1 ? "" : "s" }} {{ session('queryinput') ? "for " : "" }}<span class="text-monospace text-danger">'{{ session('queryinput') }}'</span></p>
+    {{ session()->forget('queryinput') }}
+    {{-- categoryfilter emptied/refreshed on each new search? --}}
     @if (session('categoryfilter'))
     <hr class="mx-auto w-25">
     <p class="text-center mb-2 text-primary font-weight-bold" style="font-size: 1rem;">Your filters: <span class="text-light bg-dark">&nbsp{{ session('categoryfilter')}}&nbsp</span></p>
+    {{ session()->forget('categoryfilter') }}
     @endif
     <div class="row">
 

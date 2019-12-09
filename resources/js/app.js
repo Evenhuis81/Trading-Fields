@@ -37,33 +37,30 @@ const app = new Vue({
 // maak voor iedere pagina een eigen aparte javascript file en include deze alleen voor de desbetreffende pagina voor betere
 // projectorganisatie van bestanden en betere leesbaarheid / lagere laadtijd / makkelijker debuggen van code
 
-$(document).ready(function() {
+$(document).ready(function () {
     // For all pages
-    $(".closecookie").on("click", function() {
-        // console.log('clicked');
+    $(".closecookie").on("click", function () {
         $.ajax({
             type: "post",
             url: "/acceptedcookies",
-            // data: { inputbid: inputbid },
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            success: function() {
-                    alert('yes');
-                },
-            failure: function() {
-                    alert('no');
+            success: function () {
+                alert('cookie set');
+            },
+            failure: function () {
+                alert('no');
             }
         });
-        // Ajax post make cookie accepted
     })
 
-    $(function() {
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
 
     // Login
-    $("#showPass").on("change", function() {
+    $("#showPass").on("change", function () {
         $("#password").attr(
             "type",
             $("#showPass").prop("checked") == true ? "text" : "password"
@@ -75,7 +72,7 @@ $(document).ready(function() {
         $("#inputBid").toggle();
     }
 
-    $("#bids").on("change", function() {
+    $("#bids").on("change", function () {
         if ($(this).prop("checked") == false) {
             $("#bid").removeAttr("name");
         } else {
@@ -84,8 +81,8 @@ $(document).ready(function() {
         $("#inputBid").toggle("slow");
     });
 
-    $(function() {
-        $(document).on("change", ".uploadFile", function() {
+    $(function () {
+        $(document).on("change", ".uploadFile", function () {
             // var msize = 11600;
             var msize = 2 * 1024 * 1024;
             var uploadFile = $(this);
@@ -114,7 +111,7 @@ $(document).ready(function() {
                 var reader = new FileReader(); // instance of the FileReader
                 reader.readAsDataURL(files[0]); // read the local file
 
-                reader.onloadend = function() {
+                reader.onloadend = function () {
                     // set image data as background of div
                     //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
                     uploadFile
@@ -133,14 +130,14 @@ $(document).ready(function() {
             .css("visibility", "visible")
             .hide()
             .fadeIn("slow");
-        imgMsg.delay(2000).fadeOut("slow", function() {
+        imgMsg.delay(2000).fadeOut("slow", function () {
             imgMsg.css("visibility", "hidden");
             imgMsg.css("display", display);
         });
     }
 
     // Manage Adverts
-    $(".delete").click(function() {
+    $(".delete").click(function () {
         var id = $(this).data("id");
         console.log(id);
         swal({
@@ -159,7 +156,7 @@ $(document).ready(function() {
                             "content"
                         )
                     },
-                    success: function() {
+                    success: function () {
                         $(".poss" + id)
                             .css({
                                 opacity: 0.5,
@@ -180,7 +177,7 @@ $(document).ready(function() {
     });
 
     // Edit Advert
-    $("#titlehover").on("click", function() {
+    $("#titlehover").on("click", function () {
         $(this).removeAttr("id");
         $(this).attr("id", "notitlehover");
         $("#titleText").hide();
@@ -192,7 +189,7 @@ $(document).ready(function() {
 
     // Main Index Page
 
-    $(".selectCats").on("click", function() {
+    $(".selectCats").on("click", function () {
         let catArrPush = [];
         let catArr = $(".selectCats");
         for (let index = 0; index < catArr.length; index++) {
@@ -210,7 +207,7 @@ $(document).ready(function() {
         loadAjaxDoc(url);
     });
 
-    $("#allCat").on("click", function() {
+    $("#allCat").on("click", function () {
         $(this).prop({ disabled: true });
         let catArr = $(".selectCats");
         for (let el of catArr) {
@@ -221,7 +218,7 @@ $(document).ready(function() {
     });
 
     // Searchbar
-    $("#search").keyup(function() {
+    $("#search").keyup(function () {
         var query = $(this).val();
         if (query != "") {
             $.ajax({
@@ -231,7 +228,7 @@ $(document).ready(function() {
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
                 },
-                success: function(data) {
+                success: function (data) {
                     $(".searchList").fadeIn();
                     $(".searchList").html(data);
                     attachKeypress();
@@ -242,24 +239,24 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on("click", "li", function() {
+    $(document).on("click", "li", function () {
         $("#search").val($(this).text());
         // console.log($(this).text());
         // $(".searchList").fadeOut();
     });
 
-    $("#search").click(function(e) {
+    $("#search").click(function (e) {
         e.stopPropagation();
         jQuery(".searchList").fadeIn(500);
     });
 
-    $("body").click(function(e) {
+    $("body").click(function (e) {
         if (!$(e.target).hasClass(".searchList")) {
             jQuery(".searchList").fadeOut(500);
         }
     });
 
-    $("body").keydown(function(e) {
+    $("body").keydown(function (e) {
         if (e.keyCode === 27 || e.which === 27) {
             jQuery(".searchList").fadeOut(500);
         }
@@ -267,7 +264,7 @@ $(document).ready(function() {
 });
 
 function attachKeypress() {
-    $("body").keydown(function(e) {
+    $("body").keydown(function (e) {
         if (e.keyCode === 40 || e.which === 40) {
             // jQuery(".searchList").fadeOut(500);
             e.stopPropagation();
@@ -301,16 +298,16 @@ function loadAjaxDoc(url) {
     $.ajax({
         url: url
     })
-        .done(function(data) {
+        .done(function (data) {
             $("#advertIndex").html(data);
         })
-        .fail(function() {
+        .fail(function () {
             alert("Articles could not be loaded.");
         });
 }
 
-$(function() {
-    $("body").on("click", ".pagination a", function(e) {
+$(function () {
+    $("body").on("click", ".pagination a", function (e) {
         e.preventDefault();
         // $('#load a').css('color', '#dfecf6');
         $("#load").append(
@@ -335,8 +332,8 @@ $(function() {
 });
 
 // Show page
-$(function() {
-    $("#bidform").on("submit", function(e) {
+$(function () {
+    $("#bidform").on("submit", function (e) {
         e.preventDefault(); // prevent the form submission
         var inputbid = $("#getbid").val();
         // formDataAsJson = JSON.stringify($("#bid-form").serializeArray());
@@ -351,7 +348,7 @@ $(function() {
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            success: function(data) {
+            success: function (data) {
                 if ($.isEmptyObject(data.error)) {
                     $(".bidcontent").html(data);
                     $("#getbid")
@@ -371,7 +368,7 @@ $(function() {
                     // });
                 }
             },
-            failure: function(data) {
+            failure: function (data) {
                 $("#getbid").addClass("is-invalid");
                 $("#print-error-msg").html("something went wrong! call 911");
                 $("#submitbutton").blur();
@@ -392,7 +389,7 @@ $(function() {
 // }
 
 function attachDelete() {
-    $(".deletebid").on("submit", function(e) {
+    $(".deletebid").on("submit", function (e) {
         e.preventDefault();
         var bid = $(this).attr("action");
         $.ajax({
@@ -402,7 +399,7 @@ function attachDelete() {
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            success: function(data) {
+            success: function (data) {
                 if ($.isEmptyObject(data.error)) {
                     $(".bidcontent").html(data);
                     attachDelete();
@@ -410,7 +407,7 @@ function attachDelete() {
                     printErrorMsg(data.error);
                 }
             },
-            failure: function(data) {
+            failure: function (data) {
                 printErrorMsg(data.error);
             }
         });
@@ -419,7 +416,7 @@ function attachDelete() {
 
 attachDelete();
 
-$("#visitorsubmit").on("click", function(e) {
+$("#visitorsubmit").on("click", function (e) {
     e.preventDefault();
     swal("You have to login or register to place bids", {
         buttons: {

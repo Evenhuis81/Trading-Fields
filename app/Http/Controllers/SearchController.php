@@ -10,60 +10,186 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+
+    // public function results($adverts) {
+    //     //
+    // }
+
     public function search(Request $request)
     {
-        // Empty the session filters
-        // session()->forget('categoryfilter');
+        // why does F5 on return view('index.searchresults') askes for send data again ==>>(cause it's return view through a post!!?? see comment below this one)<<==, test with named routes or return views through (another)controller
+        // ultimately: how to avoid ask for send data again with some persistant on queryinput and categoryinput etc (flash msgs that's need to be kept for particular page) without transforming to get (like most sites do)
+        // session->flash persists for 2 views if you don't redirect, either use session forget in searchresults and searchbar after you 'used' flash or make redirects
+        // (this comes with the problem that you can't do compact, so on F5 data gone unless *too complicated?*...), for now I use session->forget
+        // optional: search on title and description option like marktplaats.nl
+        // for now just flash, but else: (see comment last request category)
+        // Empty the session filters?
+        // session->forget('categoryinput');
 
-        // Empty search redirects back to homepage (distance only works with valid zipcode) (=all, can remove if and make it last fake-else)
-        if (!request('query') && !request('category') && !request('zipcode')) {
-            $cookie = cookie()->forget('pc');
-            return redirect('/')->withCookie($cookie);
-        }
-        
-        // No input search with category, without zipcode, gives category result only
-        if (!request('query') && request('category') && !request('zipcode')) {
-            $adverts = Advert::whereHas('categories', function($q) {
-                $q->wherein('categories.id', [request('category')]);
-            })->get();
-            session()->flash('categoryfilter', Category::where('id', request('category'))->value('name'));
-            session()->flash('categoryinput', request('category'));
-            return view('index.searchresults', compact('adverts'));
-        }
+        // All zipcode results:
+        // 1st -> just zipcode without distance; (=all);  >>done<<
+        // 2nd -> just zipcode with distance;;
+        // 3rd -> just zipcode without distance with category;  <<done>>
+        // 4th -> just zipcode with distance with category;
+        // 5th -> input + zipcode without distance;  <<done>>
+        // 6th -> input + zipcode with distance;
+        // 7th -> input + zipcode without distance with category;
+        // 8th -> input + zipcode with distance with category;
 
-        // Input search without category, without zipcode, gives advert->title result
-        if (request('query') && !request('category') && !request('zipcode')) {
-            $query = request('query');
-            $adverts = Advert::where('title', 'LIKE', "%{$query}%")->get();
-            if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
-            return view('index.searchresults', compact('adverts'));
-        }
-
-        // Input search with category, without zipcode (change redirect into no searchresult page)
-        if (request('query') && request('category') && !request('zipcode')) {
-            $query = request('query');
-            $adverts = Advert::where('title', 'LIKE', "%{$query}%")->whereHas('categories', function($q) {
-                $q->wherein('categories.id', [request('category')]);
-            })->get();
-            if (!$adverts->count()) {
-                return redirect('/')->with('noresultmsg', 'search gave no results');
-            } else {
-                // can replace else with last fake else(=all)
-                return view('index.searchresults', compact('adverts'));
-            }
-        }
-        // No input search without category, with zipcode input, with all distances (=all)
-        if (!request('query') && !request('category') && request('zipcode') && !request('distance')) {
+        if (request('zipcode')) {
+            // true or false
             $zipcode = $this->zipcheck(request('zipcode'));
             if ($zipcode) {
                 $zip = strtoupper(request('zipcode'));
-                return redirect('/')->withCookie('pc', $zip, 526000);
+                cookie()->queue('pc', $zip, 526000);
+                if (request('distance')) {
+                    if (request('category')) {
+                        session()->flash('categoryfilter', Category::where('id', request('category'))->value('name'));
+                        session()->flash('categoryinput', request('category'));
+                        if (request('searchquery')) {
+                            // 8th
+                        } else {
+                            // 4th
+                        }
+                    }
+                    if (request('searchquery')) {
+                        // 6th
+                    } else {
+                        // 2nd
+                    }
+                }
+                if (request('category')) {
+                    session()->flash('categoryfilter', Category::where('id', request('category'))->value('name'));
+                    session()->flash('categoryinput', request('category'));
+                    if (request('searchquery')) {
+                        // 7th
+                        session()->flash('queryinput', request('searchquery'));
+                        $query = request('searchquery');
+                        $adverts = Advert::where('title', 'LIKE', "%{$query}%")->whereHas('categories', function($q) {
+                            $q->wherein('categories.id', [request('category')]);
+                        })->get();
+                        if (!$adverts->count()) {
+                            return redirect('/')->with('noresultmsg', 'search gave no results');
+                        } else {
+                            return view('index.searchresults', compact('adverts'));
+                        }
+                    } else {
+                        // 3rd
+                        $adverts = Advert::whereHas('categories', function($q) {
+                            $q->wherein('categories.id', [request('category')]);
+                        })->get();
+                        return view('index.searchresults', compact('adverts'));
+                    }
+                }
+                if (request('searchquery')) {
+                    session()->flash('queryinput', request('searchquery'));
+                    // 5th
+                    $query = request('searchquery');
+                    $adverts = Advert::where('title', 'LIKE', "%{$query}%")->get();
+                    if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
+                    return view('index.searchresults', compact('adverts'));
+                } else {
+                    // 1st
+                    return redirect('/');
+                }
             } else {
                 session()->flash('invalidzipmsg', 'not a valid zipcode');
                 session()->flash('invalidzip', request('zipcode'));
-                return redirect('/');
+                return back();
             }
         }
+
+        cookie()->queue(cookie()->forget('pc'));
+        session()->flash('nozipflash', 'a');
+
+        if (request('category')) {
+
+            // for now just flash, but I want to keep it permanent ONLY when user refreshes searchresultpage (that's why 404 on get search and empty session filter on each new search see comment on both searchbar and index.results page (categoryfilter, categoryinput))
+            session()->flash('categoryfilter', Category::where('id', request('category'))->value('name'));
+            session()->flash('categoryinput', request('category'));
+
+            if (request('searchquery')) {
+                // same thing here, for now just flash, but I want it permanent till user goes to other page
+                session()->flash('queryinput', request('searchquery'));
+                $query = request('searchquery');
+                $adverts = Advert::where('title', 'LIKE', "%{$query}%")->whereHas('categories', function($q) {
+                    $q->wherein('categories.id', [request('category')]);
+                })->get();
+                if (!$adverts->count()) {
+                    return redirect('/')->with('noresultmsg', 'search gave no results');
+                } else {
+                    return view('index.searchresults', compact('adverts'));
+                }
+            } else {
+                $adverts = Advert::whereHas('categories', function($q) {
+                    $q->wherein('categories.id', [request('category')]);
+                })->get();
+                return view('index.searchresults', compact('adverts'));
+            }
+        }
+
+        if (request('searchquery')) {
+            session()->flash('queryinput', request('searchquery'));
+            $query = request('searchquery');
+            $adverts = Advert::where('title', 'LIKE', "%{$query}%")->get();
+            if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
+            return view('index.searchresults', compact('adverts'));
+        } else {
+            return redirect('/');
+        }
+
+
+        // // Empty search redirects back to homepage (distance only works with valid zipcode) (=all, can remove if and make it last fake-else)
+        // if (!request('query') && !request('category') && !request('zipcode')) {
+        //     $cookie = cookie()->forget('pc');
+        //     return redirect('/')->withCookie($cookie);
+        // }
+        
+        // // No input search with category, without zipcode, gives category result only
+        // if (!request('query') && request('category') && !request('zipcode')) {
+        //     $adverts = Advert::whereHas('categories', function($q) {
+        //         $q->wherein('categories.id', [request('category')]);
+        //     })->get();
+        //     session()->flash('categoryfilter', Category::where('id', request('category'))->value('name'));
+        //     session()->flash('categoryinput', request('category'));
+        //     return view('index.searchresults', compact('adverts'));
+        // }
+
+        // // Input search without category, without zipcode, gives advert->title result
+        // if (request('query') && !request('category') && !request('zipcode')) {
+        //     $query = request('query');
+        //     $adverts = Advert::where('title', 'LIKE', "%{$query}%")->get();
+        //     if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
+        //     return view('index.searchresults', compact('adverts'));
+        // }
+
+        // // Input search with category, without zipcode (change redirect into no searchresult page)
+        // if (request('query') && request('category') && !request('zipcode')) {
+        //     $query = request('query');
+        //     $adverts = Advert::where('title', 'LIKE', "%{$query}%")->whereHas('categories', function($q) {
+        //         $q->wherein('categories.id', [request('category')]);
+        //     })->get();
+        //     if (!$adverts->count()) {
+        //         return redirect('/')->with('noresultmsg', 'search gave no results');
+        //     } else {
+        //         // can replace else with last fake else(=all)
+        //         return view('index.searchresults', compact('adverts'));
+        //     }
+        // }
+        // // No input search without category, with zipcode input, with all distances (=all)
+        // if (!request('query') && !request('category') && request('zipcode') && !request('distance')) {
+        //     $zipcode = $this->zipcheck(request('zipcode'));
+        //     if ($zipcode) {
+        //         $zip = strtoupper(request('zipcode'));
+        //         cookie()->queue('pc', $zip, 526000);
+        //         // return redirect('/')->withCookie('pc', $zip, 526000);
+        //         return redirect('/');
+        //     } else {
+        //         session()->flash('invalidzipmsg', 'not a valid zipcode');
+        //         session()->flash('invalidzip', request('zipcode'));
+        //         return redirect('/');
+        //     }
+        // }
 
         // fake else (see =all comment)
         // return ('index.searchresults', compact('adverts'));
