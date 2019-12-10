@@ -16,5 +16,6 @@ Route::post('/acceptedcookies', function() {
 
 Route::post('autocomplete', 'AutocompleteController@fetch');
 Route::post('search', 'SearchController@search')->name('search');
+Route::post('search2', 'SearchController@search2')->name('search2');
 Route::get('search', function() {abort(404);});
 // Route::get('results', 'SearchController@results')->name('results');

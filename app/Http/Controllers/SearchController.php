@@ -16,6 +16,11 @@ class SearchController extends Controller
     //     //
     // }
 
+    public function search2 ()
+        {
+            //
+        }
+
     public function search(Request $request)
     {
         // why does F5 on return view('index.searchresults') askes for send data again ==>>(cause it's return view through a post!!?? see comment below this one)<<==, test with named routes or return views through (another)controller
@@ -59,12 +64,11 @@ class SearchController extends Controller
                         // 2nd
                         $lat = Pp4::where('postcode', substr($zip, 0, 4))->value('latitude');
                         $lon = Pp4::where('postcode', substr($zip, 0, 4))->value('longitude');
-                        // $rad = request('distance');
                         // $lat = $_GET['lat']; // latitude of centre of bounding circle in degrees
                         // $lon = $_GET['lon']; // longitude of centre of bounding circle in degrees
                         // $rad = $_GET['rad']; // radius of bounding circle in kilometers
 
-                        $R = 6371;  // earth's mean radius, km
+                        // $R = 6371;  // earth's mean radius, km
 
                         // first-cut bounding box (in degrees)
                         // $maxLat = $lat + rad2deg($rad/$R);
@@ -93,7 +97,7 @@ class SearchController extends Controller
                         //     'R'      => $R,
                         // ];
 
-                        $radius = 5;
+                        $radius = request('distance');
                         $points = Pp4::selectRaw("id, postcode, latitude, longitude,
                                 ( 6371 * acos( cos( radians(?) ) *
                                 cos( radians( latitude ) )
@@ -105,9 +109,28 @@ class SearchController extends Controller
                             ->having("distance", "<", $radius)
                             ->orderBy("distance")
                             ->get();
+                        $zippiesarr=[];
+                        $distancearr=[];
+                        foreach ($points as $point) {
+                            array_push($zippiesarr, $point->postcode);
+                        }
+                        // dd($zippiesarr);
+                        $adverts = Advert::whereIn('zipcode', $zippiesarr)->get();
+                        foreach ($adverts as $advert) {
+                            $point = $points->firstwhere('postcode', $advert->zipcode);
+                            dd($point);
+                        //     $z = $advert->zipcode;
+                        // $advert
+                            // $advert->push('distance', function() {
+                            //     return $points->where('zipcode', $zipcode)->value('distance');
+                            // });
+                            // $advert->put('distance', '100');
+                        }
+                        // $adverts->put('distance', '100');
 
+                        // dd($adverts);
                         // $points = Pp4::select(DB::raw($sql))->setBindings($params)->get();
-                        dd(intval(round($points[12]->distance)));
+                        // dd(intval(round($points[12]->distance)));
                         // $points = $db->prepare($sql);
                         // $points->execute($params);
                     }

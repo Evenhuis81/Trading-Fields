@@ -74,6 +74,9 @@
                 @if (!is_null($advert->phonenr))
                 <p><i class="fas fa-phone"></i> {{ $advert->phonenr }}</p>
                 @endif
+                @if (!is_null(request()->cookie('pc')))
+                <p>&nbsp;&nbsp;&nbsp;{{ $advert->distance($advert->zipcode, request()->cookie('pc')) }} KM</p>
+                @endif
                 <a href="#" class="btn btn-primary w-100 pt-3" style="height:70px;"><i class="far fa-heart"><br>Bericht
                     </i></a>
             </div>

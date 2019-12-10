@@ -18,7 +18,7 @@ class Advert extends Model implements ViewableContract
     use Viewable;
 
     protected $fillable = [
-        'title', 'description', 'condition_id', 'price', 'startbid', 'delivery_id', 'name', 'phonenr', 'zipcode', 'searchzip', 'owner_id',
+        'title', 'description', 'condition_id', 'price', 'startbid', 'delivery_id', 'name', 'phonenr', 'zipcode', 'zipletters', 'searchzip', 'owner_id',
     ];
 
     public function pictures() {
@@ -48,4 +48,44 @@ class Advert extends Model implements ViewableContract
     public function hometown($zipcode) {
         return Pp4::where('postcode', substr($zipcode, 0, 4))->value('woonplaats');
     }
+
+    public function dis($points, $zipcode) {
+      // $zipcode = $advert->zipcode
+      $point = $points->firstwhere('postcode', $advert->zipcode);
+      return $point->distance;
+    }
+
+    public function distance($userzip, $destinationzip)
+    {
+        
+        $unit = "K";
+        $lat1 = Pp4::where('postcode', substr($userzip, 0, 4))->value('latitude');
+        $lon1 = Pp4::where('postcode', substr($userzip, 0, 4))->value('longitude');
+        $lat2 = Pp4::where('postcode', substr($destinationzip, 0, 4))->value('latitude');
+        $lon2 = Pp4::where('postcode', substr($destinationzip, 0, 4))->value('longitude');
+        $distance = $this->distanceinput($lat1, $lon1, $lat2, $lon2, $unit);
+        return intval(round($distance));
+    }
+
+    private function distanceinput($lat1, $lon1, $lat2, $lon2, $unit) {
+        if (($lat1 == $lat2) && ($lon1 == $lon2)) {
+          return 0;
+        }
+        else {
+          $theta = $lon1 - $lon2;
+          $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+          $dist = acos($dist);
+          $dist = rad2deg($dist);
+          $miles = $dist * 60 * 1.1515;
+          $unit = strtoupper($unit);
+      
+          if ($unit == "K") {
+            return ($miles * 1.609344);
+          } else if ($unit == "N") {
+            return ($miles * 0.8684);
+          } else {
+            return $miles;
+          }
+        }
+      }
 }

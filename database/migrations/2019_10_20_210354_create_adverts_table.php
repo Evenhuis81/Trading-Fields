@@ -23,7 +23,8 @@ class CreateAdvertsTable extends Migration
             $table->unsignedBigInteger('delivery_id');
             $table->string('name');
             $table->string('phonenr', 10)->nullable();
-            $table->string('zipcode', 6);
+            $table->string('zipcode', 4);
+            $table->string('zipletters', 2);
             $table->unsignedBigInteger('owner_id');
             $table->timestamps();
             $table->foreign('owner_id')->references('id')->on('users');
