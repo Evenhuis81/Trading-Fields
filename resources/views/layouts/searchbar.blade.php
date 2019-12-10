@@ -9,13 +9,13 @@
                 <div class="form-row mb-0">
                     <div class="form-group col-md-4 px-0 mb-0">
                         <input type="text" name="searchquery" id="search" class="form-control"
-                        {{-- again the > option where to place, in this case I can place it outside, but that means session->forget has to be placed outside aswell --}}
-                        {{-- after testing, can't place it here, but after 2nd request for it on searchresult page, but the quest still remains --}}
-                        @if (session('queryinput'))
+                            {{-- again the > option where to place, in this case I can place it outside, but that means session->forget has to be placed outside aswell --}}
+                            {{-- after testing, can't place it here, but after 2nd request for it on searchresult page, but the quest still remains --}}
+                            @if (session('queryinput'))
                             value="{{ session('queryinput') }}"
                             {{-- this works like this tho, how? i've put it inside input element as an attribute? php code breaking out of element? --}}
                             {{-- {{ session()->forget('queryinput') }} --}}
-                        @endif>
+                            @endif>
                         <div class="searchList"></div>
                     </div>
                     <div class="form-group col-md-3 px-0 mb-0">
@@ -33,10 +33,11 @@
                         {{-- if searchzip logged in usertable not null, put in value --}}
                         {{-- <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ auth()->user() ? auth()->user()->searchzip : "" }}" placeholder="Zipcode"> --}}
                         <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="Zipcode"
-                        {{-- What to do with >, like this or after every value (like this = no repeat+good extension implementation@home, what could be the value of the other) --}}
-                        @if (session('nozipflash'))
-                        value=""
-                        @elseif (request()->cookie('pc'))
+                            {{-- What to do with >, like this or after every value (like this = no repeat+good extension implementation@home, what could be the value of the other) --}}
+                            @if (session('nozipflash'))
+                            value=""
+                            {{ session()->forget('nozipflash') }}
+                            @elseif (request()->cookie('pc'))
                         value="{{ request()->cookie('pc') }}"
                         @elseif (session('invalidzip'))
                         value="{{ session('invalidzip') }}"
@@ -44,14 +45,15 @@
                     </div>
                     <div class="form-group col-md-3 px-0 mb-0">
                         <select id="distance" class="form-control" name="distance">
-                            <option selected value="">All distances...</option>
-                            <option value="3">{{ __('< 3 km') }}</option>
-                            <option value="5">{{ __('< 5 km') }}</option>
-                            <option value="10">{{ __('< 10 km') }}</option>
-                            <option value="15">{{ __('< 15 km') }}</option>
-                            <option value="25">{{ __('< 25 km') }}</option>
-                            <option value="50">{{ __('< 50 km') }}</option>
-                            <option value="75">{{ __('< 75 km') }}</option>
+                            <option value="">All distances...</option>
+                            <option value="3" @if (session('distanceinput')) {{ 3 == session('distanceinput') ? "selected" : "" }}@endif>{{ __('< 3 km') }}</option>
+                            <option value="5" @if (session('distanceinput')) {{ 5 == session('distanceinput') ? "selected" : "" }}@endif>{{ __('< 5 km') }}</option>
+                            <option value="10" @if (session('distanceinput')) {{ 10 == session('distanceinput') ? "selected" : "" }}@endif>{{ __('< 10 km') }}</option>
+                            <option value="15" @if (session('distanceinput')) {{ 15 == session('distanceinput') ? "selected" : "" }}@endif>{{ __('< 15 km') }}</option>
+                            <option value="25" @if (session('distanceinput')) {{ 25 == session('distanceinput') ? "selected" : "" }}@endif>{{ __('< 25 km') }}</option>
+                            <option value="50" @if (session('distanceinput')) {{ 50 == session('distanceinput') ? "selected" : "" }}@endif>{{ __('< 50 km') }}</option>
+                            <option value="75" @if (session('distanceinput')) {{ 75 == session('distanceinput') ? "selected" : "" }}@endif>{{ __('< 75 km') }}</option>
+                            {{ session()->forget('distanceinput') }}
                         </select>
                     </div>
                     <div class="form-group col-md-1 px-0 mb-0">
@@ -73,7 +75,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-4" >
+                    <div class="col-4">
                         {{-- Input Error Msg --}}
                     </div>
                     <div class="col-3">

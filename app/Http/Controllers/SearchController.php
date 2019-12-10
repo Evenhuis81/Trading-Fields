@@ -34,13 +34,13 @@ class SearchController extends Controller
 
         // All zipcode results:
         // 1st -> just zipcode without distance; (=all);  >>done<<
-        // 2nd -> just zipcode with distance;;
+        // 2nd -> just zipcode with distance;; <<done>>
         // 3rd -> just zipcode without distance with category;  <<done>>
-        // 4th -> just zipcode with distance with category;
+        // 4th -> just zipcode with distance with category; <<done>>
         // 5th -> input + zipcode without distance;  <<done>>
-        // 6th -> input + zipcode with distance;
-        // 7th -> input + zipcode without distance with category;
-        // 8th -> input + zipcode with distance with category;
+        // 6th -> input + zipcode with distance; <<done>>
+        // 7th -> input + zipcode without distance with category; <<done>>
+        // 8th -> input + zipcode with distance with category; <<done>>
 
         if (request('zipcode')) {
             // true or false
@@ -49,90 +49,72 @@ class SearchController extends Controller
                 $zip = strtoupper(request('zipcode'));
                 cookie()->queue('pc', $zip, 526000);
                 if (request('distance')) {
+                    session()->flash('distancefilter', "distance < ".request('distance')." km");
+                    session()->flash('distanceinput', request('distance'));
                     if (request('category')) {
                         session()->flash('categoryfilter', Category::where('id', request('category'))->value('name'));
                         session()->flash('categoryinput', request('category'));
                         if (request('searchquery')) {
+                            $query = request('searchquery');
+                            session()->flash('queryinput', $query);
+
                             // 8th
+                            $points = $this->points(substr($zip, 0, 4), request('distance'));
+                            $zippiesarr=[];
+                            foreach ($points as $point) {
+                                array_push($zippiesarr, $point->postcode);
+                            }
+                            $adverts = Advert::whereIn('zipcode', $zippiesarr)
+                                            ->whereHas('categories', function($q) {
+                                            $q->wherein('categories.id', [request('category')]);
+                                        })->where('title', 'LIKE', "%{$query}%")
+                                        ->get();
+                            if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
+    
+                            return view('index.searchresults', compact('adverts', 'points'));
                         } else {
                             // 4th
-                        }
-                    }
-                    if (request('searchquery')) {
-                        // 6th
-                    } else {
-                        // 2nd
-                        $lat = Pp4::where('postcode', substr($zip, 0, 4))->value('latitude');
-                        $lon = Pp4::where('postcode', substr($zip, 0, 4))->value('longitude');
-                        // $lat = $_GET['lat']; // latitude of centre of bounding circle in degrees
-                        // $lon = $_GET['lon']; // longitude of centre of bounding circle in degrees
-                        // $rad = $_GET['rad']; // radius of bounding circle in kilometers
-
-                        // $R = 6371;  // earth's mean radius, km
-
-                        // first-cut bounding box (in degrees)
-                        // $maxLat = $lat + rad2deg($rad/$R);
-                        // $minLat = $lat - rad2deg($rad/$R);
-                        // $maxLon = $lon + rad2deg(asin($rad/$R) / cos(deg2rad($lat)));
-                        // $minLon = $lon - rad2deg(asin($rad/$R) / cos(deg2rad($lat)));
-
-                        // $sql = "Id, Postcode, Latitude, Longitude,
-                        //             acos(sin(:lat)*sin(radians(Latitude)) + cos(:lat)*cos(radians(Latitude))*cos(radians(Longitude)-:lon)) * :R As D
-                        //         From (
-                        //             Select Id, Postcode, Latitude, Longitude
-                        //             From Pp4
-                        //             Where Latitude Between :minLat And :maxLat
-                        //             And Longitude Between :minLon And :maxLon
-                        //         ) As FirstCut
-                        //         Where acos(sin(:lat)*sin(radians(Latitude)) + cos(:lat)*cos(radians(Latitude))*cos(radians(Longitude)-:lon)) * :R < :rad
-                        //         Order by D";
-                        // $params = [
-                        //     'lat'    => deg2rad($lat),
-                        //     'lon'    => deg2rad($lon),
-                        //     'minLat' => $minLat,
-                        //     'minLon' => $minLon,
-                        //     'maxLat' => $maxLat,
-                        //     'maxLon' => $maxLon,
-                        //     'rad'    => $rad,
-                        //     'R'      => $R,
-                        // ];
-
-                        $radius = request('distance');
-                        $points = Pp4::selectRaw("id, postcode, latitude, longitude,
-                                ( 6371 * acos( cos( radians(?) ) *
-                                cos( radians( latitude ) )
-                                * cos( radians( longitude ) - radians(?)
-                                ) + sin( radians(?) ) *
-                                sin( radians( latitude ) ) )
-                                ) AS distance", [$lat, $lon, $lat])
-                            // ->where('active', '1')
-                            ->having("distance", "<", $radius)
-                            ->orderBy("distance")
-                            ->get();
+                        $points = $this->points(substr($zip, 0, 4), request('distance'));
                         $zippiesarr=[];
-                        $distancearr=[];
                         foreach ($points as $point) {
                             array_push($zippiesarr, $point->postcode);
                         }
-                        // dd($zippiesarr);
-                        $adverts = Advert::whereIn('zipcode', $zippiesarr)->get();
-                        foreach ($adverts as $advert) {
-                            $point = $points->firstwhere('postcode', $advert->zipcode);
-                            dd($point);
-                        //     $z = $advert->zipcode;
-                        // $advert
-                            // $advert->push('distance', function() {
-                            //     return $points->where('zipcode', $zipcode)->value('distance');
-                            // });
-                            // $advert->put('distance', '100');
-                        }
-                        // $adverts->put('distance', '100');
+                        $adverts = Advert::whereIn('zipcode', $zippiesarr)
+                                        ->whereHas('categories', function($q) {
+                                        $q->wherein('categories.id', [request('category')]);
+                                    })->get();
+                        if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
 
-                        // dd($adverts);
-                        // $points = Pp4::select(DB::raw($sql))->setBindings($params)->get();
-                        // dd(intval(round($points[12]->distance)));
-                        // $points = $db->prepare($sql);
-                        // $points->execute($params);
+                        return view('index.searchresults', compact('adverts', 'points'));
+                        }
+                    }
+                    if (request('searchquery')) {
+                        $query = request('searchquery');
+                        session()->flash('queryinput', $query);
+                        // 6th
+
+                        $points = $this->points(substr($zip, 0, 4), request('distance'));
+                        $zippiesarr=[];
+                        foreach ($points as $point) {
+                            array_push($zippiesarr, $point->postcode);
+                        }
+                        $adverts = Advert::whereIn('zipcode', $zippiesarr)
+                            ->where('title', 'LIKE', "%{$query}%")
+                            ->get();
+                        if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
+
+                        return view('index.searchresults', compact('adverts', 'points'));
+                    } else {
+                        // 2nd
+                        $points = $this->points(substr($zip, 0, 4), request('distance'));
+                        $zippiesarr=[];
+                        foreach ($points as $point) {
+                            array_push($zippiesarr, $point->postcode);
+                        }
+                        $adverts = Advert::whereIn('zipcode', $zippiesarr)->get();
+                        if ($adverts->count()==0) {return redirect('/')->with('noresultmsg', 'search gave no results');}
+
+                        return view('index.searchresults', compact('adverts', 'points'));
                     }
                 }
                 if (request('category')) {
@@ -280,5 +262,33 @@ class SearchController extends Controller
         if (!preg_match("/^[a-zA-Z]+$/", substr($zipcode, 4, 6))) {return false;}
         if (!preg_match("/^[0-9]+$/", substr($zipcode, 0, 4))) {return false;}
         return Pp4::where('postcode', substr($zipcode, 0, 4))->exists();
+    }
+
+    public function points($zip, $radius)
+    {
+        $lat = Pp4::where('postcode', $zip)->value('latitude');
+        $lon = Pp4::where('postcode', $zip)->value('longitude');
+        return Pp4::selectRaw("id, postcode, latitude, longitude,
+                ( 6371 * acos( cos( radians(?) ) *
+                cos( radians( latitude ) )
+                * cos( radians( longitude ) - radians(?)
+                ) + sin( radians(?) ) *
+                sin( radians( latitude ) ) )
+                ) AS distance", [$lat, $lon, $lat])
+            ->having("distance", "<", $radius)
+            ->orderBy("distance")
+            ->get();
+            // $points = Pp4::selectRaw("pp4s.id, pp4s.postcode as postcode, pp4s.latitude as latitude, pp4s.longitude as longitude, adverts.title as title,
+            //         ( 6371 * acos( cos( radians(?) ) *
+            //         cos( radians( latitude ) )
+            //         * cos( radians( longitude ) - radians(?)
+            //         ) + sin( radians(?) ) *
+            //         sin( radians( latitude ) ) )
+            //         ) AS distance", [$lat, $lon, $lat])
+            //     // ->where('active', '1')
+            //     ->leftJoin('adverts', 'adverts.zipcode', '=', 'pp4s.postcode')
+            //     ->having("distance", "<", $radius)
+            //     ->orderBy("distance")
+            //     ->get();
     }
 }

@@ -50,9 +50,8 @@ class Advert extends Model implements ViewableContract
     }
 
     public function dis($points, $zipcode) {
-      // $zipcode = $advert->zipcode
-      $point = $points->firstwhere('postcode', $advert->zipcode);
-      return $point->distance;
+      $point = $points->firstwhere('postcode', $zipcode);
+      return intval(round($point->distance));
     }
 
     public function distance($userzip, $destinationzip)
