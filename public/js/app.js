@@ -49340,9 +49340,12 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _test__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./test */ "./resources/js/test.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -49383,10 +49386,10 @@ $(document).ready(function () {
         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
       },
       success: function success() {
-        alert('cookie set');
+        alert("cookie set");
       },
       failure: function failure() {
-        alert('no');
+        alert("no");
       }
     });
   });
@@ -49525,7 +49528,7 @@ $(document).ready(function () {
     var url = "?categories=" + catArrPush; // console.log(url);
     // return;
 
-    loadAjaxDoc(url);
+    Object(_test__WEBPACK_IMPORTED_MODULE_0__["loadAjaxDoc"])(url);
   });
   $("#allCat").on("click", function () {
     $(this).prop({
@@ -49557,7 +49560,7 @@ $(document).ready(function () {
       }
     }
 
-    loadAjaxDoc();
+    Object(_test__WEBPACK_IMPORTED_MODULE_0__["loadAjaxDoc"])();
   }); // Searchbar
 
   $("#search").keyup(function () {
@@ -49630,15 +49633,6 @@ function attachKeypress() {
 } // attachKeypress();
 
 
-function loadAjaxDoc(url) {
-  $.ajax({
-    url: url
-  }).done(function (data) {
-    $("#advertIndex").html(data);
-  }).fail(function () {
-    alert("Articles could not be loaded.");
-  });
-}
 
 $(function () {
   $("body").on("click", ".pagination a", function (e) {
@@ -49657,10 +49651,10 @@ $(function () {
     var url = $(this).attr("href");
 
     if (catArrPush.length === 0) {
-      loadAjaxDoc(url);
+      Object(_test__WEBPACK_IMPORTED_MODULE_0__["loadAjaxDoc"])(url);
     } else {
       url += "&categories=" + catArrPush;
-      loadAjaxDoc(url);
+      Object(_test__WEBPACK_IMPORTED_MODULE_0__["loadAjaxDoc"])(url);
     } // window.history.pushState("", "", url);
 
   });
@@ -49676,7 +49670,7 @@ $(function () {
       type: "post",
       // dataType: "JSON",
       // contentType: "application/json; charset=utf-8",
-      url: "/inputbid",
+      url: "/bids",
       // data: $(this).serialize(), // serialize all form inputs
       // data: formDataAsJson,
       data: {
@@ -49726,11 +49720,14 @@ function attachDelete() {
     e.preventDefault();
     var bid = $(this).attr("action");
     $.ajax({
-      type: "post",
-      url: "/deletebid",
+      type: "delete",
+      url: "/bids/".concat(bid),
       data: {
         bid: bid
       },
+      // xhrFields: {
+      //     withCredentials: true
+      // },
       headers: {
         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
       },
@@ -49921,6 +49918,28 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/test.js":
+/*!******************************!*\
+  !*** ./resources/js/test.js ***!
+  \******************************/
+/*! exports provided: loadAjaxDoc */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadAjaxDoc", function() { return loadAjaxDoc; });
+function loadAjaxDoc(url) {
+  $.ajax({
+    url: url
+  }).done(function (data) {
+    $("#advertIndex").html(data);
+  }).fail(function () {
+    alert("Articles could not be loaded.");
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
@@ -49939,8 +49958,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Dee\Documents\Code\Trading-Fields\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

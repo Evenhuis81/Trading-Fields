@@ -7,12 +7,12 @@ use App\Advert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class AjaxController extends Controller
+class BidsController extends Controller
 {
     // probeer controller methods te beperken tot CRUD-functies voor consistentie. Dus: store() i.p.v. inputbid,
     // delete() i.p.v. deletebid. Noem deze controller BidController, omdat deze controller alleen bid acties uitvoert.
     // Dat het om het afhandelen van AJAX requests gaat kun je aan de returned responses zien.
-    public function inputbid(Request $request)
+    public function store(Request $request)
     {
         $startbid = session('startbid');
         $validator = Validator::make($request->all(), [
@@ -33,7 +33,7 @@ class AjaxController extends Controller
         return response()->json(['error'=>$validator->errors()->all()]);
     }
 
-    public function deletebid(Request $request)
+    public function destroy(Request $request)
     {
         $advert = Advert::find(session('advert_id'));
         $bid = Bid::find($request->input('bid'));

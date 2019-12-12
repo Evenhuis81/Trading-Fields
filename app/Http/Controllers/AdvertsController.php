@@ -10,6 +10,7 @@ use App\Picture;
 use App\Category;
 use App\Delivery;
 use App\Condition;
+use App\Events\AdvertCreated;
 use App\Http\Controllers\Controller;
 use App\Repositories\AdvertRepository;
 use Illuminate\Support\Facades\Storage;
@@ -45,12 +46,20 @@ class AdvertsController extends Controller
     {
         $validated = $request->validated();
         // Make zipcode letters uppercase and save it in user table if zipcode null (aka 1st time input)
-        $zipcode = $this->zipcode($validated['zipcode']);
+        $zip = $this->zipcode($validated['zipcode']);
+        $zipcode = substr($zip, 0, 4);
+        $zipletters = substr($zip, 4, 6);
         $validated['zipcode'] = $zipcode;
+        $validated['zipletters'] = $zipletters;
         // onderstaande code levert error op: Undefined variable: advert  ==>>  Create Advert must be before storeimage cause it needs advertid
         $advert = Advert::create($validated);
         $this->storeImage($validated, $advert->id);
         $advert->categories()->sync($validated['category']);
+
+
+        event(new AdvertCreated($advert));
+
+
         return redirect('/adverts/create')->with('success', 'Successfully Create New Advert!')
                                             ->with('advertid', $advert->id);
     }
@@ -87,8 +96,11 @@ class AdvertsController extends Controller
     public function update(AdvertUpdateRequest $request, Advert $advert)
     {
         $validated = $request->validated();
-        $zipcode = $this->zipcode($validated['zipcode']);
+        $zip = $this->zipcode($validated['zipcode']);
+        $zipcode = substr($zip, 0, 4);
+        $zipletters = substr($zip, 4, 6);
         $validated['zipcode'] = $zipcode;
+        $validated['zipletters'] = $zipletters;
         $this->updateImage($validated, $advert);
         $advert->update($validated);
         $advert->categories()->sync([$validated['category']]);

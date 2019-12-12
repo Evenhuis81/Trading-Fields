@@ -226,7 +226,7 @@
                             <label for="zipcode" class="col-md-4 col-form-label text-md-right">{{ __('Zipcode') }}</label>
                             <div class="col-md-6">
                                 <input id="zipcode" type="text" class="form-control @error('zipcode') is-invalid @enderror" name="zipcode"
-                                    value="{{ old('zipcode') ? old('zipcode') : $advert->zipcode }}">
+                                    value="{{ old('zipcode') ? old('zipcode') : $advert->zipcode.$advert->zipletters }}">
                                 @error('zipcode')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
