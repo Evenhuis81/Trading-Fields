@@ -30,7 +30,7 @@
 <body>
     <div id="app">
         @include('navbars.main')
-        @yield('searchbar')        {{-- with view, composerCategory@compose --}}
+        @yield('searchbar') {{-- with view, composerCategory@compose --}}
         @yield('content')
     </div>
 </body>

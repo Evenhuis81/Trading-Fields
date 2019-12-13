@@ -5,6 +5,7 @@ namespace App;
 use App\Bid;
 use App\Advert;
 use Carbon\Carbon;
+use App\Chatmessage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -44,6 +45,11 @@ class User extends Authenticatable
     //     return $this->hasMany(Image::class, 'owner_id');
     // }
 
+    public function messages()
+    {
+        return $this->hasMany(Chatmessage::class);
+    }
+    
     public function advert()
     {
         return $this->hasMany(Advert::class);

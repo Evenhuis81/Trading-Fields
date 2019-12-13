@@ -25,6 +25,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('viewWebSocketsDashboard', function ($user) {
+            if ($user->isAdmin) {
+                return in_array($user->isAdmin, [
+                true,
+            ]);
+            } elseif ($user->isAdman) {
+                return in_array($user->isAdman, [
+                    true,
+            ]);
+            } else {
+                return false;
+            };
+        });
     }
 }
