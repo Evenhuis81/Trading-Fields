@@ -8,7 +8,7 @@
                 @csrf
                 <div class="form-row mb-0">
                     <div class="form-group col-md-4 px-0 mb-0">
-                        <input type="text" name="searchquery" id="search" class="form-control"
+                        <input type="text" name="searchquery" id="search" class="form-control" autocomplete="off"
                             {{-- again the > option where to place, in this case I can place it outside, but that means session->forget has to be placed outside aswell --}}
                             {{-- after testing, can't place it here, but after 2nd request for it on searchresult page, but the quest still remains --}}
                             @if (session('queryinput'))
