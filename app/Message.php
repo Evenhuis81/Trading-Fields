@@ -2,9 +2,10 @@
 
 namespace App;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-class Chatmessage extends Model
+class Message extends Model
 {
     protected $fillable = ['message'];
 

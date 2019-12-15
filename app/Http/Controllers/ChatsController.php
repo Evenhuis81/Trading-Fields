@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Chatmessage;
+use App\Message;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Events\WebsocketDemoEvent;
@@ -16,22 +16,22 @@ class ChatsController extends Controller
 
     public function index()
     {
-        broadcast(new WebsocketDemoEvent('some data'));
+        // broadcast(new WebsocketDemoEvent('some data'));
         return view('/chats');
     }
 
     public function fetchMessages()
     {
-        return Chatmessage::with('user')->get();
+        return Message::with('user')->get();
     }
 
     public function sendMessage(Request $request)
     {
         $message = auth()->user()->messages()->create([
-            'message' => $request->message,
+            'message' => $request->message
         ]);
 
-        broadcast(new MessageSent($message->load('user')));
+        broadcast(new MessageSent($message->load('user')))->toOthers();
 
         return ['status' => 'success'];
     }

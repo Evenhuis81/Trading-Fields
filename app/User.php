@@ -5,7 +5,7 @@ namespace App;
 use App\Bid;
 use App\Advert;
 use Carbon\Carbon;
-use App\Chatmessage;
+use App\Message;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,9 +47,9 @@ class User extends Authenticatable
 
     public function messages()
     {
-        return $this->hasMany(Chatmessage::class);
+        return $this->hasMany(Message::class);
     }
-    
+
     public function advert()
     {
         return $this->hasMany(Advert::class);
@@ -60,7 +60,8 @@ class User extends Authenticatable
         return $this->hasMany(Bid::class);
     }
 
-    public function time_active() {
+    public function time_active()
+    {
         // dd($this->created_at->diffForHumans());
         // return $this->created_at;
         // $timeago = $this->get_time_ago($this->created_at);
@@ -68,7 +69,8 @@ class User extends Authenticatable
         // dd($timeago);
     }
 
-    public function get_time_ago() {
+    public function get_time_ago()
+    {
         $dt = Carbon::now();
         $past = $dt->subMonth();
         echo $dt->diffForHumans($past);

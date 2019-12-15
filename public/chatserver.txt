@@ -1,0 +1,26 @@
+ #1: Laravel WebSockets Installation & Configuration | Real-time Chat Application (https://www.youtube.com/watch?v=H_4UubWE9NQ)
+
+https://docs.beyondco.de/laravel-websockets/ > get started > Installation
+    composer require beyondcode/laravel-websockets
+    php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="migrations"
+    php artisan migrate
+    php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="config"
+.env > anyID, anyKey, AnySecret
+    websockets.php > 'path' => 'admin/websocket'
+    test: php artisan serve => admin/websocket > only local
+    Pusher Replacement > Requirements
+        .env > BROADCAST_DRIVER=pusher
+        config/broadcasting.php
+    install echo:
+        npm install --save laravel-echo pusher-js
+        import echo in bootstrap.js then test app with npm run watch, websocket:serve and serve > Connect
+        php artisan make:event WebsocketDemoEvent
+
+
+
+
+attent:
+    authserviceprovider gate define webdashboard
+    app.php  uncomment broadcastserviceprovider
+    .env:
+        broadcasting.php ?

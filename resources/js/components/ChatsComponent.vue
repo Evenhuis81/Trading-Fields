@@ -50,7 +50,7 @@ export default {
   created() {
     this.fetchMessages();
 
-    Echo.join("chat").listen("MessageSent", (event) => {
+    Echo.join("chat").listen("MessageSent", event => {
       this.messages.push(event.message);
     });
   },
@@ -58,7 +58,7 @@ export default {
   methods: {
     fetchMessages() {
       axios.get("messages").then(response => {
-        this.message = response.data;
+        this.messages = response.data;
       });
     },
 
@@ -67,6 +67,7 @@ export default {
         user: this.user,
         message: this.newMessage
       });
+
       axios.post("messages", { message: this.newMessage });
 
       this.newMessage = "";

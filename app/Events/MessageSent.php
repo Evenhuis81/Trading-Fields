@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Chatmessage;
+use App\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -22,7 +22,7 @@ class MessageSent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Chatmessage $message)
+    public function __construct(Message $message)
     {
         $this->message = $message;
     }
