@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -28,11 +29,37 @@
 </head>
 
 <body>
+    {{-- <main class="container mt-4"> --}}
     <div id="app">
         @include('navbars.main')
-        @yield('searchbar') {{-- with view, composerCategory@compose --}}
+        {{-- @include('inc.navbar') --}}
+        @yield('searchbar')  {{-- with view, composerCategory@compose --}}
         @yield('content')
     </div>
+    {{-- </main> --}}
+
+
+        {{-- Success Alert --}}
+    {{-- @if(session('status'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{session('status')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endif
+
+        {{-- Error Alert --}}
+    {{-- @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{session('error')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif --}}
+
+
 </body>
 
 <footer>

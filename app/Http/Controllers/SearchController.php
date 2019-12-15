@@ -48,6 +48,7 @@ class SearchController extends Controller
             if ($zipcode) {
                 $zip = strtoupper(request('zipcode'));
                 cookie()->queue('pc', $zip, 526000);
+                session()->flash('queuedcookie', $zip);
                 if (request('distance')) {
                     session()->flash('distancefilter', "distance < ".request('distance')." km");
                     session()->flash('distanceinput', request('distance'));
@@ -154,11 +155,12 @@ class SearchController extends Controller
             } else {
                 session()->flash('invalidzipmsg', 'not a valid zipcode');
                 session()->flash('invalidzip', request('zipcode'));
-                return back();
+                return redirect()->back();
             }
         }
 
         cookie()->queue(cookie()->forget('pc'));
+        session()->forget('queuedcookie');
         session()->flash('nozipflash', 'a');
 
         if (request('category')) {
@@ -256,9 +258,12 @@ class SearchController extends Controller
 
     private function zipcheck($zipcode)
     {
+        
         // semi-rule: Ln < 80? Col => Shorthand Syntax, in this case not possible anyway cause of return. (or is there a way?)
         // 2ndly: bad practice jamming all method in a method or make more variables? and in this case/these cases?
-        if (!strlen($zipcode)==6) {return false;}
+        if (strlen($zipcode) !==6) {  
+            return false;
+        };
         if (!preg_match("/^[a-zA-Z]+$/", substr($zipcode, 4, 6))) {return false;}
         if (!preg_match("/^[0-9]+$/", substr($zipcode, 0, 4))) {return false;}
         return Pp4::where('postcode', substr($zipcode, 0, 4))->exists();

@@ -36,6 +36,14 @@ const app = new Vue({
 
 $(document).ready(function() {
     // For all pages
+
+    //close the alert after 3 seconds. (multiple auth system)
+    // $(document).ready(function(){
+	//     setTimeout(function() {
+	//         $(".alert").alert('close');
+	//     }, 3000);
+    // });
+
     $(".closecookie").on("click", function() {
         $.ajax({
             type: "post",

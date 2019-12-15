@@ -37,11 +37,13 @@
                             @if (session('nozipflash'))
                             value=""
                             {{ session()->forget('nozipflash') }}
+                            @elseif (session('queuedcookie'))
+                            value="{{ session('queuedcookie') }}"
                             @elseif (request()->cookie('pc'))
-                        value="{{ request()->cookie('pc') }}"
-                        @elseif (session('invalidzip'))
-                        value="{{ session('invalidzip') }}"
-                        @endif>
+                            value="{{ request()->cookie('pc') }}"
+                            @elseif (session('invalidzip'))
+                            value="{{ session('invalidzip') }}"
+                            @endif>
                     </div>
                     <div class="form-group col-md-3 px-0 mb-0">
                         <select id="distance" class="form-control" name="distance">

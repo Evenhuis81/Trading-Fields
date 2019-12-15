@@ -21,14 +21,14 @@ class Advert extends Model implements ViewableContract
         'title', 'description', 'condition_id', 'price', 'startbid', 'delivery_id', 'name', 'phonenr', 'zipcode', 'zipletters', 'searchzip', 'owner_id',
     ];
 
-    protected static function boot()
-    {
-      parent::boot();
+    // protected static function boot()
+    // {
+    //   parent::boot();
 
-      static::created(function ($advert) {
-        // dd('created advert');
-      });
-    }
+    //   static::created(function ($advert) {
+    //     // dd('created advert');
+    //   });
+    // }
 
     public function pictures() {
         return $this->hasMany(Picture::class, 'advert_id');

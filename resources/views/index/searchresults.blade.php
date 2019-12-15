@@ -50,8 +50,9 @@
                 <div class="col-md-2">
                     <p class="mb-0 oneLineEllipsis" style="margin-top:5px;">{{ $advert->name }}</p>
                     <p class="oneLineEllipsis">{{ $advert->hometown($advert->zipcode) }}</p>
-                    @if (!is_null(request()->cookie('pc')))
-                    <p>&nbsp;&nbsp;&nbsp;{{ empty($points) ? $advert->distance($advert->zipcode, request()->cookie('pc')) : $advert->dis($points, $advert->zipcode) }} KM</p>
+                    @if (session('queuedcookie'))
+                    <p>&nbsp;&nbsp;&nbsp;{{ empty($points) ? $advert->distance($advert->zipcode, session('queuedcookie')) : $advert->dis($points, $advert->zipcode) }} KM</p>
+                    {{-- @if (!is_null(request()->cookie('pc'))) --}}
                     @endif
                 </div>
             </div>

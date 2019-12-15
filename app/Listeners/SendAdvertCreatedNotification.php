@@ -26,6 +26,6 @@ class SendAdvertCreatedNotification
      */
     public function handle(AdvertCreated $event)
     {
-        dd('sended advert created notification');
+        // dd('sended advert created notification');
     }
 }
