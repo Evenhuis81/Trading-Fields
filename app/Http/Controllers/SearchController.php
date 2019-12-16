@@ -12,15 +12,6 @@ use Illuminate\Support\Facades\DB;
 class SearchController extends Controller
 {
 
-    // public function results($adverts) {
-    //     //
-    // }
-
-    public function search2 ()
-        {
-            //
-        }
-
     public function search(Request $request)
     {
         // why does F5 on return view('index.searchresults') askes for send data again ==>>(cause it's return view through a post!!?? see comment below this one)<<==, test with named routes or return views through (another)controller
