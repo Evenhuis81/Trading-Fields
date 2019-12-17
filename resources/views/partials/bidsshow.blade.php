@@ -2,9 +2,15 @@
 @if (!$advert->bids()->count())
 <p class="mx-auto my-auto">No bids placed</p>
 @endif
-@foreach ($advert->bids->sortByDesc(function($bid) {
+{{-- @foreach ($advert->bids->sortByDesc(function($bid) {
 return [$bid->value, $bid->created_at];
-}) as $bid)
+}) as $bid) --}}
+{{-- @php
+$bids = $advert->bids->sortBy('value')->sortByDesc('created_at');
+@endphp --}}
+{{-- @foreach ($bids as $bid) --}}
+@foreach ($advert->bids->sortByDesc('created_at')->sortByDesc('value') as $bid)
+
 @if ($bid->owner->id == auth()->id())
 <div class="row mx-0" style="height: 2.5rem;color:green;">
     <p class="card-text ml-3 font-weight-bold my-auto">{{ $bid->owner->name }}</p>

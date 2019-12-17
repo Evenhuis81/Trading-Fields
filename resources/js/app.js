@@ -8,7 +8,7 @@ require("./bootstrap");
 
 window.Vue = require("vue");
 
-import VueChatScroll from 'vue-chat-scroll'
+import VueChatScroll from "vue-chat-scroll";
 Vue.use(VueChatScroll);
 
 /**
@@ -34,17 +34,47 @@ const app = new Vue({
     el: "#app"
 });
 
+console.log(process.env.MIX_STRIPE_KEY);
+
 // maak voor iedere pagina een eigen aparte javascript file en include deze alleen voor de desbetreffende pagina voor betere
 // projectorganisatie van bestanden en betere leesbaarheid / lagere laadtijd / makkelijker debuggen van code
 
 $(document).ready(function() {
     // For all pages
 
+    const stripe = Stripe("pk_test_N9aZJFmL2NIFPdQYVGNxysXy00TqxYmM8L");
+    const elements = stripe.elements();
+    const cardElement = elements.create("card");
+    cardElement.mount("#card-element");
+
+    const cardHolderName = document.getElementById("card-holder-name");
+    const cardButton = document.getElementById("card-button");
+    const clientSecret = cardButton.dataset.secret;
+
+    cardButton.addEventListener("click", async e => {
+        const { setupIntent, error } = await stripe.handleCardSetup(
+            clientSecret,
+            cardElement,
+            {
+                payment_method_data: {
+                    billing_details: { name: cardHolderName.value }
+                }
+            }
+        );
+
+        if (error) {
+            // Display "error.message" to the user...
+        } else {
+            // The card has been verified successfully...
+            console.log("handling success", setupIntent.payment_method);
+        }
+    });
+
     //close the alert after 3 seconds. (multiple auth system)
     // $(document).ready(function(){
-	//     setTimeout(function() {
-	//         $(".alert").alert('close');
-	//     }, 3000);
+    //     setTimeout(function() {
+    //         $(".alert").alert('close');
+    //     }, 3000);
     // });
 
     $(".closecookie").on("click", function() {

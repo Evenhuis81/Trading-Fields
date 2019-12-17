@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Message;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
-use App\Events\WebsocketDemoEvent;
+// use App\Events\WebsocketDemoEvent;
 
 class ChatsController extends Controller
 {

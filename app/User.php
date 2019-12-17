@@ -4,15 +4,16 @@ namespace App;
 
 use App\Bid;
 use App\Advert;
-use Carbon\Carbon;
 use App\Message;
+use Carbon\Carbon;
+use Laravel\Cashier\Billable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Billable;
 
     /**
      * The attributes that are mass assignable.

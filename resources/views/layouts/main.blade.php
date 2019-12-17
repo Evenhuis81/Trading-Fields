@@ -17,6 +17,7 @@
     <script src="https://kit.fontawesome.com/a7d26b2623.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script> --}}
+    <script src="https://js.stripe.com/v3/"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -33,30 +34,30 @@
     <div id="app">
         @include('navbars.main')
         {{-- @include('inc.navbar') --}}
-        @yield('searchbar')  {{-- with view, composerCategory@compose --}}
+        @yield('searchbar') {{-- with view, composerCategory@compose --}}
         @yield('content')
     </div>
     {{-- </main> --}}
 
 
-        {{-- Success Alert --}}
+    {{-- Success Alert --}}
     {{-- @if(session('status'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{session('status')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
     </div>
     @endif
 
-        {{-- Error Alert --}}
+    {{-- Error Alert --}}
     {{-- @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{session('error')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
     @endif --}}
 
 
