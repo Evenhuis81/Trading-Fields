@@ -16,6 +16,8 @@
 
                     <select name="plan" class="form-control">
                         @foreach ($plans as $key => $plan)
+                        <option value="{{ $key }}">{{ $plan }}</option>
+                        @endforeach
                     </select>
                     <input placeholder="Card Holder" class="form-control" id="card-holder-name" type="text">
 

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-light bg-light fixed-top fixed-top-2 pt-2 pb-0" style="z-index:1000;">
+<nav class="navbar navbar-light bg-light fixed-top fixed-top-2 pt-2 pb-0 pb-1" style="z-index:1000;">
     <div class="container">
         {{-- @if (session('yes'))
         {{ dd(session('yes')) }}
@@ -40,10 +40,10 @@
                             @elseif (session('queuedcookie'))
                             value="{{ session('queuedcookie') }}"
                             @elseif (request()->cookie('pc'))
-                            value="{{ request()->cookie('pc') }}"
-                            @elseif (session('invalidzip'))
-                            value="{{ session('invalidzip') }}"
-                            @endif>
+                        value="{{ request()->cookie('pc') }}"
+                        @elseif (session('invalidzip'))
+                        value="{{ session('invalidzip') }}"
+                        @endif>
                     </div>
                     <div class="form-group col-md-3 px-0 mb-0">
                         <select id="distance" class="form-control" name="distance">
