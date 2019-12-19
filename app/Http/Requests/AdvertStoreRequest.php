@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\Zipcode;
+use App\Rules\MaxPrice;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdvertStoreRequest extends FormRequest
@@ -51,7 +52,7 @@ class AdvertStoreRequest extends FormRequest
             'title' => 'required|string|min:3|max:50',
             'description' => 'required|string|min:3|max:500',
             'condition_id' => 'nullable|integer',
-            'price' => 'required|integer|min:0|max:10000',
+            'price' => ['required', 'integer', 'min:0', new MaxPrice],
             'category' => 'required|integer',
             'startbid' => ['nullable', 'integer', 'min:0', 'max:'.$this->input(['price'])],
             'delivery_id' => 'required|integer',
@@ -68,7 +69,7 @@ class AdvertStoreRequest extends FormRequest
                 'title' => 'required|string|min:3|max:50',
                 'description' => 'required|string|min:3|max:500',
                 'condition_id' => 'nullable|integer',
-                'price' => 'required|integer|min:0|max:10000',
+                'price' => ['required', 'integer', 'min:0', new MaxPrice],
                 'category' => 'required|integer',
                 'startbid' => ['nullable', 'integer', 'min:0', 'max:'.$this->input(['price'])],
                 'delivery_id' => 'required|integer',

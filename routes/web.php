@@ -7,6 +7,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('bids', 'BidsController@store')->name('bids.store');
     Route::delete('/bids/{bid}', 'BidsController@destroy')->name('bids.destroy');
     Route::get('payment', 'PaymentController@payment');
+    Route::post('subscribe', 'PaymentController@subscribe');
+    // ->middleware('check-subscription');
+    Route::get('sub', function() {
+        dd(redirect()->intented()->getTargetUrl());
+        dd(auth()->user()->subscribed('main'));
+    });
 });
 
 Route::get('/chats', 'ChatsController@index');

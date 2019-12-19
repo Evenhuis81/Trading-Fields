@@ -9,7 +9,7 @@ class PaymentController extends Controller
     public function payment()
     {
         $availablePlans = [
-            'webdevmatics_monthly' => "Monthly",
+            'webdevmatics_montly' => "Monthly",
             'webdevmatics_yearly' => "Yearly",
         ];
         $data = [
@@ -21,12 +21,17 @@ class PaymentController extends Controller
 
     public function subscribe(Request $request)
     {
+        
+        // dd($request->plan);
         $user = auth()->user();
         $paymentMethod = $request->payment_method;
 
-        $planID = $request->plan;
-        $user->newSubscription('main', $planId)->create($paymentMethod);
-
-        return response(['status' => 'success']);
+        $planId = $request->plan;
+        // $user->newSubscription('main', $planId)->create($paymentMethod);
+        
+        return response([
+            // 'success_url' => redirect()->intented()->getTargetUrl(),
+            'status' => 'success',
+            ]);
     }
 }

@@ -14,7 +14,7 @@
                     </div>
                     @endif
 
-                    <select name="plan" class="form-control">
+                    <select name="plan" class="form-control" id="subscription-plan">
                         @foreach ($plans as $key => $plan)
                         <option value="{{ $key }}">{{ $plan }}</option>
                         @endforeach

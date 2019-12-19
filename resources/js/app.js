@@ -49,6 +49,8 @@ $(document).ready(function() {
         const cardButton = document.getElementById("card-button");
         const clientSecret = cardButton.dataset.secret;
 
+        const plan = document.getElementById("subscription-plan").value;
+
         cardButton.addEventListener("click", async e => {
             const { setupIntent, error } = await stripe.handleCardSetup(
                 clientSecret,
@@ -65,6 +67,13 @@ $(document).ready(function() {
             } else {
                 // The card has been verified successfully...
                 console.log("handling success", setupIntent.payment_method);
+
+                Axios.post("/subscribe", {
+                    payment_method: setupIntent.payment_method,
+                    plan: plan
+                }).then(data => {
+                    location.replace(data.data.success_url);
+                });
             }
         });
     }
@@ -332,6 +341,7 @@ function attachKeypress() {
 // attachKeypress();
 
 import { loadAjaxDoc } from "./test";
+import Axios from "axios";
 
 $(function() {
     $("body").on("click", ".pagination a", function(e) {
