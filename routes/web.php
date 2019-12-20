@@ -9,7 +9,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('payment', 'PaymentController@payment');
     Route::post('subscribe', 'PaymentController@subscribe');
     // ->middleware('check-subscription');
-    Route::get('sub', function() {
+    Route::get('sub', function () {
         dd(redirect()->intented()->getTargetUrl());
         dd(auth()->user()->subscribed('main'));
     });
@@ -23,16 +23,18 @@ Route::get('/', 'HomeController@index')->name('index');
 Route::resource('/adverts', 'AdvertsController');
 Auth::routes();
 
-Route::post('/acceptedcookies', function() {
+Route::post('/acceptedcookies', function () {
     return response('')->cookie('accepted', 'true', 526000);
 });
 
 Route::post('/autocomplete', 'AutocompleteController@fetch');
 Route::post('/search', 'SearchController@search')->name('search');
-Route::get('/search', function() {abort(404);});
+Route::get('/search', function () {
+    abort(404);
+});
 
 // Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function() {
-//     Route::namespace('Auth')->group(function(){   
+//     Route::namespace('Auth')->group(function(){
 //         //Login Routes
 //         Route::get('/login','LoginController@showLoginForm')->name('login');
 //         Route::post('/login','LoginController@login');
@@ -46,3 +48,10 @@ Route::get('/search', function() {abort(404);});
 //     });
 // });
 
+Route::get('paypal/express-checkout', 'PaypalController@expressCheckout')->name('paypal.express-checkout');
+Route::get('paypal/express-checkout-success', 'PaypalController@expressCheckoutSuccess');
+Route::post('paypal/notify', 'PaypalController@notify');
+
+Route::get('paywithpaypal', function () {
+    return view('/paywithpaypal');
+});
