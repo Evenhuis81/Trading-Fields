@@ -9,10 +9,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('payment', 'PaymentController@payment');
     Route::post('subscribe', 'PaymentController@subscribe');
     // ->middleware('check-subscription');
-    Route::get('sub', function () {
-        dd(redirect()->intented()->getTargetUrl());
-        dd(auth()->user()->subscribed('main'));
-    });
+    // Route::get('sub', function () {
+    //     dd(redirect()->intented()->getTargetUrl());
+    //     dd(auth()->user()->subscribed('main'));
+    // });
 });
 
 Route::get('/chats', 'ChatsController@index');
@@ -48,9 +48,9 @@ Route::get('/search', function () {
 //     });
 // });
 
-Route::get('paypal/express-checkout', 'PaypalController@expressCheckout')->name('paypal.express-checkout');
-Route::get('paypal/express-checkout-success', 'PaypalController@expressCheckoutSuccess');
-Route::post('paypal/notify', 'PaypalController@notify');
+// Route::get('paypal/express-checkout', 'PaypalController@expressCheckout')->name('paypal.express-checkout');
+// Route::get('paypal/express-checkout-success', 'PaypalController@expressCheckoutSuccess');
+// Route::post('paypal/notify', 'PaypalController@notify');
 
 Route::get('paywithpaypal', function () {
     return view('/paywithpaypal');

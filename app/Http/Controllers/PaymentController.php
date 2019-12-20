@@ -21,16 +21,14 @@ class PaymentController extends Controller
 
     public function subscribe(Request $request)
     {
-        
-        // dd($request->plan);
         $user = auth()->user();
         $paymentMethod = $request->payment_method;
 
         $planId = $request->plan;
-        // $user->newSubscription('main', $planId)->create($paymentMethod);
+        $user->newSubscription('main', $planId)->create($paymentMethod);
         
         return response([
-            // 'success_url' => redirect()->intented()->getTargetUrl(),
+            // 'success_url' => redirect()->intended()->getTargetUrl(),
             'status' => 'success',
             ]);
     }
